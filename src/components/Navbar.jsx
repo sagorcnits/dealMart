@@ -18,7 +18,7 @@ const Navbar = () => {
       <div className="navbar flex justify-between max-w-7xl mx-auto *:flex-1 gap-10">
         <div className="flex gap-20 items-center">
           <div className="flex gap-2 items-center">
-            <FaBars className="text-xl"></FaBars>
+            <FaBars className="text-xl lg:hidden"></FaBars>
             <h1 className="text-black font-bold text-3xl">
               Deal<span className="text-green">Mart</span>
             </h1>
@@ -42,7 +42,7 @@ const Navbar = () => {
         </div>
 
         <div className="flex-none justify-end lg:justify-between">
-          <ul className="hidden lg:flex items-center lg:gap-6 xl:gap-10 poppins-medium *:duration-500">
+          <ul className="hidden lg:flex items-center lg:gap-6 xl:gap-10 poppins *:duration-500">
             <li className="hover:text-green">
               <NavLink
                 className={({ isActive, isPending }) =>
