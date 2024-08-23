@@ -66,4 +66,24 @@
       39% 35%
     );
   }
+
+  .discount_gradeint {
+    background: rgb(121, 10, 10);
+    background: linear-gradient(
+      90deg,
+      rgba(121, 10, 10, 1) 0%,
+      rgba(198, 47, 47, 1) 0%,
+      rgba(36, 21, 22, 1) 94%
+    );
+  }
+
+  .discount_gradeint_2 {
+    background: rgb(121, 10, 10);
+    background: linear-gradient(
+      90deg,
+      rgba(121, 10, 10, 1) 0%,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(70, 69, 69, 1) 60%
+    );
+  }
 }
