@@ -1,5 +1,6 @@
 import discountImg from "../../../public/images/discount_img.png";
-
+import headphone from "../../../public/images/headphone.png";
+import watch from "../../../public/images/watch.png";
 const Discount = () => {
   return (
     <div className="flex flex-col lg:flex-row gap-4">
@@ -21,7 +22,7 @@ const Discount = () => {
         </div>
       </div>
       <div className="lg:w-[35%] flex flex-col sm:flex-row lg:flex-col gap-4 *:rounded-md">
-        <div className="flex *:flex-1 items-center bg-[#e6e6f5] p-4 discount_gradeint poppins">
+        <div className="flex *:flex-1 items-center bg-[#e6e6f5] p-4 discount_gradeint poppins h-[180px]">
           <div className="space-y-4">
             <h3 className="lg:text-[18px] xl:text-xl text-white font-semibold">
              Get 20% of these
@@ -34,10 +35,10 @@ const Discount = () => {
             </button>
           </div>
           <div>
-            <img src={discountImg} alt="discoun_img" />
+            <img src={watch} alt="discoun_img" />
           </div>
         </div>
-        <div className="flex *:flex-1 items-center bg-[#e6e6f5] p-4 discount_gradeint_2 poppins">
+        <div className="flex *:flex-1 items-center bg-[#e6e6f5] p-4 discount_gradeint_2 poppins h-[180px]">
           <div className="space-y-4">
             <h3 className="text-[18px] xl:text-xl text-white font-semibold">
              Get 20% of these
@@ -50,7 +51,7 @@ const Discount = () => {
             </button>
           </div>
           <div>
-            <img src={discountImg} alt="discoun_img" />
+            <img className="w-[60%] mx-auto" src={headphone} alt="discoun_img" />
           </div>
         </div>
        
