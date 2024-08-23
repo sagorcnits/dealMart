@@ -5,6 +5,8 @@ export default {
     extend: {
       colors: {
         green: "#17827D",
+        paragraph: "#a0a0a0",
+        darkBlue: "#073b53",
       },
     },
   },

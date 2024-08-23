@@ -1,10 +1,18 @@
+import SectionIntro from "../../components/SectionIntro";
 import Banner from "./Banner";
+import Category from "./Category";
 
 const Home = () => {
   return (
-    <div className="h-screen">
-      <section className="max-w-7xl mx-auto mt-4 px-2">
+    <div>
+      <section className="mt-4">
         <Banner></Banner>
+      </section>
+      <section className="py-12">
+        <SectionIntro title="Categories"></SectionIntro>
+        <div  className="w-full overflow-auto scrollbar-none">
+          <Category></Category>
+        </div>
       </section>
     </div>
   );
