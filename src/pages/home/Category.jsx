@@ -22,7 +22,7 @@ export default Category;
 
 const Button = ({ item }) => {
   return (
-    <button className="py-2  bg-white border border-green rounded-md  hover:bg-green duration-500 poppins hover:text-white text-xs sm:text-sm">
+    <button className="py-3  bg-white border border-green rounded-md  hover:bg-green duration-500 poppins hover:text-white text-xs sm:text-sm">
       {item}
     </button>
   );
