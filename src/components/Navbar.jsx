@@ -137,18 +137,18 @@ const Navbar = () => {
               </div>
               <ul
                 tabIndex={0}
-                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+                className="menu menu-sm dropdown-content bg-darkBlue text-white poppins rounded-box z-50 mt-3 w-52 p-2 shadow"
               >
-                <li>
+                <li className="hover:text-green duration-500">
                   <a className="justify-between">
                     Profile
                     <span className="badge">New</span>
                   </a>
                 </li>
-                <li>
+                <li className="hover:text-green duration-500">
                   <a>Settings</a>
                 </li>
-                <li>
+                <li className="hover:text-green duration-500">
                   <a>Logout</a>
                 </li>
               </ul>
