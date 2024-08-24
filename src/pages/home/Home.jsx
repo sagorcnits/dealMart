@@ -1,5 +1,4 @@
 import headphone from "../../../public/images/headphone.png";
-import ProductCard from "../../components/ProductCard";
 import SectionIntro from "../../components/SectionIntro";
 import Banner from "./Banner";
 import Category from "./Category";
@@ -29,12 +28,7 @@ const Home = () => {
       <section className="py-12 bg-[#e9f6f6]">
         <div className="max-w-7xl mx-auto px-2">
           <SectionIntro title="Popular Shoes Collection"></SectionIntro>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
-            <ProductCard></ProductCard>
-            <ProductCard></ProductCard>
-            <ProductCard></ProductCard>
-            <ProductCard></ProductCard>
-          </div>
+          <ProductContainer></ProductContainer>
         </div>
       </section>
       <section className="py-12 max-w-7xl mx-auto px-2">
@@ -63,12 +57,7 @@ const Home = () => {
       <section className="py-12 ">
         <div className="max-w-7xl mx-auto px-2">
           <SectionIntro title="Best Selling Products"></SectionIntro>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
-            <ProductCard></ProductCard>
-            <ProductCard></ProductCard>
-            <ProductCard></ProductCard>
-            <ProductCard></ProductCard>
-          </div>
+          <ProductContainer></ProductContainer>
         </div>
       </section>
       <section className="py-12 bg-[#e9f6f6] poppins px-2">
