@@ -2,7 +2,7 @@ import { GiSelfLove } from "react-icons/gi";
 
 const ProductCard = () => {
   return (
-    <div className="card-compact  bg-white border poppins h-[400px] cursor-pointer hover:border-green duration-500 rounded-md overflow-hidden">
+    <div className="card-compact  bg-white border poppins  md:h-[400px] cursor-pointer hover:border-green duration-500 rounded-md overflow-hidden">
       <figure className="h-[170px] overflow-hidden">
         <img
           src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
@@ -10,7 +10,7 @@ const ProductCard = () => {
         />
       </figure>
       <div className="card-body">
-        <h2 className="text-[17px] font-semibold leading-6">
+        <h2 className="text-sm md:text-[17px] font-semibold leading-6">
           Shoes! If a dog chews shoes whose shoes does he choose?
         </h2>
         <p className="text-paragraph">Shoes</p>
@@ -26,7 +26,7 @@ const ProductCard = () => {
           </div>
           <div>
             <del className="text-paragraph text-sm">$699</del>
-            <h2 className="font-semibold text-3xl">$399</h2>
+            <h2 className="font-semibold text-xl md:text-3xl">$399</h2>
           </div>
         </div>
         <div className="flex items-center gap-4 *:rounded-md mt-4">
