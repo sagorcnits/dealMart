@@ -4,6 +4,10 @@
 @tailwind utilities;
 
 @layer components {
+  * {
+    scroll-behavior: smooth;
+  }
+
   .poppins {
     font-family: "Poppins", sans-serif;
     font-weight: 500;

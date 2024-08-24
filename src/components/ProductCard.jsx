@@ -2,7 +2,7 @@ import { GiSelfLove } from "react-icons/gi";
 
 const ProductCard = () => {
   return (
-    <div className=" card-compact bg-white border poppins h-[400px] cursor-pointer hover:border-green duration-500 rounded-md overflow-hidden">
+    <div className="card-compact  bg-white border poppins h-[400px] cursor-pointer hover:border-green duration-500 rounded-md overflow-hidden">
       <figure className="h-[170px] overflow-hidden">
         <img
           src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
