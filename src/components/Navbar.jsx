@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaBars } from "react-icons/fa";
+import { GiSelfLove } from "react-icons/gi";
 import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
@@ -84,14 +85,15 @@ const Navbar = () => {
               </NavLink>
             </li>
           </ul>
-          <div className="flex items-center">
-            <div className="dropdown dropdown-end">
+          <div className="flex">
+            <div className="dropdown dropdown-end flex items-center">
+              <GiSelfLove className="text-xl cursor-pointer"></GiSelfLove>
               <div
                 tabIndex={0}
                 role="button"
-                className="btn btn-ghost btn-circle"
+                className="btn btn-ghost btn-circle "
               >
-                <div className="indicator">
+                <div className="indicator ">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-5 w-5"
