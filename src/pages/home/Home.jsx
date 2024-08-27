@@ -5,6 +5,10 @@ import Category from "./Category";
 import Discount from "./Discount";
 import ProductContainer from "./ProductContainer";
 const Home = () => {
+
+
+
+
   return (
     <main>
       <section className="mt-4 max-w-7xl mx-auto px-2">

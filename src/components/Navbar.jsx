@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaBars } from "react-icons/fa";
 import { GiSelfLove } from "react-icons/gi";
+import { useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
 
 const Navbar = () => {
@@ -13,10 +14,7 @@ const Navbar = () => {
       setActive(false);
     }
   });
-
-
-
-  const user = false;
+  const user = useSelector((state) => state.user.user);
 
   return (
     <div className={active ? "activeNav" : "duration-700 border-b"}>
@@ -106,42 +104,54 @@ const Navbar = () => {
                       d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
                     />
                   </svg>
-                  <span className="badge badge-sm indicator-item text-red-500 poppins">8</span>
+                  <span className="badge badge-sm indicator-item text-red-500 poppins">
+                    8
+                  </span>
                 </div>
               </div>
-             
             </div>
-           {user ? <div className="dropdown dropdown-end">
-              <div
-                tabIndex={0}
-                role="button"
-                className="btn btn-ghost btn-circle avatar"
-              >
-                <div className="w-10 rounded-full">
-                  <img
-                    alt="Tailwind CSS Navbar component"
-                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                  />
+            {user ? (
+              <div className="dropdown dropdown-end">
+                <div
+                  tabIndex={0}
+                  role="button"
+                  className="btn btn-ghost btn-circle avatar"
+                >
+                  <div className="w-10 rounded-full">
+                    <img
+                      alt="Tailwind CSS Navbar component"
+                      src={user.photoUrl}
+                    />
+                  </div>
                 </div>
+                <ul
+                  tabIndex={0}
+                  className="menu menu-sm dropdown-content bg-darkBlue text-white poppins rounded-box z-50 mt-3 w-52 p-2 shadow"
+                >
+                  <li className="hover:text-green duration-500">
+                    <a className="justify-between">
+                      Profile
+                      <span className="badge">New</span>
+                    </a>
+                  </li>
+                  <li className="hover:text-green duration-500">
+                    <a>Settings</a>
+                  </li>
+                  <Link to="/login">
+                    {" "}
+                    <li className="hover:text-green duration-500">
+                      <a>Logout</a>
+                    </li>
+                  </Link>
+                </ul>
               </div>
-              <ul
-                tabIndex={0}
-                className="menu menu-sm dropdown-content bg-darkBlue text-white poppins rounded-box z-50 mt-3 w-52 p-2 shadow"
-              >
-                <li className="hover:text-green duration-500">
-                  <a className="justify-between">
-                    Profile
-                    <span className="badge">New</span>
-                  </a>
-                </li>
-                <li className="hover:text-green duration-500">
-                  <a>Settings</a>
-                </li>
-                <li className="hover:text-green duration-500">
-                  <a>Logout</a>
-                </li>
-              </ul>
-            </div> : <Link to="/login"><span className="cursor-pointer poppins hover:text-green duration-500">Login</span></Link>}
+            ) : (
+              <Link to="/login">
+                <span className="cursor-pointer poppins hover:text-green duration-500">
+                  Login
+                </span>
+              </Link>
+            )}
           </div>
         </div>
       </div>
