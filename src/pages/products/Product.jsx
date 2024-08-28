@@ -14,7 +14,7 @@ const Product = () => {
         </h1>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {[1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8].map((item, id) => (
-            <ProductCard></ProductCard>
+            <ProductCard key={id}></ProductCard>
           ))}
         </div>
         <nav
@@ -42,7 +42,7 @@ const Product = () => {
           </button>
           {[1, 2, 4, 5, 6].map((item, id) => {
             return (
-              <button
+              <button key={id}
                 type="button"
                 aria-current="page"
                 className="inline-flex items-center px-4 py-2 text-sm font-semibold border text-black  dark:border-gray-300"

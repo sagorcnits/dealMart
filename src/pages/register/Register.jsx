@@ -1,7 +1,9 @@
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import { auth } from "../../firebase_config";
+import useAxios from "../../hooks/useAxios";
 
 const Register = () => {
   const {
@@ -12,10 +14,18 @@ const Register = () => {
     formState: { errors },
   } = useForm();
 
-  const navigate = useNavigate()
-
-
+  const navigate = useNavigate();
+const axiosFetch = useAxios()
   const submit = (data) => {
+
+const name = data.name;
+const email = data.email;
+const photoUrl = data.photo_url;
+const userData = {name,email,photoUrl, role:"user"}
+
+
+
+
     createUserWithEmailAndPassword(auth, data.email, data.password)
       .then((res) => {
         updateProfile(auth.currentUser, {
@@ -23,19 +33,35 @@ const Register = () => {
           photoURL: data.photo_url,
         })
           .then(() => {
-            // console.log(res);
-            // const user = {
-            //   name:res.user.displayName,
-            //   email:res.user.email,
-            //   photoUrl:res
-            // }
+            axiosFetch.post("/users",userData).then(res => {
+              console.log(res.data)
+              if(res.data.insertedId){
+                Swal.fire({
+                  icon: "success",
+                  title: "Your Register has been Success",
+                  showConfirmButton: false,
+                  timer: 1500,
+                });
+                setTimeout(() => {
+                  navigate("/login");
+                }, 2000);
+                reset()
+              }
+            }).catch(error => {
+              console.log(error.message)
+              Swal.fire({
+                icon: "warning",
+                title: "Your Register Failed",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+            })
+
+           
           })
           .catch((error) => {
             console.log(error.message);
           });
-
-        console.log(res);
-        navigate("/")
       })
       .catch((error) => {
         console.log(error);
@@ -44,7 +70,7 @@ const Register = () => {
 
   return (
     <div className="flex justify-center items-center h-screen px-2">
-      <div className="flex flex-col w-[480px]  rounded-md px-6 py-4 bg-[#ebe8e8]">
+      <div className="flex flex-col w-[430px]  rounded-md px-6 py-4 bg-[#ebe8e8]">
         <div className=" text-center">
           <h1 className=" text-4xl font-bold">Register</h1>
           <p className="text-sm dark:text-gray-600">Register your account</p>
@@ -107,14 +133,18 @@ const Register = () => {
               <button
                 // onClick={handleSubmit(submit)}
                 type="submit"
-                className="w-full px-8 py-3 font-semibold rounded-md dark:bg-violet-600 dark:text-gray-50"
+                className="w-full px-8 py-3 font-semibold rounded-md bg-darkBlue poppins hover:bg-black text-white duration-500"
               >
                 Register
               </button>
             </div>
             <p className="px-6 text-sm text-center dark:text-gray-600">
               Don't have an account yet?
-              <Link to="/login">Login</Link>.
+              <Link to="/login" className="poppins text-green">
+                {" "}
+                Login
+              </Link>
+              .
             </p>
           </div>
         </form>

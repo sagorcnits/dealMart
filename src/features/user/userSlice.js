@@ -7,11 +7,15 @@ const userSlice = createSlice({
   },
   reducers: {
     addUser: (state, action) => {
-      //   console.log(action.payload);
+      console.log(action.payload);
       state.user = action.payload;
+    },
+
+    removeUser: (state, action) => {
+      state.user = null;
     },
   },
 });
 
-export const { addUser } = userSlice.actions;
+export const { addUser, removeUser } = userSlice.actions;
 export default userSlice.reducer;

@@ -9,10 +9,9 @@ import { auth } from "../firebase_config";
 
 const Root = () => {
   const dispatch = useDispatch();
-  //   const [load, setLoad] = useState(true);
+
   useEffect(() => {
     const stateChange = onAuthStateChanged(auth, (user) => {
-      // const user =
       dispatch(
         addUser({
           name: user.displayName,
@@ -20,9 +19,7 @@ const Root = () => {
           photoUrl: user.photoURL,
         })
       );
-      // console.log(user);
     });
-
     return () => {
       stateChange();
     };
@@ -30,13 +27,14 @@ const Root = () => {
 
   return (
     <>
+
       <Navbar></Navbar>
-
       <Outlet></Outlet>
-
       <Footer></Footer>
     </>
   );
 };
 
 export default Root;
+
+
