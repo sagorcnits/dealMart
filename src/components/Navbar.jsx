@@ -56,6 +56,7 @@ const Navbar = () => {
                 Home
               </NavLink>
             </li>
+
             <li className="hover:text-green">
               <NavLink
                 className={({ isActive, isPending }) =>
@@ -133,7 +134,7 @@ const Navbar = () => {
                 </div>
                 <ul
                   tabIndex={0}
-                  className="menu menu-sm dropdown-content bg-darkBlue text-white poppins rounded-box z-50 mt-3 w-52 p-2 shadow"
+                  className="menu menu-sm dropdown-content bg-darkBlue text-white poppins rounded-box z-50 mt-3 w-52 p-2 shadow space-y-3"
                 >
                   <li className="hover:text-green duration-500">
                     <a className="justify-between">
@@ -141,9 +142,11 @@ const Navbar = () => {
                       <span className="badge">New</span>
                     </a>
                   </li>
-                  <li className="hover:text-green duration-500">
-                    <a>Settings</a>
-                  </li>
+                  <Link to="/create-product">
+                    <li className="hover:text-green duration-500 pl-3">
+                      Create Product
+                    </li>
+                  </Link>
                   <Link onClick={() => dispatch(removeUser())}>
                     {" "}
                     <li className="hover:text-green duration-500 pl-3">
@@ -171,7 +174,7 @@ export default Navbar;
 const Order = ({ openCart, setOpenCart }) => {
   const [isChecked, setIsChecked] = useState(false);
 
-  console.log(isChecked);
+  // console.log(isChecked);
   return (
     <div
       className={`fixed z-50 top-0 ${
@@ -259,7 +262,6 @@ const Card = () => {
           className="focus:outline-none"
         />
       </div>
-
       <textarea
         type="text"
         placeholder="address"
