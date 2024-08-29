@@ -6,6 +6,7 @@ import { IoMdClose } from "react-icons/io";
 import { MdDeleteForever } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
+import { removeCart } from "../features/cartItem/cartSlice";
 import { removeUser } from "../features/user/userSlice";
 
 const Navbar = () => {
@@ -173,7 +174,8 @@ export default Navbar;
 
 const Order = ({ openCart, setOpenCart }) => {
   const [isChecked, setIsChecked] = useState(false);
-
+  const { carts } = useSelector((state) => state.carts);
+  const dispatch = useDispatch();
   // console.log(isChecked);
   return (
     <div
@@ -189,26 +191,38 @@ const Order = ({ openCart, setOpenCart }) => {
         ></IoMdClose>
       </div>
       <div className="border-b pb-1">
-        {[1, 2, 4].map((item, id) => {
+        {carts?.map((item, id) => {
+          const {
+            _id,
+            product_name,
+            price,
+            brand,
+            category,
+            photo_url,
+            description,
+          } = item;
           return (
             <div key={id} className="flex gap-2 p-2 text-white poppins">
               <div className="w-[150px] overflow-hidden rounded-md">
                 <img
                   className="w-full h-full"
-                  src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+                  src={photo_url}
                   alt="product_card"
                 />
               </div>
               <div className="space-y-2">
-                <h3>Shoes</h3>
-                <p>$23</p>
+                <h3>{category}</h3>
+                <p>${price}</p>
                 <div className="flex gap-6">
                   <div className="flex items-center gap-10 bg-gray-400 py-2 rounded-md px-4">
                     <button>-</button>
                     <p>0</p>
                     <button>+</button>
                   </div>
-                  <button className="text-xl text-red-500">
+                  <button
+                    onClick={() => dispatch(removeCart(item))}
+                    className="text-xl text-red-500"
+                  >
                     <MdDeleteForever></MdDeleteForever>
                   </button>
                 </div>

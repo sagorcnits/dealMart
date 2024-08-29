@@ -15,9 +15,10 @@ const AddProduct = () => {
     const product_name = data.product_name;
     const price = data.price;
     const brand = data.brand;
-    const category = data.category;
+    const category = data.category_name;
     const photo_url = data.photo_url;
     const description = data.description;
+   
     // const axiosFetch = useAxios()
     const productData = {
       product_name,
@@ -28,10 +29,11 @@ const AddProduct = () => {
       description,
     };
     dispatch(productFetch(productData));
+    reset()
   };
 
   return (
-    <div className="flex justify-center items-center mt-8">
+    <div className="flex justify-center items-center mt-4">
       <div className="flex flex-col w-full md:w-[480px]  rounded-md p-2 md:px-6 md:py-4 bg-[#ebe8e8]">
         <div className=" text-center">
           <h1 className="text-3xl font-bold poppins">Create Product</h1>
@@ -70,6 +72,38 @@ const AddProduct = () => {
                 )}
               </div>
             </div>
+            <div className="flex gap-2 items-center *:flex-1">
+              <div>
+                <label className="block mb-1 text-sm poppins">
+                  Category Name
+                </label>
+                <input
+                  {...register("category_name", { required: true })}
+                  type="text"
+                  name="category_name"
+                  placeholder="category name"
+                  className="w-full px-3 py-2 border rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800"
+                />
+                {errors.category_name && (
+                  <p className="text-red-500">Invalid Your category Name</p>
+                )}
+              </div>
+              <div>
+                <label className="block mb-1 text-sm poppins">
+                  brand name
+                </label>
+                <input
+                  {...register("brand", { required: true })}
+                  type="text"
+                  name="brand"
+                  placeholder="brand"
+                  className="w-full px-3 py-2 border rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800"
+                />
+                {errors.brand && (
+                  <p className="text-red-500">Invalid Your brand</p>
+                )}
+              </div>
+            </div>
 
             <div>
               <label className="block mb-2 text-sm poppins">Photo URL</label>
@@ -93,7 +127,7 @@ const AddProduct = () => {
                 type="text"
                 name="description"
                 placeholder="product description"
-                className="w-full h-[120px] resize-none px-3 py-2 border rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800"
+                className="w-full h-[100px] resize-none px-3 py-2 border rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800"
               />
               {errors.description && (
                 <p className="text-red-500">Invalid Your Description</p>

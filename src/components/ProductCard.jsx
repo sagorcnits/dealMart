@@ -1,19 +1,25 @@
 import { GiSelfLove } from "react-icons/gi";
+import { useDispatch } from "react-redux";
+import { addCart } from "../features/cartItem/cartSlice";
 
-const ProductCard = () => {
+const ProductCard = ({item}) => {
+
+const {_id, product_name,price,brand,category,photo_url,description} = item;
+const dispatch = useDispatch()
+
   return (
     <div className="card-compact  bg-white border poppins  md:h-[400px] cursor-pointer hover:border-green duration-500 rounded-md overflow-hidden">
       <figure className="h-[170px] overflow-hidden">
         <img
-          src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-          alt="Shoes"
+          src={photo_url}
+          alt={category}
         />
       </figure>
       <div className="card-body">
         <h2 className="text-sm md:text-[17px] font-semibold leading-6">
-          Shoes! If a dog chews shoes whose shoes does he choose?
+         {product_name}
         </h2>
-        <p className="text-paragraph">Shoes</p>
+        <p className="text-paragraph">{category}</p>
         <div className="flex items-center justify-between *:flex *:items-center *:gap-2">
           <div>
             <div className="flex items-center gap-1">
@@ -25,15 +31,15 @@ const ProductCard = () => {
             </span>
           </div>
           <div>
-            <del className="text-paragraph text-sm">$699</del>
-            <h2 className="font-semibold text-xl md:text-3xl">$399</h2>
+            <del className="text-paragraph text-sm">$400</del>
+            <h2 className="font-semibold text-xl md:text-3xl">${price}</h2>
           </div>
         </div>
         <div className="flex items-center gap-4 *:rounded-md mt-4">
           <button className="w-[30%] h-[45px] bg-white border border-darkBlue flex justify-center items-center text-xl  hover:bg-darkBlue duration-500 hover:text-white">
             <GiSelfLove></GiSelfLove>
           </button>
-          <button className="w-[70%] h-[45px] border border-darkBlue bg-white text-darkBlue hover:bg-darkBlue duration-500 hover:text-white">
+          <button onClick={() => dispatch(addCart(item))} className="w-[70%] h-[45px] border border-darkBlue bg-white text-darkBlue hover:bg-darkBlue duration-500 hover:text-white">
             Add to cart
           </button>
         </div>

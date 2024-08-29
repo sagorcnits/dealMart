@@ -1,8 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import ProductCard from "../../components/ProductCard";
+import { productGet } from "../../features/products/productSlice";
 import Banner from "./Banner";
 
 const Product = () => {
+
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(productGet());
+  }, [dispatch]);
+  const { loading, products, error } = useSelector((state) => state.products);
+
   return (
     <main className="max-w-7xl mx-auto px-2 xl:px-0">
       <section className="mt-6">
@@ -13,8 +24,8 @@ const Product = () => {
           Choose Your Product
         </h1>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8].map((item, id) => (
-            <ProductCard key={id}></ProductCard>
+          {products?.map((item, id) => (
+            <ProductCard key={id} item={item}></ProductCard>
           ))}
         </div>
         <nav
