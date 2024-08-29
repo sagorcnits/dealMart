@@ -19,6 +19,7 @@ const Navbar = () => {
       setActive(false);
     }
   });
+  const { carts } = useSelector((state) => state.carts);
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
 
@@ -114,7 +115,7 @@ const Navbar = () => {
                     />
                   </svg>
                   <span className="badge badge-sm indicator-item text-red-500 poppins">
-                    8
+                    {carts.length}
                   </span>
                 </div>
               </div>
@@ -175,6 +176,13 @@ export default Navbar;
 const Order = ({ openCart, setOpenCart }) => {
   const [isChecked, setIsChecked] = useState(false);
   const { carts } = useSelector((state) => state.carts);
+  const price = carts.length > 0 && carts?.reduce((prev,current) => {
+   return parseInt(prev) + parseInt(current.price)
+  }, 0)
+  // const price = carts.length > 0 && carts.map((item) => {
+  //   const price = parseInt(item.price) +  parseInt(item.price) 
+  //   console.log(price)
+  // })
   const dispatch = useDispatch();
   // console.log(isChecked);
   return (
@@ -200,6 +208,7 @@ const Order = ({ openCart, setOpenCart }) => {
             category,
             photo_url,
             description,
+            quantity
           } = item;
           return (
             <div key={id} className="flex gap-2 p-2 text-white poppins">
@@ -216,7 +225,7 @@ const Order = ({ openCart, setOpenCart }) => {
                 <div className="flex gap-6">
                   <div className="flex items-center gap-10 bg-gray-400 py-2 rounded-md px-4">
                     <button>-</button>
-                    <p>0</p>
+                    <p>{quantity}</p>
                     <button>+</button>
                   </div>
                   <button
@@ -231,36 +240,40 @@ const Order = ({ openCart, setOpenCart }) => {
           );
         })}
       </div>
-      <div className="flex gap-2 items-center poppins justify-between text-white  px-6 py-2">
-        <h1>Subtitle</h1>
-        <p>4000</p>
-      </div>
-      <div className="flex items-center text-white p-3 poppins">
-        <input
-          checked={isChecked}
-          onChange={(e) => setIsChecked(e.target.checked)}
-          type="checkbox"
-          name="cash_on"
-          id="cash_on"
-          aria-label="cash on delivery"
-          className="mr-1 rounded-sm cursor-pointer"
-        />
-        <label htmlFor="cash_on" className="text-sm cursor-pointer">
-          Cash On delivery
-        </label>
-      </div>
-      {isChecked && <Card></Card>}
-      <div className="px-2 py-4">
-        {isChecked ? (
-          <button className="w-full bg-green py-3 text-center text-white rounded-md hover:bg-black duration-500 poppins">
-            Order now
-          </button>
-        ) : (
-          <button className="w-full bg-green py-3 text-center text-white rounded-md hover:bg-black duration-500 poppins">
-            Check Out
-          </button>
-        )}
-      </div>
+      {carts.length > 0&&
+        <>
+          <div className="flex gap-2 items-center poppins justify-between text-white  px-6 py-2">
+            <h1>Subtitle</h1>
+            <p>{price}</p>
+          </div>
+          <div className="flex items-center text-white p-3 poppins">
+            <input
+              checked={isChecked}
+              onChange={(e) => setIsChecked(e.target.checked)}
+              type="checkbox"
+              name="cash_on"
+              id="cash_on"
+              aria-label="cash on delivery"
+              className="mr-1 rounded-sm cursor-pointer"
+            />
+            <label htmlFor="cash_on" className="text-sm cursor-pointer">
+              Cash On delivery
+            </label>
+          </div>
+          {isChecked && <Card></Card>}
+          <div className="px-2 py-4">
+            {isChecked ? (
+              <button className="w-full bg-green py-3 text-center text-white rounded-md hover:bg-black duration-500 poppins">
+                Order now
+              </button>
+            ) : (
+              <button className="w-full bg-green py-3 text-center text-white rounded-md hover:bg-black duration-500 poppins">
+                Check Out
+              </button>
+            )}
+          </div>{" "}
+        </>
+      }
     </div>
   );
 };
