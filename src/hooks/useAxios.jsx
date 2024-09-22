@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const axiosFetch = axios.create({
-  baseURL: "http://localhost:5000/",
+  baseURL: "https://dealmart-server-neon.vercel.app/",
 });
 
 const useAxios = () => {
