@@ -21,7 +21,8 @@ const axiosFetch = useAxios()
 const name = data.name;
 const email = data.email;
 const photoUrl = data.photo_url;
-const userData = {name,email,photoUrl, role:"user"}
+const password = data.password;
+const userData = {name,email,photoUrl, password,  role:"user"}
 
 
 

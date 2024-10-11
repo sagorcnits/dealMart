@@ -14,9 +14,9 @@ const Root = () => {
     const stateChange = onAuthStateChanged(auth, (user) => {
       dispatch(
         addUser({
-          name: user.displayName,
-          email: user.email,
-          photoUrl: user.photoURL,
+          name: user?.displayName,
+          email: user?.email,
+          photoUrl: user?.photoURL,
         })
       );
     });
