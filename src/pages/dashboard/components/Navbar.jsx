@@ -12,7 +12,7 @@ const Navbar = ({ handleSideBar, handleMobileSideBar, sidebar }) => {
   const dispatch = useDispatch();
 
   return (
-    <div className={`flex justify-between items-center px-3 py-2 bg-white box-shadow fixed ${sidebar? "left-[250px]" : "left-0"} right-0 duration-700`}>
+    <div className={`flex justify-between items-center px-3 py-2 bg-white box-shadow left-0 fixed ${sidebar? "lg:left-[250px]" : "left-0"} right-0 duration-700`}>
       <div className="flex justify-center items-center gap-6">
         <IoMdMenu
           className="cursor-pointer hidden lg:block"

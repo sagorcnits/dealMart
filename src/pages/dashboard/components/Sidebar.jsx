@@ -4,8 +4,8 @@ import { FiShoppingCart } from "react-icons/fi";
 import { HiUserPlus } from "react-icons/hi2";
 import { IoIosArrowForward, IoMdArrowRoundBack } from "react-icons/io";
 import {
-    IoChatbubbleEllipsesOutline,
-    IoSettingsOutline,
+  IoChatbubbleEllipsesOutline,
+  IoSettingsOutline,
 } from "react-icons/io5";
 import { LuLayoutDashboard, LuShoppingBag } from "react-icons/lu";
 import { NavLink } from "react-router-dom";
@@ -28,7 +28,7 @@ const Sidebar = ({ sidebar, mobileSideBar, handleMobileSideBar }) => {
       <div
         className={`h-screen duration-700 bg-white box-shadow w-[250px] lg:hidden ${
           mobileSideBar ? "left-0" : "-left-[250px]"
-        } fixed`}
+        } fixed z-50`}
       >
         <div className="flex justify-between items-center gap-2 py-2 px-3 border-b">
           <div className="flex items-center gap-3">
@@ -37,7 +37,7 @@ const Sidebar = ({ sidebar, mobileSideBar, handleMobileSideBar }) => {
             </div>
             <h1 className="font-bold text-2xl">DealMart</h1>
           </div>
-          <span onClick={handleMobileSideBar}>
+          <span onClick={handleMobileSideBar} className="cursor-pointer">
             <IoMdArrowRoundBack></IoMdArrowRoundBack>
           </span>
         </div>

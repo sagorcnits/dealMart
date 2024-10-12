@@ -13,7 +13,8 @@ export const productFetch = createAsyncThunk(
   async (productData) => {
     try {
       const res = await axiosFetch.post("/products", productData);
-      if (res.data.insertedId) {
+      console.log(res)
+      if (res.data._id) {
         Swal.fire({
           icon: "success",
           title: "Your Register has been Success",
@@ -32,6 +33,7 @@ export const productFetch = createAsyncThunk(
 export const productGet = createAsyncThunk("products/productGet", async () => {
   try {
     const res = await axiosFetch.get("/products");
+    console.log(res.data)
     return res.data;
   } catch (error) {
     return rejectWithValue(error.response.data);

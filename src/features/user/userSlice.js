@@ -6,11 +6,11 @@ const userSlice = createSlice({
     user: null,
   },
   reducers: {
+    // layout folder root use
     addUser: (state, action) => {
-      console.log(action.payload);
       state.user = action.payload;
     },
-
+    //  nabar use remove user
     removeUser: (state, action) => {
       state.user = null;
     },

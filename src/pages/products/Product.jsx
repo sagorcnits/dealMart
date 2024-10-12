@@ -12,6 +12,7 @@ const Product = () => {
   useEffect(() => {
     dispatch(productGet());
   }, [dispatch]);
+  
   const { loading, products, error } = useSelector((state) => state.products);
 
   return (

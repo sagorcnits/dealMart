@@ -26,6 +26,14 @@ const AdminDashboard = () => {
           <h1>Comming soon.....</h1>
         </div>
       </div>
+      <div className="grid grid-cols-4 gap-4 mt-4 *:h-[300px]">
+        <div className="flex justify-center items-center col-span-2 box-shadow bg-white">
+          <h1>Comming soon.....</h1>
+        </div>
+        <div className="flex justify-center items-center col-span-2 box-shadow bg-white">
+          <h1>Comming soon.....</h1>
+        </div>
+      </div>
     </div>
   );
 };
