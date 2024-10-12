@@ -7,6 +7,7 @@ export default {
         green: "#17827D",
         paragraph: "#a0a0a0",
         darkBlue: "#073b53",
+        dashBgColor:"#F3F5F9",
       },
     },
   },

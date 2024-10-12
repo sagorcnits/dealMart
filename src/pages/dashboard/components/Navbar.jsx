@@ -5,12 +5,14 @@ import { IoNotificationsOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { removeUser } from "../../../features/user/userSlice";
-const Navbar = ({ handleSideBar, handleMobileSideBar }) => {
+
+
+const Navbar = ({ handleSideBar, handleMobileSideBar, sidebar }) => {
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
 
   return (
-    <div className="flex justify-between items-center px-3 py-2 bg-white box-shadow">
+    <div className={`flex justify-between items-center px-3 py-2 bg-white box-shadow fixed ${sidebar? "left-[250px]" : "left-0"} right-0 duration-700`}>
       <div className="flex justify-center items-center gap-6">
         <IoMdMenu
           className="cursor-pointer hidden lg:block"

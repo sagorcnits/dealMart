@@ -18,17 +18,22 @@ const Dashboard = () => {
 
   return (
     <main className="flex">
-      <Sidebar sidebar={sidebar} mobileSideBar={mobileSideBar} handleMobileSideBar={handleMobileSideBar}></Sidebar>
+      <Sidebar
+        sidebar={sidebar}
+        mobileSideBar={mobileSideBar}
+        handleMobileSideBar={handleMobileSideBar}
+      ></Sidebar>
       <section
-        className={`w-full duration-700 h-screen ${
+        className={`relative w-full duration-700  h-full ${
           sidebar ? "lg:ml-[250px]" : ""
         }  bg-[#F3F5F9]`}
       >
         <Navbar
+          sidebar={sidebar}
           handleSideBar={handleSideBar}
           handleMobileSideBar={handleMobileSideBar}
         ></Navbar>
-        <div className="p-4">
+        <div className="p-6">
           <Outlet></Outlet>
         </div>
       </section>
