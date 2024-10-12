@@ -10,7 +10,7 @@ const Navbar = ({ handleSideBar }) => {
   const dispatch = useDispatch();
 
   return (
-    <div className="flex justify-between items-center px-3 py-2 bg-white">
+    <div className="flex justify-between items-center px-3 py-2 bg-white box-shadow">
       <div className="flex justify-center items-center gap-6">
         <IoMdMenu
           className="cursor-pointer"
@@ -18,7 +18,11 @@ const Navbar = ({ handleSideBar }) => {
           onClick={handleSideBar}
         ></IoMdMenu>
         <div className="flex justify-between items-center w-[400px] border px-3 rounded-md">
-          <input className="focus:outline-none py-2" type="text" placeholder="serach here" />
+          <input
+            className="focus:outline-none py-2"
+            type="text"
+            placeholder="serach here"
+          />
           <CiSearch className="cursor-pointer" size={20}></CiSearch>
         </div>
       </div>
@@ -36,24 +40,16 @@ const Navbar = ({ handleSideBar }) => {
 
         <div>
           <div className="dropdown dropdown-end">
-            <div className="flex items-center gap-2">
-              <div
-                tabIndex={0}
-                role="button"
-                className="btn btn-ghost btn-circle  avatar"
-              >
-                <div className="w-10 rounded-full ">
-                  <img
-                    alt="Tailwind CSS Navbar component"
-                    src={user?.photoUrl}
-                  />
-                </div>
-              </div>
-              <div>
-                <p className="text-sm font-bold">Sagor Hossian</p>
-                <p className="text-[10px]">Admin</p>
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost btn-circle  avatar"
+            >
+              <div className="w-10 rounded-full ">
+                <img alt="Tailwind CSS Navbar component" src={user?.photoUrl} />
               </div>
             </div>
+
             <ul
               tabIndex={0}
               className="menu menu-sm dropdown-content bg-darkBlue text-white poppins rounded-box z-50 mt-3 w-52 p-2 shadow space-y-3"
