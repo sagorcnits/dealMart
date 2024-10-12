@@ -5,7 +5,7 @@ import { IoNotificationsOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { removeUser } from "../../../features/user/userSlice";
-const Navbar = ({ handleSideBar }) => {
+const Navbar = ({ handleSideBar, handleMobileSideBar }) => {
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
 
@@ -13,11 +13,16 @@ const Navbar = ({ handleSideBar }) => {
     <div className="flex justify-between items-center px-3 py-2 bg-white box-shadow">
       <div className="flex justify-center items-center gap-6">
         <IoMdMenu
-          className="cursor-pointer"
+          className="cursor-pointer hidden lg:block"
           size={30}
           onClick={handleSideBar}
         ></IoMdMenu>
-        <div className="flex justify-between items-center w-[400px] border px-3 rounded-md">
+        <IoMdMenu
+          className="cursor-pointer lg:hidden"
+          size={30}
+          onClick={handleMobileSideBar}
+        ></IoMdMenu>
+        <div className="md:flex justify-between items-center w-[400px] border px-3 rounded-md  hidden">
           <input
             className="focus:outline-none py-2"
             type="text"
