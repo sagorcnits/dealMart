@@ -3,6 +3,7 @@ import Root from "../layout/Root";
 import About from "../pages/about/About";
 import AddProduct from "../pages/addProduct/AddProduct";
 import Contact from "../pages/contact/Contact";
+import Dashboard from "../pages/dashboard/Dashboard";
 import Home from "../pages/home/Home";
 import Login from "../pages/login/Login";
 import NotFound from "../pages/notFound/NotFound";
@@ -47,6 +48,12 @@ const router = createBrowserRouter([
     path: "/login",
     element: <Login></Login>,
   },
+  // dashboard routes
+  {
+    path:"/dashboard",
+    element:<Dashboard></Dashboard>,
+    
+  }
 ]);
 
 export default router;

@@ -12,6 +12,8 @@ import { removeUser } from "../features/user/userSlice";
 const Navbar = () => {
   const [openCart, setOpenCart] = useState(false);
   const [active, setActive] = useState(false);
+  const admin = true;
+  // scroll effect of navabr
   window.addEventListener("scroll", () => {
     if (window.scrollY > 200) {
       setActive(true);
@@ -19,6 +21,7 @@ const Navbar = () => {
       setActive(false);
     }
   });
+  // get the carts form redux store
   const { carts } = useSelector((state) => state.carts);
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
@@ -138,6 +141,13 @@ const Navbar = () => {
                   tabIndex={0}
                   className="menu menu-sm dropdown-content bg-darkBlue text-white poppins rounded-box z-50 mt-3 w-52 p-2 shadow space-y-3"
                 >
+                  {admin && (
+                    <Link to="/dashboard">
+                      <li className="hover:text-green duration-500 pl-3">
+                        Dashboard
+                      </li>
+                    </Link>
+                  )}
                   <li className="hover:text-green duration-500">
                     <a className="justify-between">
                       Profile
@@ -176,11 +186,13 @@ export default Navbar;
 const Order = ({ openCart, setOpenCart }) => {
   const [isChecked, setIsChecked] = useState(false);
   const { carts } = useSelector((state) => state.carts);
-  const price = carts.length > 0 && carts?.reduce((prev,current) => {
-   return parseInt(prev) + parseInt(current.price)
-  }, 0)
+  const price =
+    carts.length > 0 &&
+    carts?.reduce((prev, current) => {
+      return parseInt(prev) + parseInt(current.price);
+    }, 0);
   // const price = carts.length > 0 && carts.map((item) => {
-  //   const price = parseInt(item.price) +  parseInt(item.price) 
+  //   const price = parseInt(item.price) +  parseInt(item.price)
   //   console.log(price)
   // })
   const dispatch = useDispatch();
@@ -208,7 +220,7 @@ const Order = ({ openCart, setOpenCart }) => {
             category,
             photo_url,
             description,
-            quantity
+            quantity,
           } = item;
           return (
             <div key={id} className="flex gap-2 p-2 text-white poppins">
@@ -240,7 +252,7 @@ const Order = ({ openCart, setOpenCart }) => {
           );
         })}
       </div>
-      {carts.length > 0&&
+      {carts.length > 0 && (
         <>
           <div className="flex gap-2 items-center poppins justify-between text-white  px-6 py-2">
             <h1>Subtitle</h1>
@@ -273,7 +285,7 @@ const Order = ({ openCart, setOpenCart }) => {
             )}
           </div>{" "}
         </>
-      }
+      )}
     </div>
   );
 };
