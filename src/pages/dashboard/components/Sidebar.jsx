@@ -17,7 +17,7 @@ const Sidebar = ({ sidebar, mobileSideBar, handleMobileSideBar }) => {
           sidebar ? "left-0" : "-left-[250px]"
         } fixed`}
       >
-        <div className="flex items-center gap-2 py-[9px] px-3 border-b">
+        <div className="flex items-center gap-2 py-[8px] px-3 border-b">
           <div className="logo bg-darkBlue size-12 flex justify-center items-center text-3xl">
             <h1 className="font-bold text-white">D</h1>
           </div>
