@@ -8,6 +8,8 @@ export default {
         paragraph: "#a0a0a0",
         darkBlue: "#073b53",
         dashBgColor:"#F3F5F9",
+        blue:"#035ECF",
+        red:"#FF6170"
       },
     },
   },

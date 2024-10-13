@@ -13,11 +13,11 @@ const Sidebar = ({ sidebar, mobileSideBar, handleMobileSideBar }) => {
   return (
     <div>
       <div
-        className={`h-screen duration-700 bg-white box-shadow w-[250px] hidden lg:block ${
+        className={`h-screen duration-700 bg-white box-shadow border-r z-20 w-[250px] hidden lg:block ${
           sidebar ? "left-0" : "-left-[250px]"
         } fixed`}
       >
-        <div className="flex items-center gap-2 py-2 px-3 border-b">
+        <div className="flex items-center gap-2 py-[9px] px-3 border-b">
           <div className="logo bg-darkBlue size-12 flex justify-center items-center text-3xl">
             <h1 className="font-bold text-white">D</h1>
           </div>
