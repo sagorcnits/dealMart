@@ -12,28 +12,45 @@ const CreateProduct = () => {
 
   const submit = (data) => {
     const product_name = data.product_name;
-    const price = data.price;
-    const brand = data.brand;
-    const category = data.category_name;
-    const photo_url = data.photo_url;
+    const brand_name = data.brand;
+    const reguler_price = data.reguler_price;
+    const sale_price = data.sale_price;
+    const category_name = data.category_name;
+    const quantity_in_stock = data.quantity_in_stock;
+    const stock_status = data.stock_status;
     const description = data.description;
+    const img1 = data.img1;
+    const img2 = data.img2;
+    const img3 = data.img3;
+    const img4 = data.img4;
 
-    // const axiosFetch = useAxios()
     const productData = {
       product_name,
-      price,
-      brand,
-      category,
-      photo_url,
+      brand_name,
+      reguler_price,
+      sale_price,
+      category_name,
+      quantity_in_stock,
+      stock_status,
       description,
+      img1,
+      img2,
+      img3,
+      img4,
     };
+
+    console.log(productData);
   };
+
   return (
     <main className="mt-16">
       <div className="py-3">
         <h1 className="text-3xl font-bold poppins">Create Product</h1>
       </div>
-      <form className="bg-white box-shadow p-4 ">
+      <form
+        onSubmit={handleSubmit(submit)}
+        className="bg-white box-shadow p-4 "
+      >
         <div className="*:mt-4">
           <div>
             <label className="block mb-1 text-xs poppins font-bold text-paragraph">
@@ -93,9 +110,6 @@ const CreateProduct = () => {
                 {...register("category_name", { required: true })}
                 className="py-2 border px-2  w-full  focus:outline-none"
               >
-                <option disabled selected>
-                  Choose Category
-                </option>
                 <option>watch</option>
                 <option>phone</option>
                 <option>headphone</option>
@@ -126,7 +140,10 @@ const CreateProduct = () => {
               <label className="block mb-1 text-xs poppins font-bold text-paragraph">
                 Stock Status
               </label>
-              <select  {...register("stock_status", { required: true })} className="py-2 border px-2  w-full  focus:outline-none">
+              <select
+                {...register("stock_status", { required: true })}
+                className="py-2 border px-2  w-full  focus:outline-none"
+              >
                 <option>In Stock</option>
                 <option>Out Of Stock</option>
               </select>
@@ -174,45 +191,69 @@ const CreateProduct = () => {
               Product Image
             </label>
             <div className="grid grid-cols-4 gap-2">
-              <div class="border border-blue border-dashed p-2 text-center flex justify-center items-center">
+              <div className="border border-blue border-dashed p-2 text-center flex justify-center items-center">
                 <label
-                  for="fileUpload"
-                  class="cursor-pointer text-green poppins text-sm"
+                  htmlFor="fileUpload"
+                  className="cursor-pointer text-green poppins text-sm"
                 >
                   <BiImage className="mx-auto" size={20}></BiImage>
                   Browse img
                 </label>
-                <input type="file" id="fileUpload" class="hidden" />
+                <input
+                  {...register("img1", { required: true })}
+                  type="file"
+                  id="fileUpload"
+                  className="hidden"
+                />
+                {errors.img1 && <p className="text-red-500">Invalid</p>}
               </div>
-              <div class="border border-blue border-dashed p-2 text-center flex justify-center items-center">
+              <div className="border border-blue border-dashed p-2 text-center flex justify-center items-center">
                 <label
-                  for="fileUpload"
-                  class="cursor-pointer text-green poppins text-sm"
+                  htmlFor="fileUpload2"
+                  className="cursor-pointer text-green poppins text-sm"
                 >
                   <BiImage className="mx-auto" size={20}></BiImage>
                   Browse img
                 </label>
-                <input type="file" id="fileUpload" class="hidden" />
+                <input
+                  {...register("img2", { required: true })}
+                  type="file"
+                  id="fileUpload2"
+                  className="hidden"
+                />
+                {errors.img2 && <p className="text-red-500">Invalid</p>}
               </div>
-              <div class="border border-blue border-dashed p-2 text-center flex justify-center items-center">
+              <div className="border border-blue border-dashed p-2 text-center flex justify-center items-center">
                 <label
-                  for="fileUpload"
-                  class="cursor-pointer text-green poppins text-sm"
+                  htmlFor="fileUpload3"
+                  className="cursor-pointer text-green poppins text-sm"
                 >
                   <BiImage className="mx-auto" size={20}></BiImage>
                   Browse img
                 </label>
-                <input type="file" id="fileUpload" class="hidden" />
+                <input
+                  {...register("img3", { required: true })}
+                  type="file"
+                  id="fileUpload3"
+                  className="hidden"
+                />
+                {errors.img3 && <p className="text-red-500">Invalid</p>}
               </div>
-              <div class="border border-blue border-dashed p-2 text-center flex justify-center items-center">
+              <div className="border border-blue border-dashed p-2 text-center flex justify-center items-center">
                 <label
-                  for="fileUpload"
-                  class="cursor-pointer text-green poppins text-sm"
+                  htmlFor="fileUpload4"
+                  className="cursor-pointer text-green poppins text-sm"
                 >
                   <BiImage className="mx-auto" size={20}></BiImage>
                   Browse img
                 </label>
-                <input type="file" id="fileUpload" class="hidden" />
+                <input
+                  {...register("img4", { required: true })}
+                  type="file"
+                  id="fileUpload4"
+                  className="hidden"
+                />
+                {errors.img4 && <p className="text-red-500">Invalid</p>}
               </div>
             </div>
           </div>

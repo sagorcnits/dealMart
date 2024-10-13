@@ -82,7 +82,7 @@ const Card = ({ item }) => {
         <button className="border-blue text-blue hover:bg-blue  hover:text-white">
           Edit
         </button>
-        <button className="border-red hover:bg-red  hover:text-white">
+        <button className="border-customRed hover:bg-customRed  hover:text-white">
           Delete
         </button>
       </div>

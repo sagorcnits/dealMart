@@ -9,7 +9,7 @@ export default {
         darkBlue: "#073b53",
         dashBgColor:"#F3F5F9",
         blue:"#035ECF",
-        red:"#FF6170"
+        customRed:"#FF6170"
       },
     },
   },
