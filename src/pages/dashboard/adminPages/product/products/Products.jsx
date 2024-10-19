@@ -1,8 +1,9 @@
 import { IoEyeOutline } from "react-icons/io5";
 import { MdDoubleArrow } from "react-icons/md";
-import useProducts from "../../../../hooks/useProducts";
+import { Link } from "react-router-dom";
+import useProducts from "../../../../../hooks/useProducts";
 const Products = () => {
-  const products = useProducts()
+  const products = useProducts();
 
   return (
     <main className="mt-16">
@@ -64,9 +65,11 @@ const Card = ({ item }) => {
       <figure className="h-[170px] lg:h-[130px] relative overflow-hidden rounded-md">
         <img className="w-full" src={photo_url} alt={category} />
         <div className="flex z-10  justify-center items-center gap-6 absolute dashboard_card_effect right-0 top-0 bottom-0 left-0  bg-black opacity-80 px-4">
-          <div className="logo bg-darkBlue size-10 hover:bg-gray-500 duration-500 flex justify-center items-center  text-white">
-            <IoEyeOutline></IoEyeOutline>
-          </div>
+          <Link to={`/dashboard/product-details/${_id}`}>
+            <div className="logo bg-darkBlue size-10 hover:bg-gray-500 duration-500 flex justify-center items-center  text-white">
+              <IoEyeOutline></IoEyeOutline>
+            </div>
+          </Link>
         </div>
       </figure>
       <div className="card-body">

@@ -5,7 +5,7 @@ import { BiImage } from "react-icons/bi";
 import { IoCloseSharp } from "react-icons/io5";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
-import useAxios from "../../../../hooks/useAxios";
+import useAxios from "../../../../../hooks/useAxios";
 const CreateProduct = () => {
   const [images, setImages] = useState([]);
   const {

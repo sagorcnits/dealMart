@@ -4,10 +4,11 @@ import About from "../pages/about/About";
 import Contact from "../pages/contact/Contact";
 import AdminDashboard from "../pages/dashboard/adminPages/adminHome/AdminDashboard";
 import Chat from "../pages/dashboard/adminPages/chat/Chat";
-import CreateProduct from "../pages/dashboard/adminPages/create_product/CreateProduct";
 import Customers from "../pages/dashboard/adminPages/customers/Customers";
 import OrderList from "../pages/dashboard/adminPages/order_list/OrderList";
-import Products from "../pages/dashboard/adminPages/products/Products";
+import CreateProduct from "../pages/dashboard/adminPages/product/create_product/CreateProduct";
+import ProductDetails from "../pages/dashboard/adminPages/product/product_details/Product_details";
+import Products from "../pages/dashboard/adminPages/product/products/Products";
 import Users from "../pages/dashboard/adminPages/users/Users";
 import Dashboard from "../pages/dashboard/Dashboard";
 import Settings from "../pages/dashboard/shared/settings/Settings";
@@ -39,7 +40,6 @@ const router = createBrowserRouter([
         path: "/contact",
         element: <Contact></Contact>,
       },
-     
     ],
   },
 
@@ -60,6 +60,7 @@ const router = createBrowserRouter([
         path: "/dashboard/dashboard",
         element: <AdminDashboard></AdminDashboard>,
       },
+      // product Routes
       {
         path: "/dashboard/all-product",
         element: <Products></Products>,
@@ -67,6 +68,11 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/create-product",
         element: <CreateProduct></CreateProduct>,
+      },
+      {
+        path: "/dashboard/product-details/:id",
+        element: <ProductDetails></ProductDetails>,
+  
       },
       {
         path: "/dashboard/customers",
