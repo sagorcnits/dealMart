@@ -1,18 +1,18 @@
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import headphone from "../../../public/images/headphone.png";
 import SectionIntro from "../../components/SectionIntro";
-import { productGet } from "../../features/products/productSlice";
+
 import Banner from "./Banner";
 import Category from "./Category";
 import Discount from "./Discount";
 import ProductContainer from "./ProductContainer";
 const Home = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(productGet());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(productGet());
+  // }, [dispatch]);
+
+
 
   // console.log(products)
   return (

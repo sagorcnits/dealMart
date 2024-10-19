@@ -1,7 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import Root from "../layout/Root";
 import About from "../pages/about/About";
-import AddProduct from "../pages/addProduct/AddProduct";
 import Contact from "../pages/contact/Contact";
 import AdminDashboard from "../pages/dashboard/adminPages/adminHome/AdminDashboard";
 import Chat from "../pages/dashboard/adminPages/chat/Chat";
@@ -40,10 +39,7 @@ const router = createBrowserRouter([
         path: "/contact",
         element: <Contact></Contact>,
       },
-      {
-        path: "/create-product",
-        element: <AddProduct></AddProduct>,
-      },
+     
     ],
   },
 

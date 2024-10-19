@@ -1,8 +1,8 @@
 import { IoEyeOutline } from "react-icons/io5";
 import { MdDoubleArrow } from "react-icons/md";
-import { useSelector } from "react-redux";
+import useProducts from "../../../../hooks/useProducts";
 const Products = () => {
-  const { loading, products, error } = useSelector((state) => state.products);
+  const products = useProducts()
 
   return (
     <main className="mt-16">

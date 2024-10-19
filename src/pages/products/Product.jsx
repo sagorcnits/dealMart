@@ -1,19 +1,12 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
 import ProductCard from "../../components/ProductCard";
-import { productGet } from "../../features/products/productSlice";
+import useProducts from "../../hooks/useProducts";
 import Banner from "./Banner";
 
 const Product = () => {
 
+const products = useProducts()
 
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(productGet());
-  }, [dispatch]);
-  
-  const { loading, products, error } = useSelector((state) => state.products);
 
   return (
     <main className="max-w-7xl mx-auto px-2 xl:px-0">

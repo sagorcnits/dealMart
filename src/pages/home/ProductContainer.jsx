@@ -1,12 +1,12 @@
 import { useRef, useState } from "react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import { useSelector } from "react-redux";
 import ProductCard from "../../components/ProductCard";
+import useProducts from "../../hooks/useProducts";
 
 const ProductContainer = () => {
   const trendingRef = useRef(null);
   const [prevScroll, setPrevScroll] = useState(false);
-  const { loading, products, error } = useSelector((state) => state.products);
+  const products = useProducts()
   // next scroll product
   const nextProduct = () => {
     trendingRef.current.scrollLeft += 700;
