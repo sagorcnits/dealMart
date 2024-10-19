@@ -3,9 +3,11 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { BiImage } from "react-icons/bi";
 import { IoCloseSharp } from "react-icons/io5";
+import { useDispatch } from "react-redux";
+import Swal from "sweetalert2";
+import useAxios from "../../../../hooks/useAxios";
 const CreateProduct = () => {
   const [images, setImages] = useState([]);
-  const [imageId, setImageId] = useState([]);
   const {
     register,
     handleSubmit,
@@ -13,6 +15,9 @@ const CreateProduct = () => {
     reset,
     formState: { errors },
   } = useForm();
+
+  const dispatch = useDispatch();
+  const axiosFetch = useAxios();
 
   const submit = (data) => {
     const product_name = data.product_name;
@@ -36,11 +41,29 @@ const CreateProduct = () => {
       images: images,
     };
 
-    if (images.length > 2) {
+    if (!images.length > 2) {
       return alert("Please Provide More Product Image");
     }
 
-    console.log(productData);
+    axiosFetch
+      .post("/products", productData)
+      .then((res) => {
+        if (res.data._id) {
+          Swal.fire({
+            icon: "success",
+            title: "Your Register has been Success",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          reset();
+          setImages([]);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    // console.log(productData);
   };
   // images upload method in cloundinary
   const handleFileChange = (event) => {
@@ -56,13 +79,7 @@ const CreateProduct = () => {
       .then((response) => {
         if (response.data.asset_id) {
           setImages((prev) => [...prev, response.data.secure_url]);
-          setImageId((prev) => [
-            ...prev,
-            {
-              public_id: response.data.public_id,
-              imgUrl: response.data.secure_url,
-            },
-          ]);
+          console.log(response.data);
         }
       })
       .catch((error) => {
@@ -71,24 +88,10 @@ const CreateProduct = () => {
   };
 
   //  delete images
-  const removeProductImage = (imgLength, public_id) => {
-    console.log(imgLength, public_id);
-
-    axios.delete(
-      `https://api.cloudinary.com/v1_1/dqsqzp3an/resources/image/upload/${public_id}`,
-      {
-        auth: {
-          username: "941311292871449",
-          password: "cDFHwNBnkc6MORcbxTNAJ7bs_d8",
-        },
-      }
-    );
-
-    const removeImages = imageId.filter((item, id) => id !== imgLength);
-    setImageId(removeImages);
+  const removeProductImage = (imgLength) => {
+    const removeImages = images.filter((item, id) => id !== imgLength);
+    setImages(removeImages);
   };
-
-  // console.log(imageId);
 
   return (
     <main className="mt-16">
@@ -240,7 +243,7 @@ const CreateProduct = () => {
             </label>
             <div className="grid grid-cols-4 gap-2 *:border *:border-blue *:border-dashed *:p-2 *:text-center *:flex *:justify-center *:items-center  *:h-[200px] *:overflow-hidden *:relative">
               <div>
-                {imageId.length == 0 ? (
+                {images.length == 0 ? (
                   <>
                     <label
                       htmlFor="fileUpload"
@@ -260,13 +263,11 @@ const CreateProduct = () => {
                   <>
                     <img
                       className="w-full h-full object-cover"
-                      src={imageId[0]?.imgUrl}
+                      src={images[0]}
                       alt="img1"
                     />
                     <div
-                      onClick={() =>
-                        removeProductImage(0, imageId[0]?.public_id)
-                      }
+                      onClick={() => removeProductImage(0)}
                       className="absolute top-2 right-2 size-6 rounded-full bg-red-500 text-white hover:bg-blue duration-500 cursor-pointer flex justify-center items-center"
                     >
                       <IoCloseSharp></IoCloseSharp>
@@ -275,7 +276,7 @@ const CreateProduct = () => {
                 )}
               </div>
               <div>
-                {imageId.length == 1 || imageId.length == 0 ? (
+                {images.length == 1 || images.length == 0 ? (
                   <>
                     <label
                       htmlFor="fileUpload2"
@@ -295,13 +296,11 @@ const CreateProduct = () => {
                   <>
                     <img
                       className="w-full h-full object-cover"
-                      src={imageId[1]?.imgUrl}
+                      src={images[1]}
                       alt="img2"
                     />
                     <div
-                      onClick={() =>
-                        removeProductImage(1, imageId[1]?.public_id)
-                      }
+                      onClick={() => removeProductImage(1)}
                       className="absolute top-2 right-2 size-6 rounded-full bg-red-500 text-white hover:bg-blue duration-500 cursor-pointer flex justify-center items-center"
                     >
                       <IoCloseSharp></IoCloseSharp>
@@ -310,9 +309,9 @@ const CreateProduct = () => {
                 )}
               </div>
               <div>
-                {imageId.length == 0 ||
-                imageId.length == 1 ||
-                imageId.length == 2 ? (
+                {images.length == 0 ||
+                images.length == 1 ||
+                images.length == 2 ? (
                   <>
                     <label
                       htmlFor="fileUpload3"
@@ -332,13 +331,11 @@ const CreateProduct = () => {
                   <>
                     <img
                       className="w-full h-full object-cover"
-                      src={imageId[2]?.imgUrl}
+                      src={images[2]}
                       alt="img2"
                     />
                     <div
-                      onClick={() =>
-                        removeProductImage(2, imageId[2]?.public_id)
-                      }
+                      onClick={() => removeProductImage(2)}
                       className="absolute top-2 right-2 size-6 rounded-full bg-red-500 text-white hover:bg-blue duration-500 cursor-pointer flex justify-center items-center"
                     >
                       <IoCloseSharp></IoCloseSharp>
@@ -347,10 +344,10 @@ const CreateProduct = () => {
                 )}
               </div>
               <div>
-                {imageId.length == 0 ||
-                imageId.length == 1 ||
-                imageId.length == 2 ||
-                imageId.length == 3 ? (
+                {images.length == 0 ||
+                images.length == 1 ||
+                images.length == 2 ||
+                images.length == 3 ? (
                   <>
                     <label
                       htmlFor="fileUpload4"
@@ -370,13 +367,11 @@ const CreateProduct = () => {
                   <>
                     <img
                       className="w-full h-full object-cover"
-                      src={imageId[3]?.imgUrl}
+                      src={images[3]}
                       alt="img3"
                     />
                     <div
-                      onClick={() =>
-                        removeProductImage(3, imageId[3]?.public_id)
-                      }
+                      onClick={() => removeProductImage(3)}
                       className="absolute top-2 right-2 size-6 rounded-full bg-red-500 text-white hover:bg-blue duration-500 cursor-pointer flex justify-center items-center"
                     >
                       <IoCloseSharp></IoCloseSharp>
