@@ -1,6 +1,8 @@
 import { IoEyeOutline } from "react-icons/io5";
 import { MdDoubleArrow } from "react-icons/md";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
+import useAxios from "../../../../../hooks/useAxios";
 import useProducts from "../../../../../hooks/useProducts";
 const Products = () => {
   const products = useProducts();
@@ -58,6 +60,37 @@ const Products = () => {
 export default Products;
 
 const Card = ({ item }) => {
+  const axiosFetch = useAxios();
+
+  const removeProduct = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosFetch
+          .delete(`/products/${id}`)
+          .then((res) => {
+            if (res.data.message === "ok") {
+              Swal.fire({
+                title: "Deleted!",
+                text: "Your file has been deleted.",
+                icon: "success",
+              });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    });
+  };
+
   const { _id, product_name, price, brand, category, photo_url, description } =
     item;
   return (
@@ -85,7 +118,10 @@ const Card = ({ item }) => {
         <button className="border-blue text-blue hover:bg-blue  hover:text-white">
           Edit
         </button>
-        <button className="border-customRed hover:bg-customRed  hover:text-white">
+        <button
+          onClick={() => removeProduct(_id)}
+          className="border-customRed hover:bg-customRed  hover:text-white"
+        >
           Delete
         </button>
       </div>

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Swal from "sweetalert2";
 import useAxios from "../../../../../hooks/useAxios";
 import Detail_slider from "./Detail_slider";
-
 const ProductDetails = () => {
   const [productData, setProductData] = useState(null);
   const axiosFetch = useAxios();
@@ -19,54 +21,87 @@ const ProductDetails = () => {
       });
   }, []);
 
-  console.log(productData);
+  const removeProduct = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosFetch
+          .delete(`/products/${id}`)
+          .then((res) => {
+            if (res.data.message === "ok") {
+              Swal.fire({
+                title: "Deleted!",
+                text: "Your file has been deleted.",
+                icon: "success",
+              });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    });
+  };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6 mt-16">
+    <div className="min-h-screen bg-gray-100 p-4 mt-16">
+      <ToastContainer></ToastContainer>
       <h1 className="text-3xl font-bold mb-6 text-gray-800">Product Details</h1>
       <div className="container mx-auto bg-white p-8 rounded-lg shadow-md">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Product Image */}
           <div className="flex justify-center h-[400px] overflow-hidden">
-            {/* <img
-              className="w-full h-full object-cover rounded-lg shadow-lg"
-              src="https://img.freepik.com/free-photo/smartphone-nature-concept_23-2150246099.jpg?t=st=1728749055~exp=1728752655~hmac=f6f658e2da13e201791ea049c11aff47c71d6466a3a7cde125c1ab05fda62f35&w=360"
-              alt="Product"
-            /> */}
-
-            <Detail_slider  productImage={productData.images}></Detail_slider>
+            <Detail_slider productImage={productData?.images}></Detail_slider>
           </div>
 
           {/* Product Information */}
           <div>
             <h2 className="text-2xl font-semibold mb-4 text-gray-800">
-              Product Name : IPhone
+              Product Name : {productData?.product_name}
             </h2>
             <p className="text-lg mb-4 text-gray-600">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Pellentesque et eros auctor, luctus erat a, tincidunt elit. Lorem
-              ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque et
-              eros auctor, luctus erat a, tincidunt elit.
+              {productData?.description}
             </p>
 
             <div className="mb-4">
               <span className="font-bold text-gray-800">Category: </span>
-              <span className="text-gray-600">Electronics</span>
+              <span className="text-gray-600">
+                {productData?.category_name}
+              </span>
             </div>
 
             <div className="mb-4">
-              <span className="font-bold text-gray-800">Price: </span>
-              <span className="text-gray-600">$499.99</span>
+              <span className="font-bold text-gray-800">Reguler Price: </span>
+              <span className="text-gray-600">
+                ${productData?.reguler_price}
+              </span>
+            </div>
+            <div className="mb-4">
+              <span className="font-bold text-gray-800">Sale Price: </span>
+              <span className="text-gray-600">${productData?.sale_price}</span>
+            </div>
+            <div className="mb-4">
+              <span className="font-bold text-gray-800">Quantity: </span>
+              <span className="text-gray-600">
+                {productData?.quantity_in_stock}
+              </span>
             </div>
 
             <div className="mb-4">
               <span className="font-bold text-gray-800">Stock: </span>
-              <span className="text-gray-600">In Stock</span>
+              <span className="text-gray-600">{productData?.stock_status}</span>
             </div>
 
             <div className="mb-4">
               <span className="font-bold text-gray-800">Brand: </span>
-              <span className="text-gray-600">Apple</span>
+              <span className="text-gray-600">{productData?.brand_name}</span>
             </div>
 
             {/* Actions */}
@@ -74,21 +109,14 @@ const ProductDetails = () => {
               <button className="border-blue text-blue hover:bg-blue  hover:text-white">
                 Edit
               </button>
-              <button className="border-customRed hover:bg-customRed  hover:text-white">
+              <button
+                onClick={() => removeProduct(id)}
+                className="border-customRed hover:bg-customRed  hover:text-white"
+              >
                 Delete
               </button>
             </div>
           </div>
-        </div>
-
-        {/* Additional Details */}
-        <div className="mt-8">
-          <h3 className="text-xl font-bold mb-4 text-gray-800">
-            Additional Information
-          </h3>
-          <p className="text-gray-600 mb-2">- Manufacturer: XYZ Company</p>
-          <p className="text-gray-600 mb-2">- Warranty: 2 Years</p>
-          <p className="text-gray-600 mb-2">- Weight: 1.5kg</p>
         </div>
       </div>
     </div>

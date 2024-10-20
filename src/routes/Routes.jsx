@@ -8,6 +8,7 @@ import Customers from "../pages/dashboard/adminPages/customers/Customers";
 import OrderList from "../pages/dashboard/adminPages/order_list/OrderList";
 import CreateProduct from "../pages/dashboard/adminPages/product/create_product/CreateProduct";
 import ProductDetails from "../pages/dashboard/adminPages/product/product_details/Product_details";
+import Product_update from "../pages/dashboard/adminPages/product/product_update/Product_update";
 import Products from "../pages/dashboard/adminPages/product/products/Products";
 import Users from "../pages/dashboard/adminPages/users/Users";
 import Dashboard from "../pages/dashboard/Dashboard";
@@ -74,6 +75,12 @@ const router = createBrowserRouter([
         element: <ProductDetails></ProductDetails>,
   
       },
+      {
+        path: "/dashboard/update-product/:id",
+        element: <Product_update></Product_update>,
+  
+      },
+      // customer routes
       {
         path: "/dashboard/customers",
         element: <Customers></Customers>,

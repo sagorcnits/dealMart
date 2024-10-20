@@ -4,98 +4,100 @@ import { useForm } from "react-hook-form";
 import { BiImage } from "react-icons/bi";
 import { IoCloseSharp } from "react-icons/io5";
 import Swal from "sweetalert2";
-import useAxios from "../../../../../hooks/useAxios";
-const CreateProduct = () => {
-  const [images, setImages] = useState([]);
-  const {
-    register,
-    handleSubmit,
-    watch,
-    reset,
-    formState: { errors },
-  } = useForm();
+import useAxios from "../.../../../../../../hooks/useAxios";
 
+const Product_update = () => {
 
-  const axiosFetch = useAxios();
-
-  const submit = (data) => {
-    const product_name = data.product_name;
-    const brand_name = data.brand;
-    const reguler_price = data.reguler_price;
-    const sale_price = data.sale_price;
-    const category_name = data.category_name;
-    const quantity_in_stock = data.quantity_in_stock;
-    const stock_status = data.stock_status;
-    const description = data.description;
-
-    const productData = {
-      product_name,
-      brand_name,
-      reguler_price,
-      sale_price,
-      category_name,
-      quantity_in_stock,
-      stock_status,
-      description,
-      images: images,
+    const [images, setImages] = useState([]);
+    const {
+      register,
+      handleSubmit,
+      watch,
+      reset,
+      formState: { errors },
+    } = useForm();
+  
+  
+    const axiosFetch = useAxios();
+  
+    const submit = (data) => {
+      const product_name = data.product_name;
+      const brand_name = data.brand;
+      const reguler_price = data.reguler_price;
+      const sale_price = data.sale_price;
+      const category_name = data.category_name;
+      const quantity_in_stock = data.quantity_in_stock;
+      const stock_status = data.stock_status;
+      const description = data.description;
+  
+      const productData = {
+        product_name,
+        brand_name,
+        reguler_price,
+        sale_price,
+        category_name,
+        quantity_in_stock,
+        stock_status,
+        description,
+        images: images,
+      };
+  
+      if (!images.length > 2) {
+        return alert("Please Provide More Product Image");
+      }
+  
+      axiosFetch
+        .post("/products", productData)
+        .then((res) => {
+          if (res.data._id) {
+            Swal.fire({
+              icon: "success",
+              title: "Your Register has been Success",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            reset();
+            setImages([]);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  
+      // console.log(productData);
+    };
+    // images upload method in cloundinary
+    const handleFileChange = (event) => {
+      console.log("ok");
+  
+      const formData = new FormData();
+      formData.append("file", event.target.files[0]);
+      formData.append("upload_preset", "dealMart");
+      formData.append("api_key", "941311292871449");
+  
+      axios
+        .post("https://api.cloudinary.com/v1_1/dqsqzp3an/image/upload", formData)
+        .then((response) => {
+          if (response.data.asset_id) {
+            setImages((prev) => [...prev, response.data.secure_url]);
+            console.log(response.data);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
+  
+    //  delete images
+    const removeProductImage = (imgLength) => {
+      const removeImages = images.filter((item, id) => id !== imgLength);
+      setImages(removeImages);
     };
 
-    if (!images.length > 2) {
-      return alert("Please Provide More Product Image");
-    }
-
-    axiosFetch
-      .post("/products", productData)
-      .then((res) => {
-        if (res.data._id) {
-          Swal.fire({
-            icon: "success",
-            title: "Your Register has been Success",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          reset();
-          setImages([]);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    // console.log(productData);
-  };
-  // images upload method in cloundinary
-  const handleFileChange = (event) => {
-    console.log("ok");
-
-    const formData = new FormData();
-    formData.append("file", event.target.files[0]);
-    formData.append("upload_preset", "dealMart");
-    formData.append("api_key", "941311292871449");
-
-    axios
-      .post("https://api.cloudinary.com/v1_1/dqsqzp3an/image/upload", formData)
-      .then((response) => {
-        if (response.data.asset_id) {
-          setImages((prev) => [...prev, response.data.secure_url]);
-          console.log(response.data);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
-  //  delete images
-  const removeProductImage = (imgLength) => {
-    const removeImages = images.filter((item, id) => id !== imgLength);
-    setImages(removeImages);
-  };
-
-  return (
-    <main className="mt-16">
+    return (
+        <main className="mt-16">
       <div className="py-3">
-        <h1 className="text-3xl font-bold poppins">Create Product</h1>
+        <h1 className="text-3xl font-bold poppins">Update Product</h1>
       </div>
       <form
         onSubmit={handleSubmit(submit)}
@@ -391,7 +393,7 @@ const CreateProduct = () => {
         </div>
       </form>
     </main>
-  );
+    );
 };
 
-export default CreateProduct;
+export default Product_update;
