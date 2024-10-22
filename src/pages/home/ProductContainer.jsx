@@ -6,7 +6,7 @@ import useProducts from "../../hooks/useProducts";
 const ProductContainer = () => {
   const trendingRef = useRef(null);
   const [prevScroll, setPrevScroll] = useState(false);
-  const products = useProducts()
+  const [products] = useProducts()
   // next scroll product
   const nextProduct = () => {
     trendingRef.current.scrollLeft += 700;

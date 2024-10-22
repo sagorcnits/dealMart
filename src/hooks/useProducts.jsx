@@ -1,22 +1,22 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import useAxios from "./useAxios";
 
 const useProducts = () => {
   const axiosFetch = useAxios();
-  const [products, setProducts] = useState([]);
 
-  useEffect(() => {
-    axiosFetch
-      .get("/products")
-      .then((res) => {
-        setProducts(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+  const {
+    data: products = [],
+    refetch,
+    isPending,
+  } = useQuery({
+    queryKey: ["products"],
+    queryFn: async () => {
+      const res = await axiosFetch.get(`/products`);
+      return res.data;
+    },
+  });
 
-  return products;
+  return [products, refetch, isPending];
 };
 
 export default useProducts;

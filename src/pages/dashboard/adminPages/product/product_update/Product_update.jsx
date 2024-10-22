@@ -51,17 +51,7 @@ const Product_update = () => {
     const stock_status = form.stock_status.value;
     const description = form.description.value;
 
-    // const productData = {
-    //   product_name,
-    //   brand_name,
-    //   reguler_price,
-    //   sale_price,
-    //   category_name,
-    //   quantity_in_stock,
-    //   stock_status,
-    //   description,
-    //   images: images,
-    // };
+    
 
     if (
       product_name == " " ||
@@ -188,6 +178,7 @@ const Product_update = () => {
                 Category Name
               </label>
               <select
+                name="category_name"
                 value={product?.category_name}
                 className="py-2 border px-2  w-full  focus:outline-none"
               >
@@ -217,6 +208,7 @@ const Product_update = () => {
                 Stock Status
               </label>
               <select
+              name="stock_status"
                 value={product?.stock_status}
                 onChange={handleChange}
                 className="py-2 border px-2  w-full  focus:outline-none"

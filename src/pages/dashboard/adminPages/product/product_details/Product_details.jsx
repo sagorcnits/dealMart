@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
@@ -9,7 +9,7 @@ const ProductDetails = () => {
   const [productData, setProductData] = useState(null);
   const axiosFetch = useAxios();
   const { id } = useParams();
-
+  const navigate = useNavigate();
   useEffect(() => {
     axiosFetch
       .get(`/products/${id}`)
@@ -41,6 +41,8 @@ const ProductDetails = () => {
                 text: "Your file has been deleted.",
                 icon: "success",
               });
+
+              navigate("/dashboard/all-product");
             }
           })
           .catch((err) => {
@@ -106,10 +108,11 @@ const ProductDetails = () => {
 
             {/* Actions */}
             <div className="flex space-x-4 mt-6 *:rounded-full *:duration-500   *:py-[6px] *:border *:flex-1 *:text-center">
-              <Link className="border-blue text-blue hover:bg-blue  hover:text-white" to={`/dashboard/update-product/${id}`}>
-                <button>
-                  Edit
-                </button>
+              <Link
+                className="border-blue text-blue hover:bg-blue  hover:text-white"
+                to={`/dashboard/update-product/${id}`}
+              >
+                <button>Edit</button>
               </Link>
               <button
                 onClick={() => removeProduct(id)}

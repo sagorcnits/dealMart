@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import useAxios from "../../../../../hooks/useAxios";
 import useProducts from "../../../../../hooks/useProducts";
 const Products = () => {
-  const products = useProducts();
+  const [products, refetch] = useProducts();
 
   return (
     <main className="mt-16">
@@ -35,7 +35,7 @@ const Products = () => {
       </section>
       <section className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-4 mt-5">
         {products?.map((item, id) => (
-          <Card key={id} item={item}></Card>
+          <Card refetch={refetch} key={id} item={item}></Card>
         ))}
       </section>
       <div className="mt-6 flex gap-3 items-center *:size-10 *:box-shadow *:flex *:justify-center *:items-center *:rounded-full *:duration-500">
@@ -59,7 +59,7 @@ const Products = () => {
 
 export default Products;
 
-const Card = ({ item }) => {
+const Card = ({ item, refetch}) => {
   const axiosFetch = useAxios();
 
   const removeProduct = (id) => {
@@ -82,6 +82,8 @@ const Card = ({ item }) => {
                 text: "Your file has been deleted.",
                 icon: "success",
               });
+
+              refetch()
             }
           })
           .catch((err) => {
@@ -115,8 +117,8 @@ const Card = ({ item }) => {
         <p className="text-paragraph">Sale Price : 305</p>
       </div>
       <div className="absolute bottom-4 left-2 right-2 flex justify-between gap-4 items-center *:rounded-full *:duration-500   *:py-[6px] *:border *:flex-1 *:text-center ">
-       <Link to={`/dashboard/update-product/${_id}`}>
-       <button className="border-blue text-blue hover:bg-blue  hover:text-white">
+       <Link className="border-blue text-blue hover:bg-blue  hover:text-white" to={`/dashboard/update-product/${_id}`}>
+       <button >
           Edit
         </button>
        </Link>
