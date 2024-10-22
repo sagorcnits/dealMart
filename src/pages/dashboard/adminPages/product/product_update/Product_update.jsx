@@ -1,123 +1,156 @@
 import axios from "axios";
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import React, { useEffect, useState } from "react";
 import { BiImage } from "react-icons/bi";
 import { IoCloseSharp } from "react-icons/io5";
+import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
-import useAxios from "../.../../../../../../hooks/useAxios";
+import useAxios from "../../../../../hooks/useAxios";
 
 const Product_update = () => {
+  const { id } = useParams();
+  const [product, setProduct] = useState({
+    product_name: "",
+    brand_name: "",
+    reguler_price: "",
+    sale_price: "",
+    category_name: "",
+    quantity_in_stock: "",
+    stock_status: "",
+    description: "",
+  });
+  const axiosFetch = useAxios();
+  const [images, setImages] = useState([]);
 
-    const [images, setImages] = useState([]);
-    const {
-      register,
-      handleSubmit,
-      watch,
-      reset,
-      formState: { errors },
-    } = useForm();
-  
-  
-    const axiosFetch = useAxios();
-  
-    const submit = (data) => {
-      const product_name = data.product_name;
-      const brand_name = data.brand;
-      const reguler_price = data.reguler_price;
-      const sale_price = data.sale_price;
-      const category_name = data.category_name;
-      const quantity_in_stock = data.quantity_in_stock;
-      const stock_status = data.stock_status;
-      const description = data.description;
-  
-      const productData = {
-        product_name,
-        brand_name,
-        reguler_price,
-        sale_price,
-        category_name,
-        quantity_in_stock,
-        stock_status,
-        description,
-        images: images,
-      };
-  
-      if (!images.length > 2) {
-        return alert("Please Provide More Product Image");
-      }
-  
-      axiosFetch
-        .post("/products", productData)
-        .then((res) => {
-          if (res.data._id) {
-            Swal.fire({
-              icon: "success",
-              title: "Your Register has been Success",
-              showConfirmButton: false,
-              timer: 1500,
-            });
-            reset();
-            setImages([]);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-  
-      // console.log(productData);
-    };
-    // images upload method in cloundinary
-    const handleFileChange = (event) => {
-      console.log("ok");
-  
-      const formData = new FormData();
-      formData.append("file", event.target.files[0]);
-      formData.append("upload_preset", "dealMart");
-      formData.append("api_key", "941311292871449");
-  
-      axios
-        .post("https://api.cloudinary.com/v1_1/dqsqzp3an/image/upload", formData)
-        .then((response) => {
-          if (response.data.asset_id) {
-            setImages((prev) => [...prev, response.data.secure_url]);
-            console.log(response.data);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    };
-  
-    //  delete images
-    const removeProductImage = (imgLength) => {
-      const removeImages = images.filter((item, id) => id !== imgLength);
-      setImages(removeImages);
-    };
+  useEffect(() => {
+    axiosFetch
+      .get(`/products/${id}`)
+      .then((res) => {
+        setProduct(res.data);
+        setImages(res.data.images);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
-    return (
-        <main className="mt-16">
+  // input change
+
+  const handleChange = (e) => {
+    setProduct({ ...product, [e.target.name]: e.target.value });
+  };
+
+  const submit = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const product_name = form.product_name.value;
+    const brand_name = form.brand_name.value;
+    const reguler_price = form.reguler_price.value;
+    const sale_price = form.sale_price.value;
+    const category_name = form.category_name.value;
+    const quantity_in_stock = form.quantity_in_stock.value;
+    const stock_status = form.stock_status.value;
+    const description = form.description.value;
+
+    // const productData = {
+    //   product_name,
+    //   brand_name,
+    //   reguler_price,
+    //   sale_price,
+    //   category_name,
+    //   quantity_in_stock,
+    //   stock_status,
+    //   description,
+    //   images: images,
+    // };
+
+    if (
+      product_name == " " ||
+      brand_name == " " ||
+      reguler_price == " " ||
+      sale_price == " " ||
+      category_name == " " ||
+      quantity_in_stock == " " ||
+      stock_status == " " ||
+      description == " "
+    ) {
+      return Swal.fire({
+        icon: "error",
+        title: "Please Provide Valid Input",
+        text: "Something went wrong!",
+      });
+    }
+
+    if (!images.length > 2) {
+      return Swal.fire({
+        icon: "error",
+        title: "Please Provide at least two image",
+        text: "Something went wrong!",
+      });
+    }
+
+    axiosFetch
+      .put(`/products/${id}`, { ...product, images: images })
+      .then((res) => {
+        if (res.data.modifiedCount) {
+          Swal.fire({
+            icon: "success",
+            title: "Your Product Update has been Success",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    // console.log(productData);
+  };
+  // images upload method in cloundinary
+
+  const handleFileChange = (event) => {
+    const formData = new FormData();
+    formData.append("file", event.target.files[0]);
+    formData.append("upload_preset", "dealMart");
+    formData.append("api_key", "941311292871449");
+    axios
+      .post("https://api.cloudinary.com/v1_1/dqsqzp3an/image/upload", formData)
+      .then((response) => {
+        if (response.data.asset_id) {
+          setImages((prev) => [...prev, response.data.secure_url]);
+          console.log(response.data);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  //  delete images
+  const removeProductImage = (imgLength) => {
+    const removeImages = images.filter((item, id) => id !== imgLength);
+    setImages(removeImages);
+  };
+
+  return (
+    <main className="mt-16">
       <div className="py-3">
-        <h1 className="text-3xl font-bold poppins">Update Product</h1>
+        <h1 className="text-3xl font-bold poppins">Create Product</h1>
       </div>
-      <form
-        onSubmit={handleSubmit(submit)}
-        className="bg-white box-shadow p-4 "
-      >
+      <form onSubmit={submit} className="bg-white box-shadow p-4 ">
         <div className="*:mt-4">
           <div>
             <label className="block mb-1 text-xs poppins font-bold text-paragraph">
               Product Name
             </label>
             <input
-              {...register("product_name", { required: true })}
               type="text"
+              value={product?.product_name}
+              onChange={handleChange}
               name="product_name"
               placeholder="Enter product name"
               className="w-full px-3 py-2 border   focus:outline-none"
             />
-            {errors.product_name && (
-              <p className="text-red-500">Invalid Your Product Name</p>
-            )}
           </div>
           {/* price */}
           <div className="flex gap-2 items-center *:flex-1">
@@ -126,30 +159,26 @@ const Product_update = () => {
                 reguler price
               </label>
               <input
-                {...register("reguler_price", { required: true })}
                 type="text"
+                value={product?.reguler_price}
+                onChange={handleChange}
                 name="reguler_price"
                 placeholder="reguler price"
                 className="w-full px-3 py-2 border  focus:outline-none"
               />
-              {errors.reguler_price && (
-                <p className="text-red-500">Invalid Your reguler price</p>
-              )}
             </div>
             <div>
               <label className="block mb-1 text-xs poppins font-bold text-paragraph">
                 sale price
               </label>
               <input
-                {...register("sale_price", { required: true })}
                 type="text"
+                value={product?.sale_price}
+                onChange={handleChange}
                 name="sale_price"
                 placeholder="sale price"
                 className="w-full px-3 py-2 border  focus:outline-none"
               />
-              {errors.sale_price && (
-                <p className="text-red-500">Invalid Your sale price</p>
-              )}
             </div>
           </div>
           {/* category and brand */}
@@ -159,31 +188,26 @@ const Product_update = () => {
                 Category Name
               </label>
               <select
-                {...register("category_name", { required: true })}
+                value={product?.category_name}
                 className="py-2 border px-2  w-full  focus:outline-none"
               >
                 <option>watch</option>
                 <option>phone</option>
                 <option>headphone</option>
               </select>
-              {errors.category_name && (
-                <p className="text-red-500">Invalid Your category Name</p>
-              )}
             </div>
             <div>
               <label className="block mb-1 text-xs poppins font-bold text-paragraph">
                 brand name
               </label>
               <input
-                {...register("brand", { required: true })}
                 type="text"
-                name="brand"
+                value={product?.brand_name}
+                onChange={handleChange}
+                name="brand_name"
                 placeholder="brand name"
                 className="w-full px-3 py-2 border  focus:outline-none"
               />
-              {errors.brand && (
-                <p className="text-red-500">Invalid Your brand</p>
-              )}
             </div>
           </div>
           {/* stock and quantity*/}
@@ -193,30 +217,26 @@ const Product_update = () => {
                 Stock Status
               </label>
               <select
-                {...register("stock_status", { required: true })}
+                value={product?.stock_status}
+                onChange={handleChange}
                 className="py-2 border px-2  w-full  focus:outline-none"
               >
                 <option>In Stock</option>
                 <option>Out Of Stock</option>
               </select>
-              {errors.stock_status && (
-                <p className="text-red-500">Invalid Your stock status</p>
-              )}
             </div>
             <div>
               <label className="block mb-1 text-xs poppins font-bold text-paragraph">
                 Quantity in Stck
               </label>
               <input
-                {...register("quantity_in_stock", { required: true })}
+                onChange={handleChange}
                 type="text"
+                value={product?.quantity_in_stock}
                 name="quantity_in_stock"
                 placeholder="quantity stock"
                 className="w-full px-3 py-2 border  focus:outline-none"
               />
-              {errors.quantity_in_stock && (
-                <p className="text-red-500">Invalid Your quantity in stock</p>
-              )}
             </div>
           </div>
           {/* description */}
@@ -227,15 +247,13 @@ const Product_update = () => {
               </label>
             </div>
             <textarea
-              {...register("description", { required: true })}
+              onChange={handleChange}
               type="text"
+              value={product?.description}
               name="description"
               placeholder="product description"
               className="w-full h-[150px] resize-none px-3 py-2 border focus:outline-none"
             />
-            {errors.description && (
-              <p className="text-red-500">Invalid Your Description</p>
-            )}
           </div>
           {/* images */}
           <div>
@@ -393,7 +411,7 @@ const Product_update = () => {
         </div>
       </form>
     </main>
-    );
+  );
 };
 
 export default Product_update;

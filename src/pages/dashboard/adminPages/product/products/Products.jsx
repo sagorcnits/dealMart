@@ -115,9 +115,11 @@ const Card = ({ item }) => {
         <p className="text-paragraph">Sale Price : 305</p>
       </div>
       <div className="absolute bottom-4 left-2 right-2 flex justify-between gap-4 items-center *:rounded-full *:duration-500   *:py-[6px] *:border *:flex-1 *:text-center ">
-        <button className="border-blue text-blue hover:bg-blue  hover:text-white">
+       <Link to={`/dashboard/update-product/${_id}`}>
+       <button className="border-blue text-blue hover:bg-blue  hover:text-white">
           Edit
         </button>
+       </Link>
         <button
           onClick={() => removeProduct(_id)}
           className="border-customRed hover:bg-customRed  hover:text-white"

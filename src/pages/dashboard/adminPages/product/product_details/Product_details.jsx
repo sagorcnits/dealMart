@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
@@ -106,9 +106,11 @@ const ProductDetails = () => {
 
             {/* Actions */}
             <div className="flex space-x-4 mt-6 *:rounded-full *:duration-500   *:py-[6px] *:border *:flex-1 *:text-center">
-              <button className="border-blue text-blue hover:bg-blue  hover:text-white">
-                Edit
-              </button>
+              <Link className="border-blue text-blue hover:bg-blue  hover:text-white" to={`/dashboard/update-product/${id}`}>
+                <button>
+                  Edit
+                </button>
+              </Link>
               <button
                 onClick={() => removeProduct(id)}
                 className="border-customRed hover:bg-customRed  hover:text-white"
