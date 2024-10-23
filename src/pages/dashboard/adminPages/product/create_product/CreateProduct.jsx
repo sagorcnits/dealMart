@@ -50,7 +50,7 @@ const CreateProduct = () => {
         if (res.data._id) {
           Swal.fire({
             icon: "success",
-            title: "Your Register has been Success",
+            title: "Your Product add has been Success",
             showConfirmButton: false,
             timer: 1500,
           });
