@@ -179,6 +179,7 @@ const Product_update = () => {
               </label>
               <select
                 name="category_name"
+                onChange={handleChange}
                 value={product?.category_name}
                 className="py-2 border px-2  w-full  focus:outline-none"
               >

@@ -1,15 +1,55 @@
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { IoEyeOutline } from "react-icons/io5";
 import { MdDoubleArrow } from "react-icons/md";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import useAxios from "../../../../../hooks/useAxios";
 import useProducts from "../../../../../hooks/useProducts";
+
 const Products = () => {
-  const [products, refetch] = useProducts();
+  const axiosFetch = useAxios();
+  const [products] = useProducts();
+  const [category, setCategory] = useState("all");
+  const [sort, setSorted] = useState("all");
+  // pagination
+  const [itemPerPage, setItemPerPage] = useState(8);
+  const [currentPage, setCurrentPage] = useState(1);
+  const numberPages = Math.ceil(products.length / itemPerPage);
+  const totalbtn = [...Array(numberPages).keys()];
+  // get product form server
+  console.log(currentPage, itemPerPage, sort, category);
+  const {
+    data: productsData = [],
+    refetch,
+    isPending,
+  } = useQuery({
+    queryKey: ["products", currentPage, itemPerPage, category, sort],
+    queryFn: async () => {
+      const res = await axiosFetch.get(
+        `/products?page=${currentPage}&size=${itemPerPage}&category=${category}&sort=${sort}`
+      );
+      return res.data;
+    },
+  });
+  // showproduct in perPage
+  const showProductPerPage = (e) => {
+    setItemPerPage(e.target.value);
+  };
+
+  // filter product by category
+  const filterProduct = (e) => {
+    setCategory(e.target.value);
+  };
+
+  // sorted product by price
+  const sorted = (e) => {
+    setSorted(e.target.value);
+  };
 
   return (
     <>
-      {products.length > 0 ? (
+      {productsData.length > 0 ? (
         <main className="mt-16">
           <section className="space-y-2 flex justify-between items-center">
             <span>back</span>
@@ -17,10 +57,13 @@ const Products = () => {
           </section>
           <section className="flex flex-col-reverse md:flex-row justify-between items-center *:flex-1 mt-4">
             <div>
-             
-              <select className="select select-bordered  max-w-xs focus:outline-none">
+              <select
+                onChange={showProductPerPage}
+                className="select select-bordered  max-w-xs focus:outline-none"
+                name="show_product"
+              >
                 <option disabled selected>
-                 Show Product
+                  Show Product
                 </option>
                 <option>10</option>
                 <option>15</option>
@@ -30,7 +73,11 @@ const Products = () => {
               </select>
             </div>
             <div className="flex justify-between md:justify-end gap-4 items-center w-full">
-              <select className="select select-bordered w-full max-w-xs focus:outline-none">
+              <select
+                onChange={filterProduct}
+                name="category"
+                className="select select-bordered w-full max-w-xs focus:outline-none"
+              >
                 <option disabled selected>
                   Choose Category
                 </option>
@@ -38,7 +85,11 @@ const Products = () => {
                 <option>headphone</option>
                 <option>phone</option>
               </select>
-              <select className="select select-bordered w-full max-w-xs focus:outline-none">
+              <select
+                name="sorted"
+                onChange={sorted}
+                className="select select-bordered w-full max-w-xs focus:outline-none"
+              >
                 <option disabled selected>
                   Sort by
                 </option>
@@ -49,17 +100,23 @@ const Products = () => {
             </div>
           </section>
           <section className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-4 mt-5">
-            {products?.map((item, id) => (
+            {productsData?.map((item, id) => (
               <Card refetch={refetch} key={id} item={item}></Card>
             ))}
           </section>
           <div className="mt-6 flex gap-3 items-center *:size-10 *:box-shadow *:flex *:justify-center *:items-center *:rounded-full *:duration-500">
-            <button className="rotate-180 hover:bg-blue hover:text-white">
-              <MdDoubleArrow></MdDoubleArrow>
+            <button className=" hover:bg-blue hover:text-white">
+              <MdDoubleArrow className="rotate-180"></MdDoubleArrow>
             </button>
-            {[1, 2, 3, 4, 5].map((item, id) => {
+            {totalbtn?.map((item, id) => {
               return (
-                <button className="hover:bg-blue hover:text-white" key={id}>
+                <button
+                  onClick={() => setCurrentPage(id + 1)}
+                  className={`hover:bg-blue hover:text-white ${
+                    currentPage == id + 1 && "bg-blue text-white"
+                  }`}
+                  key={id}
+                >
                   {id + 1}
                 </button>
               );
@@ -145,9 +202,7 @@ const Card = ({ item, refetch }) => {
         <p className="text-[#17aa2f]">Available : {quantity_in_stock}</p>
         <p className="text-paragraph">Regular Price : {reguler_price}</p>
         <p className="text-paragraph">Sale Price : {sale_price}</p>
-        <p className="text-paragraph">
-          Description : {description.slice(0, 40)}
-        </p>
+        <p className="text-paragraph text-xs">{description.slice(0, 40)}...</p>
       </div>
       <div className="absolute bottom-4 left-2 right-2 flex justify-between gap-4 items-center *:rounded-full *:duration-500   *:py-[6px] *:border *:flex-1 *:text-center ">
         <Link
