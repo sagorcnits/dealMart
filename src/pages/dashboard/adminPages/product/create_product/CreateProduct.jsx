@@ -15,14 +15,13 @@ const CreateProduct = () => {
     formState: { errors },
   } = useForm();
 
-
   const axiosFetch = useAxios();
 
   const submit = (data) => {
     const product_name = data.product_name;
     const brand_name = data.brand;
-    const reguler_price = data.reguler_price;
-    const sale_price = data.sale_price;
+    const reguler_price = parseInt(data.reguler_price);
+    const sale_price = parseInt(data.sale_price);
     const category_name = data.category_name;
     const quantity_in_stock = data.quantity_in_stock;
     const stock_status = data.stock_status;
@@ -40,8 +39,12 @@ const CreateProduct = () => {
       images: images,
     };
 
-    if (!images.length > 2) {
-      return alert("Please Provide More Product Image");
+    if (images.length < 2) {
+      return Swal.fire({
+        icon: "error",
+        title: "Please Provide at least two image",
+        text: "Something went wrong!",
+      });
     }
 
     axiosFetch
@@ -125,7 +128,7 @@ const CreateProduct = () => {
               </label>
               <input
                 {...register("reguler_price", { required: true })}
-                type="text"
+                type="number"
                 name="reguler_price"
                 placeholder="reguler price"
                 className="w-full px-3 py-2 border  focus:outline-none"
@@ -140,7 +143,7 @@ const CreateProduct = () => {
               </label>
               <input
                 {...register("sale_price", { required: true })}
-                type="text"
+                type="number"
                 name="sale_price"
                 placeholder="sale price"
                 className="w-full px-3 py-2 border  focus:outline-none"
@@ -207,7 +210,7 @@ const CreateProduct = () => {
               </label>
               <input
                 {...register("quantity_in_stock", { required: true })}
-                type="text"
+                type="number"
                 name="quantity_in_stock"
                 placeholder="quantity stock"
                 className="w-full px-3 py-2 border  focus:outline-none"

@@ -12,12 +12,14 @@ const Product_update = () => {
     product_name: "",
     brand_name: "",
     reguler_price: "",
-    sale_price: "",
+    sale_price: 0,
     category_name: "",
     quantity_in_stock: "",
     stock_status: "",
     description: "",
   });
+
+
   const axiosFetch = useAxios();
   const [images, setImages] = useState([]);
 
@@ -51,8 +53,6 @@ const Product_update = () => {
     const stock_status = form.stock_status.value;
     const description = form.description.value;
 
-    
-
     if (
       product_name == " " ||
       brand_name == " " ||
@@ -70,7 +70,7 @@ const Product_update = () => {
       });
     }
 
-    if (!images.length > 2) {
+    if (images.length < 2) {
       return Swal.fire({
         icon: "error",
         title: "Please Provide at least two image",
@@ -79,7 +79,10 @@ const Product_update = () => {
     }
 
     axiosFetch
-      .put(`/products/${id}`, { ...product, images: images })
+      .put(`/products/${id}`, {
+        ...product,
+        images: images,
+      })
       .then((res) => {
         if (res.data.modifiedCount) {
           Swal.fire({
@@ -125,7 +128,7 @@ const Product_update = () => {
   return (
     <main className="mt-16">
       <div className="py-3">
-        <h1 className="text-3xl font-bold poppins">Create Product</h1>
+        <h1 className="text-3xl font-bold poppins">Update Product</h1>
       </div>
       <form onSubmit={submit} className="bg-white box-shadow p-4 ">
         <div className="*:mt-4">
@@ -149,7 +152,7 @@ const Product_update = () => {
                 reguler price
               </label>
               <input
-                type="text"
+                type="number"
                 value={product?.reguler_price}
                 onChange={handleChange}
                 name="reguler_price"
@@ -162,7 +165,7 @@ const Product_update = () => {
                 sale price
               </label>
               <input
-                type="text"
+                type="number"
                 value={product?.sale_price}
                 onChange={handleChange}
                 name="sale_price"
@@ -209,7 +212,7 @@ const Product_update = () => {
                 Stock Status
               </label>
               <select
-              name="stock_status"
+                name="stock_status"
                 value={product?.stock_status}
                 onChange={handleChange}
                 className="py-2 border px-2  w-full  focus:outline-none"
@@ -224,7 +227,7 @@ const Product_update = () => {
               </label>
               <input
                 onChange={handleChange}
-                type="text"
+                type="number"
                 value={product?.quantity_in_stock}
                 name="quantity_in_stock"
                 placeholder="quantity stock"
@@ -399,7 +402,7 @@ const Product_update = () => {
             type="submit"
             className="w-full poppins px-8 py-3 font-semibold rounded-md bg-darkBlue hover:bg-black duration-500 text-white"
           >
-            Add Product
+            Update Product
           </button>
         </div>
       </form>
