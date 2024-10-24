@@ -1,13 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { FaLongArrowAltLeft } from "react-icons/fa";
 import { IoEyeOutline } from "react-icons/io5";
 import { MdDoubleArrow } from "react-icons/md";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import useAxios from "../../../../../hooks/useAxios";
 import useProducts from "../../../../../hooks/useProducts";
-
 const Products = () => {
+
+
+
+
   const axiosFetch = useAxios();
   const [products] = useProducts();
   const [category, setCategory] = useState("all");
@@ -61,11 +65,16 @@ const Products = () => {
     }
   };
 
+
+
   return (
     <>
       <main className="mt-16">
-        <section className="space-y-2 flex justify-between items-center">
-          <span>back</span>
+        <section className="py-3 flex justify-between items-center">
+          <span  className="flex items-center gap-2 cursor-pointer">
+            <FaLongArrowAltLeft></FaLongArrowAltLeft>
+            back
+          </span>
           <h1 className="text-3xl font-bold">All products</h1>
         </section>
         <section className="flex flex-col-reverse md:flex-row justify-between items-center *:flex-1 mt-4">
@@ -124,34 +133,34 @@ const Products = () => {
           </div>
         )}
         {products.length > 8 && (
-              <section className="mt-6 flex gap-3 items-center *:size-10 *:box-shadow *:flex *:justify-center *:items-center *:rounded-full *:duration-500">
+          <section className="mt-6 flex gap-3 items-center *:size-10 *:box-shadow *:flex *:justify-center *:items-center *:rounded-full *:duration-500">
+            <button
+              onClick={prevBtn}
+              className=" hover:bg-blue hover:text-white"
+            >
+              <MdDoubleArrow className="rotate-180"></MdDoubleArrow>
+            </button>
+            {totalbtn?.map((item, id) => {
+              return (
                 <button
-                  onClick={prevBtn}
-                  className=" hover:bg-blue hover:text-white"
+                  onClick={() => setCurrentPage(id + 1)}
+                  className={`hover:bg-blue hover:text-white ${
+                    currentPage == item + 1 && "bg-blue text-white"
+                  }`}
+                  key={id}
                 >
-                  <MdDoubleArrow className="rotate-180"></MdDoubleArrow>
+                  {item + 1}
                 </button>
-                {totalbtn?.map((item, id) => {
-                  return (
-                    <button
-                      onClick={() => setCurrentPage(id + 1)}
-                      className={`hover:bg-blue hover:text-white ${
-                        currentPage == item + 1 && "bg-blue text-white"
-                      }`}
-                      key={id}
-                    >
-                      {item + 1}
-                    </button>
-                  );
-                })}
-                <button
-                  onClick={nextbtn}
-                  className="hover:bg-blue hover:text-white"
-                >
-                  <MdDoubleArrow></MdDoubleArrow>
-                </button>
-              </section>
-            )}
+              );
+            })}
+            <button
+              onClick={nextbtn}
+              className="hover:bg-blue hover:text-white"
+            >
+              <MdDoubleArrow></MdDoubleArrow>
+            </button>
+          </section>
+        )}
       </main>
     </>
   );
