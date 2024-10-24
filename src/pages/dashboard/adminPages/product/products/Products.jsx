@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { FaLongArrowAltLeft } from "react-icons/fa";
 import { IoEyeOutline } from "react-icons/io5";
 import { MdDoubleArrow } from "react-icons/md";
 import { Link } from "react-router-dom";
@@ -8,10 +7,6 @@ import Swal from "sweetalert2";
 import useAxios from "../../../../../hooks/useAxios";
 import useProducts from "../../../../../hooks/useProducts";
 const Products = () => {
-
-
-
-
   const axiosFetch = useAxios();
   const [products] = useProducts();
   const [category, setCategory] = useState("all");
@@ -65,16 +60,10 @@ const Products = () => {
     }
   };
 
-
-
   return (
     <>
       <main className="mt-16">
-        <section className="py-3 flex justify-between items-center">
-          <span  className="flex items-center gap-2 cursor-pointer">
-            <FaLongArrowAltLeft></FaLongArrowAltLeft>
-            back
-          </span>
+        <section className="py-3">
           <h1 className="text-3xl font-bold">All products</h1>
         </section>
         <section className="flex flex-col-reverse md:flex-row justify-between items-center *:flex-1 mt-4">
