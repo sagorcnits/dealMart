@@ -10,9 +10,14 @@ import {
 } from "react-icons/md";
 import { TbProgressAlert } from "react-icons/tb";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
+import useAxios from "../../../../hooks/useAxios";
+import useOrders from "../../../../hooks/useOrders";
 const OrderList = () => {
+  const [orders, refetch] = useOrders();
   const [currentPage, setCurrentPage] = useState(1);
 
+  //  pagination next btn
   const nextbtn = () => {
     if (currentPage < totalbtn.length) {
       setCurrentPage(currentPage + 1);
@@ -49,7 +54,7 @@ const OrderList = () => {
             </select>
           </div>
           <div className="overflow-auto">
-            <Table></Table>
+            <Table orders={orders} refetch={refetch}></Table>
           </div>
         </section>
         <section className="mt-6 flex gap-3 items-center *:size-10 *:box-shadow *:flex *:justify-center *:items-center *:rounded-full *:duration-500">
@@ -81,9 +86,40 @@ const OrderList = () => {
 export default OrderList;
 
 // table
-
-const Table = () => {
+const Table = ({ orders, refetch }) => {
   const [activeStatus, setActiveStatus] = useState(false);
+  const axiosFetch = useAxios();
+  // remove order product
+  const deleteOrder = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosFetch
+          .delete(`/orders/${id}`)
+          .then((res) => {
+            if (res.data.message === "ok") {
+              Swal.fire({
+                title: "Deleted!",
+                text: "Your file has been deleted.",
+                icon: "success",
+              });
+
+              refetch();
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    });
+  };
 
   return (
     <table className="w-full">
@@ -100,21 +136,31 @@ const Table = () => {
         </tr>
       </thead>
       <tbody>
-        {[1, 2, 3, 4].map((item, id) => {
+        {orders?.map((item, id) => {
+          const {
+            _id,
+            orderId,
+            products,
+            customer,
+            total_price,
+            payment_status,
+            order_status,
+            createdAt,
+          } = item;
           return (
             <tr
               key={id}
               className="*:p-3 border-b items-center hover:bg-[#f1efef] duration-500"
             >
-              <td>#1292013</td>
-              <td>Sagor Hossain</td>
-              <td>10/24/2024</td>
-              <td>$200</td>
-              <td>4</td>
-              <td>Paid</td>
+              <td>{orderId}</td>
+              <td>{customer}</td>
+              <td>{createdAt.slice(0, 10)}</td>
+              <td>${total_price}</td>
+              <td>{products.length}</td>
+              <td>{payment_status}</td>
               <td>
                 <div className="flex items-center gap-2">
-                  <p>Complate</p>
+                  <p>{order_status}</p>
                   <div>
                     <div className="dropdown dropdown-bottom dropdown-end">
                       <div tabIndex={0} role="button" className="m-1">
@@ -145,10 +191,13 @@ const Table = () => {
               <td>
                 <div className="flex items-center gap-2">
                   <div className="flex items-center gap-2 *:cursor-pointer">
-                    <Link to={`/dashboard/order-details`}>
+                    <Link to={`/dashboard/order-details/${_id}`}>
                       <IoEyeOutline size={20}></IoEyeOutline>
                     </Link>
-                    <MdOutlineDeleteForever size={20}></MdOutlineDeleteForever>
+                    <MdOutlineDeleteForever
+                      onClick={() => deleteOrder(_id)}
+                      size={20}
+                    ></MdOutlineDeleteForever>
                   </div>
                 </div>
               </td>

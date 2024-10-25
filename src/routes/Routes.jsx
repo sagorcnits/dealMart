@@ -93,7 +93,7 @@ const router = createBrowserRouter([
       },
 
       {
-        path: "/dashboard/order-details",
+        path: "/dashboard/order-details/:id",
         element: <OrderDetails></OrderDetails>,
       },
 
