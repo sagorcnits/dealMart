@@ -5,6 +5,7 @@ import Contact from "../pages/contact/Contact";
 import AdminDashboard from "../pages/dashboard/adminPages/adminHome/AdminDashboard";
 import Chat from "../pages/dashboard/adminPages/chat/Chat";
 import Customers from "../pages/dashboard/adminPages/customers/Customers";
+import OrderDetails from "../pages/dashboard/adminPages/order_list/OrderDetails";
 import OrderList from "../pages/dashboard/adminPages/order_list/OrderList";
 import CreateProduct from "../pages/dashboard/adminPages/product/create_product/CreateProduct";
 import ProductDetails from "../pages/dashboard/adminPages/product/product_details/Product_details";
@@ -85,10 +86,17 @@ const router = createBrowserRouter([
         path: "/dashboard/customers",
         element: <Customers></Customers>,
       },
+      // order routes
       {
         path: "/dashboard/order-list",
         element: <OrderList></OrderList>,
       },
+
+      {
+        path: "/dashboard/order-details",
+        element: <OrderDetails></OrderDetails>,
+      },
+
       {
         path: "/dashboard/users",
         element: <Users></Users>,

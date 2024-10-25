@@ -9,6 +9,7 @@ import {
   MdOutlineDeleteForever,
 } from "react-icons/md";
 import { TbProgressAlert } from "react-icons/tb";
+import { Link } from "react-router-dom";
 const OrderList = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -85,14 +86,14 @@ const Table = () => {
   const [activeStatus, setActiveStatus] = useState(false);
 
   return (
-    <table className="w-full table-auto">
+    <table className="w-full">
       <thead>
         <tr className="text-left *:p-3 border-b">
           <th>#Order Id</th>
-          <th>Product</th>
           <th>Customer</th>
           <th>Date</th>
-          <th>Category</th>
+          <th>Total</th>
+          <th>Items</th>
           <th>Payment Status</th>
           <th>Order Status</th>
           <th>Action</th>
@@ -101,23 +102,15 @@ const Table = () => {
       <tbody>
         {[1, 2, 3, 4].map((item, id) => {
           return (
-            <tr key={id} className="*:p-3 border-b items-center">
+            <tr
+              key={id}
+              className="*:p-3 border-b items-center hover:bg-[#f1efef] duration-500"
+            >
               <td>#1292013</td>
-              <td className="w-[200px]">
-                <div className="flex items-center gap-2">
-                  <figure className="overflow-hidden size-[50px] rounded-md">
-                    <img
-                      className="w-full h-full object-cover"
-                      src="https://img.freepik.com/free-photo/rendering-smart-home-device_23-2151039302.jpg?t=st=1729786130~exp=1729789730~hmac=1329b4b8cb68ab8a0dd56c4b9c41325f3c6becb1508213696d45649e699acc45&w=740"
-                      alt=""
-                    />
-                  </figure>
-                  <p>Smart Watch</p>
-                </div>
-              </td>
               <td>Sagor Hossain</td>
               <td>10/24/2024</td>
-              <td>Electronics</td>
+              <td>$200</td>
+              <td>4</td>
               <td>Paid</td>
               <td>
                 <div className="flex items-center gap-2">
@@ -152,7 +145,9 @@ const Table = () => {
               <td>
                 <div className="flex items-center gap-2">
                   <div className="flex items-center gap-2 *:cursor-pointer">
-                    <IoEyeOutline size={20}></IoEyeOutline>
+                    <Link to={`/dashboard/order-details`}>
+                      <IoEyeOutline size={20}></IoEyeOutline>
+                    </Link>
                     <MdOutlineDeleteForever size={20}></MdOutlineDeleteForever>
                   </div>
                 </div>
