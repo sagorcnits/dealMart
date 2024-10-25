@@ -12,7 +12,7 @@ const OrderDetails = () => {
             <CustomerLocation></CustomerLocation>
           </div>
 
-          <div className="col-span-1 mt-6">
+          <div className="col-span-1 mt-6 lg:mt-0">
             <OrderSummary></OrderSummary>
           </div>
         </section>
