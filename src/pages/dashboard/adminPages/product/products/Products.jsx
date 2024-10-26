@@ -74,7 +74,7 @@ const Products = () => {
               name="show_product"
             >
               <option disabled selected>
-                Show Product
+                Show Products
               </option>
               <option>10</option>
               <option>15</option>

@@ -197,9 +197,10 @@ const OrderSummary = ({ orderData }) => {
         </div>
       </div>
 
-      <div className="box-shadow p-4 bg-white space-y-3 rounded-md h-[350px]">
-        <p className="border-b pb-2 font-semibold">Expected Date Of Delivery</p>
-       
+      <div className="box-shadow p-4 bg-white space-y-3 rounded-md">
+        <button className="border border-blue py-2 duration-500 hover:bg-blue w-full text-center font-semibold rounded-md hover:text-white">
+          Track Order
+        </button>
       </div>
     </section>
   );
