@@ -4,7 +4,7 @@ import useAxios from "../../../../hooks/useAxios";
 
 const OrderDetails = () => {
   const { id } = useParams();
-  const [orderData, setOrderData] = useState(null);
+  const [orderData, setOrderData] = useState([]);
   const axiosFetch = useAxios();
   // data fetch form server
   useEffect(() => {
@@ -142,7 +142,7 @@ const OrderSummary = ({ orderData }) => {
         </div>
         <div className="flex justify-between items-center">
           <p>Date</p>
-          <p>{createdAt.slice(0,10)}</p>
+          <p>{createdAt?.slice(0,10)}</p>
         </div>
         <div className="flex justify-between items-center">
           <p>Total</p>
@@ -175,12 +175,7 @@ const OrderSummary = ({ orderData }) => {
           </div>
         </div>
       </div>
-      <div className="box-shadow p-4 bg-white space-y-3 rounded-md">
-        <p className="border-b pb-2 font-semibold">Payment Information</p>
-        <div>
-          <p className="text-sm ">Cash On Delivery</p>
-        </div>
-      </div>
+      
       <div className="box-shadow p-4 bg-white space-y-3 rounded-md h-[350px]">
         <p className="border-b pb-2 font-semibold">Payment Information</p>
         <div>

@@ -121,6 +121,30 @@ const Table = ({ orders, refetch }) => {
     });
   };
 
+  //  update data by order status
+  const updateOrder = (status, id) => {
+    axiosFetch
+      .put(`/orders/${id}`, { order_status: status })
+      .then((res) => {
+        if (res.data.acknowledged) {
+          Swal.fire({
+            title: "Update",
+            text: "Your file has been Updated.",
+            icon: "success",
+          });
+          refetch();
+        }
+      })
+      .catch((error) => {
+        Swal.fire({
+          title: "Update is not working",
+          text: "Somthong Wrong",
+          icon: "warning",
+        });
+        console.log(error);
+      });
+  };
+
   return (
     <table className="w-full">
       <thead>
@@ -174,13 +198,13 @@ const Table = ({ orders, refetch }) => {
                         tabIndex={0}
                         className="dropdown-content menu bg-white rounded-box z-50 w-52 p-2 box-shadow"
                       >
-                        <li>
+                        <li onClick={() => updateOrder("complated", _id)}>
                           <a>Complated</a>
                         </li>
-                        <li>
+                        <li onClick={() => updateOrder("canceled", _id)}>
                           <a>Canceled</a>
                         </li>
-                        <li>
+                        <li onClick={() => updateOrder("refund", _id)}>
                           <a>Refund</a>
                         </li>
                       </ul>
