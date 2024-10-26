@@ -26,16 +26,16 @@ const OrderDetails = () => {
     <>
       <main className="pt-20">
         <h1 className="text-3xl font-bold">Order Details</h1>
-        <section className="mt-4 lg:grid  lg:grid-cols-4 gap-6">
-          <div className="col-span-3 flex flex-col gap-6">
-            <div className="bg-white box-shadow rounded-md">
+        <section className="mt-4 lg:grid  lg:grid-cols-6 gap-6">
+          <div className="col-span-4 flex flex-col gap-6">
+            <div className="bg-white box-shadow rounded-md overflow-auto w-full">
               <Table orderData={orderData}></Table>
             </div>
             <CartTotals orderData={orderData}></CartTotals>
             <CustomerLocation></CustomerLocation>
           </div>
 
-          <div className="col-span-1 mt-6 lg:mt-0">
+          <div className="col-span-2 mt-6 lg:mt-0">
             <OrderSummary orderData={orderData}></OrderSummary>
           </div>
         </section>
@@ -62,14 +62,20 @@ const Table = ({ orderData }) => {
       </thead>
       <tbody>
         {orderData.products?.map((item, id) => {
-          const {product_name,brand_name,category_name,images,sale_price,} = item?.product_id;
+          const {
+            product_name,
+            brand_name,
+            category_name,
+            images,
+            sale_price,
+          } = item?.product_id;
           return (
             <tr
               key={id}
               className="*:p-3 border-b items-center hover:bg-[#f1efef] duration-500"
             >
-              <td className="w-[200px]">
-                <div className="flex items-center gap-2">
+              <td>
+                <div className="flex items-center gap-2 w-[150px]">
                   <figure className="overflow-hidden size-[50px] rounded-md">
                     <img
                       className="w-full h-full object-cover"
@@ -84,7 +90,7 @@ const Table = ({ orderData }) => {
               <td>{category_name}</td>
               <td>{item?.quantity}</td>
               <td>${sale_price}</td>
-              <td>$700</td>
+              <td>${item?.total_price}</td>
             </tr>
           );
         })}
@@ -93,7 +99,7 @@ const Table = ({ orderData }) => {
   );
 };
 // cart Totals card
-const CartTotals = () => {
+const CartTotals = ({ orderData }) => {
   return (
     <div className="bg-white box-shadow *:flex *:justify-between *:items-center *:p-3 *:border-b rounded-md">
       <div className="font-semibold">
@@ -102,15 +108,15 @@ const CartTotals = () => {
       </div>
       <div>
         <p>SubTotal: </p>
-        <p>$3000</p>
+        <p>${orderData?.total_price}</p>
       </div>
       <div>
         <p>Shipping: </p>
-        <p>$3000</p>
+        <p>${orderData?.shipping_price}</p>
       </div>
       <div className="font-semibold">
         <p>Total Price: </p>
-        <p>$5000</p>
+        <p>${orderData?.total_price + orderData?.shipping_price}</p>
       </div>
     </div>
   );
@@ -129,11 +135,22 @@ const CustomerLocation = () => {
 };
 // order Summury
 const OrderSummary = ({ orderData }) => {
-
-  const {createdAt,customer,orderId,order_status,total_price,} = orderData;
-
+  const {
+    createdAt,
+    customer,
+    orderId,
+    order_status,
+    total_price,
+    customer_img,
+    shipping_address,
+    phone,
+    email,
+    payment_infor,
+    payment_status,
+    shipping_price,
+  } = orderData;
   return (
-    <section className="flex flex-col gap-6">
+    <section className="flex flex-col gap-6 ">
       <div className="box-shadow p-4 bg-white space-y-3 rounded-md">
         <p className="font-semibold">Summary</p>
         <div className="flex justify-between items-center">
@@ -142,45 +159,47 @@ const OrderSummary = ({ orderData }) => {
         </div>
         <div className="flex justify-between items-center">
           <p>Date</p>
-          <p>{createdAt?.slice(0,10)}</p>
+          <p>{createdAt?.slice(0, 10)}</p>
         </div>
         <div className="flex justify-between items-center">
           <p>Total</p>
-          <p>${total_price}</p>
+          <p>${total_price + shipping_price}</p>
         </div>
       </div>
       <div className="box-shadow p-4 bg-white space-y-3 rounded-md">
         <p className="border-b pb-2 font-semibold">Customer Details</p>
         <div className="space-y-3">
           <div className="flex gap-2">
-            <figure className="overflow-hidden size-[50px] rounded-md">
+            <figure className="overflow-hidden size-[50px] rounded-full border">
               <img
                 className="w-full h-full object-cover"
-                src="https://img.freepik.com/free-photo/rendering-smart-home-device_23-2151039302.jpg?t=st=1729786130~exp=1729789730~hmac=1329b4b8cb68ab8a0dd56c4b9c41325f3c6becb1508213696d45649e699acc45&w=740"
-                alt=""
+                src={customer_img}
+                alt={customer}
               />
             </figure>
             <div>
               <p>{customer}</p>
-              <p className="text-green">sagor@gamil.com</p>
+              <p className="text-green">{email}</p>
             </div>
           </div>
           <div>
             <p className="font-semibold">Contact Number</p>
-            <p className="text-sm">732-760-5760</p>
+            <p className="text-sm">{phone}</p>
           </div>
           <div>
             <p className="font-semibold">Shipping Address</p>
-            <p className="text-sm">Komorpur Pabna Sadar Pabna</p>
+            <p className="text-sm">{shipping_address}</p>
+          </div>
+          <div>
+            <p className="font-semibold">Payment Information</p>
+            <p className="text-sm">{payment_infor}</p>
           </div>
         </div>
       </div>
-      
+
       <div className="box-shadow p-4 bg-white space-y-3 rounded-md h-[350px]">
-        <p className="border-b pb-2 font-semibold">Payment Information</p>
-        <div>
-          <p className="text-sm ">Cash On Delivery</p>
-        </div>
+        <p className="border-b pb-2 font-semibold">Expected Date Of Delivery</p>
+       
       </div>
     </section>
   );

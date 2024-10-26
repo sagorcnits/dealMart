@@ -124,7 +124,7 @@ const Table = ({ orders, refetch }) => {
   //  update data by order status
   const updateOrder = (status, id) => {
     axiosFetch
-      .put(`/orders/${id}`, { order_status: status })
+      .put(`/orders/${id}`, { status: status, })
       .then((res) => {
         if (res.data.acknowledged) {
           Swal.fire({
@@ -181,7 +181,36 @@ const Table = ({ orders, refetch }) => {
               <td>{createdAt.slice(0, 10)}</td>
               <td>${total_price}</td>
               <td>{products.length}</td>
-              <td>{payment_status}</td>
+              <td>
+                <div className="flex items-center gap-2">
+                  <p>{payment_status}</p>
+                  <div>
+                    <div className="dropdown dropdown-bottom dropdown-end">
+                      <div tabIndex={0} role="button" className="m-1">
+                        <BsThreeDotsVertical
+                          onClick={() => setActiveStatus(!activeStatus)}
+                          size={20}
+                          className="mx-auto cursor-pointer"
+                        ></BsThreeDotsVertical>
+                      </div>
+                      <ul
+                        tabIndex={0}
+                        className="dropdown-content menu bg-white rounded-box z-50 w-52 p-2 box-shadow"
+                      >
+                        <li onClick={() => updateOrder("paid", _id)}>
+                          <a>paid</a>
+                        </li>
+                        <li onClick={() => updateOrder("unpaid", _id)}>
+                          <a>unpaid</a>
+                        </li>
+                        <li onClick={() => updateOrder("refund", _id)}>
+                          <a>refund</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </td>
               <td>
                 <div className="flex items-center gap-2">
                   <p>{order_status}</p>
@@ -204,8 +233,8 @@ const Table = ({ orders, refetch }) => {
                         <li onClick={() => updateOrder("canceled", _id)}>
                           <a>Canceled</a>
                         </li>
-                        <li onClick={() => updateOrder("refund", _id)}>
-                          <a>Refund</a>
+                        <li onClick={() => updateOrder("progress", _id)}>
+                          <a>Progress</a>
                         </li>
                       </ul>
                     </div>
