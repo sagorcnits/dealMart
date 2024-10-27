@@ -271,31 +271,51 @@ const Table = ({
                   <td>{products.length}</td>
                   <td>
                     <div className="flex items-center gap-2">
-                      <p>{payment_status}</p>
+                      <p
+                        className={`${
+                          payment_status == "paid"
+                            ? "text-green"
+                            : payment_status == "refund"
+                            ? "text-customRed"
+                            : ""
+                        } font-semibold`}
+                      >
+                        {payment_status}
+                      </p>
                       <div>
-                        <div className="dropdown dropdown-bottom dropdown-end">
-                          <div tabIndex={0} role="button" className="m-1">
-                            <BsThreeDotsVertical
-                              onClick={() => setActiveStatus(!activeStatus)}
-                              size={20}
-                              className="mx-auto cursor-pointer"
-                            ></BsThreeDotsVertical>
+                        {payment_status != "refund" && (
+                          <div className="dropdown dropdown-bottom dropdown-end">
+                            <div tabIndex={0} role="button" className="m-1">
+                              <BsThreeDotsVertical
+                                onClick={() => setActiveStatus(!activeStatus)}
+                                size={20}
+                                className="mx-auto cursor-pointer"
+                              ></BsThreeDotsVertical>
+                            </div>
+                            <ul
+                              tabIndex={0}
+                              className="dropdown-content menu bg-white rounded-box z-50 w-52 p-2 box-shadow"
+                            >
+                              {payment_status == "paid" ? (
+                                <>
+                                  <li
+                                    onClick={() => updateOrder("refund", _id)}
+                                  >
+                                    <a>refund</a>
+                                  </li>
+                                </>
+                              ) : payment_status == "unpaid" ? (
+                                <li onClick={() => updateOrder("paid", _id)}>
+                                  <a>paid</a>
+                                </li>
+                              ) : (
+                                <li onClick={() => updateOrder("unpaid", _id)}>
+                                  <a>unpaid</a>
+                                </li>
+                              )}
+                            </ul>
                           </div>
-                          <ul
-                            tabIndex={0}
-                            className="dropdown-content menu bg-white rounded-box z-50 w-52 p-2 box-shadow"
-                          >
-                            <li onClick={() => updateOrder("paid", _id)}>
-                              <a>paid</a>
-                            </li>
-                            <li onClick={() => updateOrder("unpaid", _id)}>
-                              <a>unpaid</a>
-                            </li>
-                            <li onClick={() => updateOrder("refund", _id)}>
-                              <a>refund</a>
-                            </li>
-                          </ul>
-                        </div>
+                        )}
                       </div>
                     </div>
                   </td>
@@ -312,12 +332,16 @@ const Table = ({
                             : order_status?.status === "canceled"
                             ? "text-customRed"
                             : ""
-                        }`}
+                        } font-semibold`}
                       >
                         {order_status?.status}
                       </p>
                       <div>
-                        {order_status?.status != "complated" && (
+                        {order_status?.status == "complated" ? (
+                          " "
+                        ) : order_status?.status == "canceled" ? (
+                          " "
+                        ) : (
                           <div className="dropdown dropdown-bottom dropdown-end">
                             <div tabIndex={0} role="button" className="m-1">
                               <BsThreeDotsVertical
@@ -330,12 +354,6 @@ const Table = ({
                               tabIndex={0}
                               className="dropdown-content menu bg-white rounded-box z-50 w-52 p-2 box-shadow"
                             >
-                              <li onClick={() => updateOrder("complated", _id)}>
-                                <a>complated</a>
-                              </li>
-                              <li onClick={() => updateOrder("courier", _id)}>
-                                <a>courier</a>
-                              </li>
                               {order_status?.status == "pending" ? (
                                 <>
                                   <li
@@ -416,16 +434,26 @@ const Table = ({
 const Card = ({ changeStatus }) => {
   const axiosFetch = useAxios();
   const [orderDetails, setOrderDetails] = useState(null);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     axiosFetch
       .get("/orders")
       .then((res) => {
         setOrderDetails(res.data.orderDetails);
+        setLoading(false)
       })
       .catch((err) => {
         console.log(err);
       });
   }, [changeStatus]);
+
+
+    if (loading) {
+      return (
+        <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-blue mx-auto"></div>
+      );
+    }
+  
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 *:bg-white">
@@ -486,7 +514,7 @@ const Card = ({ changeStatus }) => {
       <div className="flex justify-between *:text-emerald-400 items-center box-shadow p-4 rounded-md">
         <div className="space-y-3">
           <h1 className="font-semibold">Payment paid</h1>
-          <p>{orderDetails?.unpaid}</p>
+          <p>{orderDetails?.paid}</p>
         </div>
         <div>
           <IoLogoUsd size={30}></IoLogoUsd>

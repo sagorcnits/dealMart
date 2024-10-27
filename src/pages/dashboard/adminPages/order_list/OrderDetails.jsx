@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+import { IoClose } from "react-icons/io5";
 import { MdDownloadDone } from "react-icons/md";
 import { useParams } from "react-router-dom";
 import useAxios from "../../../../hooks/useAxios";
-
 const OrderDetails = () => {
   const { id } = useParams();
   const [orderData, setOrderData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const axiosFetch = useAxios();
   // data fetch form server
   useEffect(() => {
@@ -14,6 +15,7 @@ const OrderDetails = () => {
       .then((res) => {
         if (res.data.message == "ok") {
           setOrderData(res.data.order);
+          setLoading(false)
         }
       })
       .catch((err) => {
@@ -21,7 +23,13 @@ const OrderDetails = () => {
       });
   }, [id]);
 
-  console.log(orderData);
+  if (loading) {
+    return (
+     <div className="h-screen flex justify-center items-center">
+         <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-blue mx-auto"></div>
+     </div>
+    );
+  }
 
   return (
     <>
@@ -129,7 +137,6 @@ const CartTotals = ({ orderData }) => {
 };
 // google map by customer address
 const TrackOrder = ({ orderData }) => {
-  
   const { order_status } = orderData;
   console.log(order_status?.track_order);
 
@@ -138,92 +145,127 @@ const TrackOrder = ({ orderData }) => {
     progress: "",
     courier: "",
     complated: "",
+    canceled: "",
   };
 
   for (let i = 0; i < order_status?.track_order?.length; i++) {
-    console.log(order_status?.track_order[i].status);
     if (order_status?.track_order[i].status == "pending") {
-      order_track.reciving = order_status?.track_order[i].status;
+      order_track.reciving = order_status?.track_order[i];
     } else if (order_status?.track_order[i].status == "progress") {
-      order_track.progress = order_status?.track_order[i].status;
-    }else if (order_status?.track_order[i].status == "complated") {
-      order_track.complated = order_status?.track_order[i].status;
-    }else if (order_status?.track_order[i].status == "courier") {
-      order_track.courier = order_status?.track_order[i].status;
+      order_track.progress = order_status?.track_order[i];
+    } else if (order_status?.track_order[i].status == "complated") {
+      order_track.complated = order_status?.track_order[i];
+    } else if (order_status?.track_order[i].status == "courier") {
+      order_track.courier = order_status?.track_order[i];
+    } else if (order_status?.track_order[i].status == "canceled") {
+      order_track.canceled = order_status?.track_order[i];
     }
   }
 
   return (
-    <div className="bg-white box-shadow rounded-md p-3">
+    <div className="bg-white box-shadow rounded-md p-4">
       <h3 className="font-semibold">Detail</h3>
       <p className="text-sm">
         Tracking information will be available within 24 hours.
       </p>
 
-      <div className="grid grid-cols-4  items-center py-8">
-        <div
-          className={`${
-            order_track?.reciving ? "bg-blue" : "bg-paragraph"
-          } h-1 relative`}
-        >
-          <div
-            className={`track_order size-[40px] rounded-full flex justify-center items-center ${
-              order_track?.reciving ? "bg-blue text-white" : "bg-paragraph"
-            } absolute`}
-          >
-            <MdDownloadDone size={20}></MdDownloadDone>
+      {order_track?.canceled?.status ? (
+        <div className="text-center font-semibold text-sm space-y-2">
+          <div className="size-[50px] my-4 mx-auto rounded-full bg-customRed flex justify-center items-center text-white">
+            <IoClose size={30}></IoClose>
           </div>
+          <p>Canceled order</p>
+          <p>{order_track?.canceled?.date?.slice(11, 19)}</p>
+          <p>{order_track?.canceled?.date?.slice(0, 10)}</p>
         </div>
-        <div
-          className={`${order_track?.progress ? "bg-blue" : "bg-paragraph"} h-1 relative`}
-        >
-          <div
-            className={`track_order size-[40px] rounded-full flex justify-center items-center ${
-              order_track?.progress ? "bg-blue text-white" : "bg-paragraph"
-            } absolute`}
-          >
-            <MdDownloadDone size={20}></MdDownloadDone>
+      ) : (
+        <>
+          <div className="grid grid-cols-4  items-center py-8">
+            <div
+              className={`${
+                order_track?.reciving.status ? "bg-blue" : "bg-paragraph"
+              } h-1 relative`}
+            >
+              <div
+                className={`track_order size-[40px] rounded-full flex justify-center items-center ${
+                  order_track?.reciving.status
+                    ? "bg-blue text-white"
+                    : "bg-paragraph"
+                } absolute`}
+              >
+                <MdDownloadDone size={20}></MdDownloadDone>
+              </div>
+            </div>
+            <div
+              className={`${
+                order_track?.progress.status ? "bg-blue" : "bg-paragraph"
+              } h-1 relative`}
+            >
+              <div
+                className={`track_order size-[40px] rounded-full flex justify-center items-center ${
+                  order_track?.progress.status
+                    ? "bg-blue text-white"
+                    : "bg-paragraph"
+                } absolute`}
+              >
+                <MdDownloadDone size={20}></MdDownloadDone>
+              </div>
+            </div>
+            <div
+              className={`${
+                order_track?.courier.status ? "bg-blue" : "bg-paragraph"
+              } h-1 relative`}
+            >
+              <div
+                className={`track_order size-[40px] rounded-full flex justify-center items-center ${
+                  order_track?.courier.status
+                    ? "bg-blue text-white"
+                    : "bg-paragraph"
+                } absolute`}
+              >
+                <MdDownloadDone size={20}></MdDownloadDone>
+              </div>
+            </div>
+            <div
+              className={`${
+                order_track?.complated.status ? "bg-blue" : "bg-paragraph"
+              } h-1 relative`}
+            >
+              <div
+                className={`track_order size-[40px] rounded-full flex justify-center items-center ${
+                  order_track?.complated.status
+                    ? "bg-blue text-white"
+                    : "bg-paragraph"
+                } absolute`}
+              >
+                <MdDownloadDone size={20}></MdDownloadDone>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className={`${order_track?.courier ? "bg-blue" : "bg-paragraph"} h-1 relative`}>
-          <div
-            className={`track_order size-[40px] rounded-full flex justify-center items-center ${
-              order_track?.courier ? "bg-blue text-white" : "bg-paragraph"
-            } absolute`}
-          >
-            <MdDownloadDone size={20}></MdDownloadDone>
+          <div className="grid grid-cols-4  items-center text-sm font-semibold">
+            <div className="text-center space-y-2 ">
+              <h3>receving order</h3>
+              <p>{order_track?.reciving?.date?.slice(11, 19)}</p>
+              <p>{order_track?.reciving?.date?.slice(0, 10)}</p>
+            </div>
+            <div className="text-center space-y-2 ">
+              <h3>progress order</h3>
+              <p>{order_track?.progress?.date?.slice(11, 19)}</p>
+              <p>{order_track?.progress?.date?.slice(0, 10)}</p>
+            </div>
+            <div className="text-center space-y-2 ">
+              <h3>courier Order</h3>
+              <p>{order_track?.courier?.date?.slice(11, 19)}</p>
+              <p>{order_track?.courier?.date?.slice(0, 10)}</p>
+            </div>
+            <div className="text-center space-y-2 ">
+              <h3>delivered Order</h3>
+              <p>{order_track?.complated?.date?.slice(11, 19)}</p>
+              <p>{order_track?.complated?.date?.slice(0, 10)}</p>
+            </div>
           </div>
-        </div>
-        <div
-          className={`${order_track?.complated ? "bg-blue" : "bg-paragraph"} h-1 relative`}
-        >
-          <div
-            className={`track_order size-[40px] rounded-full flex justify-center items-center ${
-              order_track?.complated ? "bg-blue text-white" : "bg-paragraph"
-            } absolute`}
-          >
-            <MdDownloadDone size={20}></MdDownloadDone>
-          </div>
-        </div>
-      </div>
-      <div className="grid grid-cols-4  items-center">
-        <div className="text-center space-y-2 ">
-          <h3>receving order</h3>
-          <p>20/10/2024</p>
-        </div>
-        <div className="text-center space-y-2 ">
-          <h3>progress order</h3>
-          <p>20/10/2024</p>
-        </div>
-        <div className="text-center space-y-2 ">
-          <h3>courier Order</h3>
-          <p>20/10/2024</p>
-        </div>
-        <div className="text-center space-y-2 ">
-          <h3>complated Order</h3>
-          <p>20/10/2024</p>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 };
@@ -249,15 +291,29 @@ const OrderSummary = ({ orderData }) => {
         <p className="font-semibold">Summary</p>
         <div className="flex justify-between items-center">
           <p>Order Id</p>
-          <p>{orderId}</p>
+          <p className="font-semibold text-sm">{orderId}</p>
+        </div>
+        <div className="flex justify-between items-center">
+          <p>Payment Status</p>
+          <p className="font-semibold text-sm">{payment_status}</p>
+        </div>
+        <div className="flex justify-between items-center">
+          <p>Order Status</p>
+          <p className="font-semibold text-sm">{order_status?.status}</p>
+        </div>
+        <div className="flex justify-between items-center">
+          <p>Payment Method</p>
+          <p className="font-semibold text-sm">{payment_infor}</p>
         </div>
         <div className="flex justify-between items-center">
           <p>Date</p>
-          <p>{createdAt?.slice(0, 10)}</p>
+          <p className="font-semibold text-sm">{createdAt?.slice(0, 10)}</p>
         </div>
         <div className="flex justify-between items-center">
           <p>Total</p>
-          <p>${total_price + shipping_price}</p>
+          <p className="font-semibold text-sm">
+            ${total_price + shipping_price}
+          </p>
         </div>
       </div>
       <div className="box-shadow p-4 bg-white space-y-3 rounded-md">
@@ -284,17 +340,7 @@ const OrderSummary = ({ orderData }) => {
             <p className="font-semibold">Shipping Address</p>
             <p className="text-sm">{shipping_address}</p>
           </div>
-          <div>
-            <p className="font-semibold">Payment Information</p>
-            <p className="text-sm">{payment_infor}</p>
-          </div>
         </div>
-      </div>
-
-      <div className="box-shadow p-4 bg-white space-y-3 rounded-md">
-        <button className="border border-blue py-2 duration-500 hover:bg-blue w-full text-center font-semibold rounded-md hover:text-white">
-          Track Order
-        </button>
       </div>
     </section>
   );
