@@ -110,17 +110,16 @@ const Products = () => {
             </select>
           </div>
         </section>
-        {productsData.length > 0 ? (
+        {isPending && (
+          <div className="mt-10 w-16 h-16 border-4 border-dashed rounded-full animate-spin border-blue mx-auto"></div>
+        )}
+        {productsData.length > 0 && (
           <section className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-4 mt-5">
             {productsData?.map((item, id) => (
               <Card refetch={refetch} key={id} item={item}></Card>
             ))}
           </section>
-        ) : (
-          <div className="flex justify-center items-center h-screen text-3xl font-bold">
-            <h1>No Products</h1>
-          </div>
-        )}
+        ) }
         {products.length > 8 && (
           <section className="mt-6 flex gap-3 items-center *:size-10 *:box-shadow *:flex *:justify-center *:items-center *:rounded-full *:duration-500">
             <button

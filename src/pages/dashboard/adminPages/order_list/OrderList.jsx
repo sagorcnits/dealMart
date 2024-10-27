@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { CiShoppingCart } from "react-icons/ci";
 import { FaHandHoldingUsd } from "react-icons/fa";
@@ -16,9 +16,9 @@ import useAxios from "../../../../hooks/useAxios";
 import useOrders from "../../../../hooks/useOrders";
 const OrderList = () => {
   const [orders] = useOrders();
-
   const axiosFetch = useAxios();
   const [filter, setFilter] = useState("all");
+  const [changeStatus, setChangeStatus] = useState(false);
   // pagination
   const [itemPerPage, setItemPerPage] = useState(8);
   const [currentPage, setCurrentPage] = useState(1);
@@ -40,6 +40,8 @@ const OrderList = () => {
       return res.data;
     },
   });
+
+  // console.log(changeStatus)
 
   // showproduct in perPage
   const showProductPerPage = (e) => {
@@ -71,7 +73,7 @@ const OrderList = () => {
           <h1 className="text-3xl font-bold">Order List</h1>
         </div>
         <section className="mt-6">
-          <Card></Card>
+          <Card changeStatus={changeStatus}></Card>
         </section>
         <section className="mt-6 bg-white rounded-md">
           <div className="flex justify-between items-center p-3">
@@ -113,6 +115,8 @@ const OrderList = () => {
               orders={ordersData}
               refetch={refetch}
               isPending={isPending}
+              changeStatus={changeStatus}
+              setChangeStatus={setChangeStatus}
             ></Table>
           </div>
         </section>
@@ -153,7 +157,13 @@ const OrderList = () => {
 export default OrderList;
 
 // table
-const Table = ({ orders, refetch, isPending }) => {
+const Table = ({
+  orders,
+  refetch,
+  isPending,
+  changeStatus,
+  setChangeStatus,
+}) => {
   const [activeStatus, setActiveStatus] = useState(false);
   const axiosFetch = useAxios();
   // remove order product
@@ -177,8 +187,8 @@ const Table = ({ orders, refetch, isPending }) => {
                 text: "Your file has been deleted.",
                 icon: "success",
               });
-
               refetch();
+              setChangeStatus(!changeStatus);
             }
           })
           .catch((err) => {
@@ -200,6 +210,7 @@ const Table = ({ orders, refetch, isPending }) => {
             icon: "success",
           });
           refetch();
+          setChangeStatus(!changeStatus);
         }
       })
       .catch((error) => {
@@ -343,13 +354,26 @@ const Table = ({ orders, refetch, isPending }) => {
   );
 };
 
-const Card = () => {
+const Card = ({ changeStatus }) => {
+  const axiosFetch = useAxios();
+  const [orderDetails, setOrderDetails] = useState(null);
+  useEffect(() => {
+    axiosFetch
+      .get("/orders")
+      .then((res) => {
+        setOrderDetails(res.data.orderDetails);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [changeStatus]);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 *:bg-white">
       <div className="flex justify-between items-center box-shadow p-4 rounded-md">
         <div className="space-y-3">
           <h1 className="font-semibold">Payment Refund</h1>
-          <p className="text-paragraph">490</p>
+          <p className="text-paragraph">{orderDetails?.refund?.length}</p>
         </div>
         <div>
           <FaHandHoldingUsd size={40}></FaHandHoldingUsd>
@@ -358,7 +382,7 @@ const Card = () => {
       <div className="flex justify-between *:text-customRed items-center box-shadow p-4 rounded-md">
         <div className="space-y-3">
           <h1 className="font-semibold ">Canceled Order</h1>
-          <p>490</p>
+          <p>{orderDetails?.canceled?.length}</p>
         </div>
         <div>
           <CiShoppingCart size={40}></CiShoppingCart>
@@ -367,7 +391,7 @@ const Card = () => {
       <div className="flex justify-between text-green items-center box-shadow p-4 rounded-md">
         <div className="space-y-3">
           <h1 className="font-semibold">Complated</h1>
-          <p>490</p>
+          <p>{orderDetails?.complated?.length}</p>
         </div>
         <div>
           <MdDownloadDone size={40}></MdDownloadDone>
@@ -376,7 +400,7 @@ const Card = () => {
       <div className="flex justify-between *:text-darkBlue items-center box-shadow p-4 rounded-md">
         <div className="space-y-3">
           <h1 className="font-semibold">In Progress</h1>
-          <p>490</p>
+          <p>{orderDetails?.progress?.length}</p>
         </div>
         <div>
           <TbProgressAlert size={40}></TbProgressAlert>
