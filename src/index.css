@@ -127,4 +127,11 @@
   .dashboard_card:hover .dashboard_card_effect {
     transform: scale(1);
   }
+
+  /* order details */
+  .track_order {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 }

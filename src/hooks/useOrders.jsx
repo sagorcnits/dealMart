@@ -12,7 +12,7 @@ const useOrders = () => {
       queryKey: ["orders"],
       queryFn: async () => {
         const res = await axiosFetch.get(`/orders`);
-        return res.data.orders;
+        return res.data.orders || [];
       },
     });
   

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { MdDownloadDone } from "react-icons/md";
 import { useParams } from "react-router-dom";
 import useAxios from "../../../../hooks/useAxios";
 
@@ -32,11 +33,16 @@ const OrderDetails = () => {
               <Table orderData={orderData}></Table>
             </div>
             <CartTotals orderData={orderData}></CartTotals>
-            <CustomerLocation></CustomerLocation>
+            <div className="hidden lg:block">
+              <TrackOrder orderData={orderData}></TrackOrder>
+            </div>
           </div>
 
-          <div className="col-span-2 mt-6 lg:mt-0">
+          <div className="col-span-2 mt-6 lg:mt-0 flex flex-col gap-6">
             <OrderSummary orderData={orderData}></OrderSummary>
+            <div className="block lg:hidden ">
+              <TrackOrder orderData={orderData}></TrackOrder>
+            </div>
           </div>
         </section>
       </main>
@@ -122,14 +128,102 @@ const CartTotals = ({ orderData }) => {
   );
 };
 // google map by customer address
-const CustomerLocation = () => {
+const TrackOrder = ({ orderData }) => {
+  
+  const { order_status } = orderData;
+  console.log(order_status?.track_order);
+
+  let order_track = {
+    reciving: "",
+    progress: "",
+    courier: "",
+    complated: "",
+  };
+
+  for (let i = 0; i < order_status?.track_order?.length; i++) {
+    console.log(order_status?.track_order[i].status);
+    if (order_status?.track_order[i].status == "pending") {
+      order_track.reciving = order_status?.track_order[i].status;
+    } else if (order_status?.track_order[i].status == "progress") {
+      order_track.progress = order_status?.track_order[i].status;
+    }else if (order_status?.track_order[i].status == "complated") {
+      order_track.complated = order_status?.track_order[i].status;
+    }else if (order_status?.track_order[i].status == "courier") {
+      order_track.courier = order_status?.track_order[i].status;
+    }
+  }
+
   return (
-    <div>
-      <iframe
-        className="w-full h-[350px] rounded-md"
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d164973.09597354202!2d89.2291932378806!3d23.980770535818408!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39fe84d98fa5bf3d%3A0xb038902617eb9884!2sPabna!5e0!3m2!1sen!2sbd!4v1729849286907!5m2!1sen!2sbd"
-        loading="lazy"
-      ></iframe>
+    <div className="bg-white box-shadow rounded-md p-3">
+      <h3 className="font-semibold">Detail</h3>
+      <p className="text-sm">
+        Tracking information will be available within 24 hours.
+      </p>
+
+      <div className="grid grid-cols-4  items-center py-8">
+        <div
+          className={`${
+            order_track?.reciving ? "bg-blue" : "bg-paragraph"
+          } h-1 relative`}
+        >
+          <div
+            className={`track_order size-[40px] rounded-full flex justify-center items-center ${
+              order_track?.reciving ? "bg-blue text-white" : "bg-paragraph"
+            } absolute`}
+          >
+            <MdDownloadDone size={20}></MdDownloadDone>
+          </div>
+        </div>
+        <div
+          className={`${order_track?.progress ? "bg-blue" : "bg-paragraph"} h-1 relative`}
+        >
+          <div
+            className={`track_order size-[40px] rounded-full flex justify-center items-center ${
+              order_track?.progress ? "bg-blue text-white" : "bg-paragraph"
+            } absolute`}
+          >
+            <MdDownloadDone size={20}></MdDownloadDone>
+          </div>
+        </div>
+        <div className={`${order_track?.courier ? "bg-blue" : "bg-paragraph"} h-1 relative`}>
+          <div
+            className={`track_order size-[40px] rounded-full flex justify-center items-center ${
+              order_track?.courier ? "bg-blue text-white" : "bg-paragraph"
+            } absolute`}
+          >
+            <MdDownloadDone size={20}></MdDownloadDone>
+          </div>
+        </div>
+        <div
+          className={`${order_track?.complated ? "bg-blue" : "bg-paragraph"} h-1 relative`}
+        >
+          <div
+            className={`track_order size-[40px] rounded-full flex justify-center items-center ${
+              order_track?.complated ? "bg-blue text-white" : "bg-paragraph"
+            } absolute`}
+          >
+            <MdDownloadDone size={20}></MdDownloadDone>
+          </div>
+        </div>
+      </div>
+      <div className="grid grid-cols-4  items-center">
+        <div className="text-center space-y-2 ">
+          <h3>receving order</h3>
+          <p>20/10/2024</p>
+        </div>
+        <div className="text-center space-y-2 ">
+          <h3>progress order</h3>
+          <p>20/10/2024</p>
+        </div>
+        <div className="text-center space-y-2 ">
+          <h3>courier Order</h3>
+          <p>20/10/2024</p>
+        </div>
+        <div className="text-center space-y-2 ">
+          <h3>complated Order</h3>
+          <p>20/10/2024</p>
+        </div>
+      </div>
     </div>
   );
 };

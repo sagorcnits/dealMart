@@ -2,7 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { CiShoppingCart } from "react-icons/ci";
-import { FaHandHoldingUsd } from "react-icons/fa";
+import { FaHandHoldingUsd, FaShoppingCart } from "react-icons/fa";
+import { IoLogoUsd } from "react-icons/io";
 import { IoEyeOutline } from "react-icons/io5";
 import {
   MdDoubleArrow,
@@ -203,6 +204,7 @@ const Table = ({
     axiosFetch
       .put(`/orders/${id}`, { status: status })
       .then((res) => {
+        console.log(res.data);
         if (res.data.acknowledged) {
           Swal.fire({
             title: "Update",
@@ -299,31 +301,88 @@ const Table = ({
                   </td>
                   <td>
                     <div className="flex items-center gap-2">
-                      <p>{order_status}</p>
+                      <p
+                        className={`${
+                          order_status?.status === "complated"
+                            ? "text-green"
+                            : order_status?.status === "courier"
+                            ? "text-lime-700"
+                            : order_status?.status === "progress"
+                            ? "text-darkBlue"
+                            : order_status?.status === "canceled"
+                            ? "text-customRed"
+                            : ""
+                        }`}
+                      >
+                        {order_status?.status}
+                      </p>
                       <div>
-                        <div className="dropdown dropdown-bottom dropdown-end">
-                          <div tabIndex={0} role="button" className="m-1">
-                            <BsThreeDotsVertical
-                              onClick={() => setActiveStatus(!activeStatus)}
-                              size={20}
-                              className="mx-auto cursor-pointer"
-                            ></BsThreeDotsVertical>
+                        {order_status?.status != "complated" && (
+                          <div className="dropdown dropdown-bottom dropdown-end">
+                            <div tabIndex={0} role="button" className="m-1">
+                              <BsThreeDotsVertical
+                                onClick={() => setActiveStatus(!activeStatus)}
+                                size={20}
+                                className="mx-auto cursor-pointer"
+                              ></BsThreeDotsVertical>
+                            </div>
+                            <ul
+                              tabIndex={0}
+                              className="dropdown-content menu bg-white rounded-box z-50 w-52 p-2 box-shadow"
+                            >
+                              <li onClick={() => updateOrder("complated", _id)}>
+                                <a>complated</a>
+                              </li>
+                              <li onClick={() => updateOrder("courier", _id)}>
+                                <a>courier</a>
+                              </li>
+                              {order_status?.status == "pending" ? (
+                                <>
+                                  <li
+                                    onClick={() => updateOrder("canceled", _id)}
+                                  >
+                                    <a>canceled</a>
+                                  </li>
+                                  <li
+                                    onClick={() => updateOrder("progress", _id)}
+                                  >
+                                    <a>progress</a>
+                                  </li>
+                                </>
+                              ) : order_status?.status == "progress" ? (
+                                <>
+                                  <li
+                                    onClick={() => updateOrder("canceled", _id)}
+                                  >
+                                    <a>canceled</a>
+                                  </li>
+                                  <li
+                                    onClick={() => updateOrder("courier", _id)}
+                                  >
+                                    <a>courier</a>
+                                  </li>
+                                </>
+                              ) : order_status?.status == "courier" ? (
+                                <>
+                                  <li
+                                    onClick={() => updateOrder("canceled", _id)}
+                                  >
+                                    <a>canceled</a>
+                                  </li>
+                                  <li
+                                    onClick={() =>
+                                      updateOrder("complated", _id)
+                                    }
+                                  >
+                                    <a>complated</a>
+                                  </li>
+                                </>
+                              ) : (
+                                ""
+                              )}
+                            </ul>
                           </div>
-                          <ul
-                            tabIndex={0}
-                            className="dropdown-content menu bg-white rounded-box z-50 w-52 p-2 box-shadow"
-                          >
-                            <li onClick={() => updateOrder("complated", _id)}>
-                              <a>Complated</a>
-                            </li>
-                            <li onClick={() => updateOrder("canceled", _id)}>
-                              <a>Canceled</a>
-                            </li>
-                            <li onClick={() => updateOrder("progress", _id)}>
-                              <a>Progress</a>
-                            </li>
-                          </ul>
-                        </div>
+                        )}
                       </div>
                     </div>
                   </td>
@@ -373,7 +432,7 @@ const Card = ({ changeStatus }) => {
       <div className="flex justify-between items-center box-shadow p-4 rounded-md">
         <div className="space-y-3">
           <h1 className="font-semibold">Payment Refund</h1>
-          <p className="text-paragraph">{orderDetails?.refund?.length}</p>
+          <p className="text-paragraph">{orderDetails?.refund}</p>
         </div>
         <div>
           <FaHandHoldingUsd size={40}></FaHandHoldingUsd>
@@ -382,7 +441,7 @@ const Card = ({ changeStatus }) => {
       <div className="flex justify-between *:text-customRed items-center box-shadow p-4 rounded-md">
         <div className="space-y-3">
           <h1 className="font-semibold ">Canceled Order</h1>
-          <p>{orderDetails?.canceled?.length}</p>
+          <p>{orderDetails?.canceled}</p>
         </div>
         <div>
           <CiShoppingCart size={40}></CiShoppingCart>
@@ -391,7 +450,7 @@ const Card = ({ changeStatus }) => {
       <div className="flex justify-between text-green items-center box-shadow p-4 rounded-md">
         <div className="space-y-3">
           <h1 className="font-semibold">Complated</h1>
-          <p>{orderDetails?.complated?.length}</p>
+          <p>{orderDetails?.complated}</p>
         </div>
         <div>
           <MdDownloadDone size={40}></MdDownloadDone>
@@ -400,10 +459,46 @@ const Card = ({ changeStatus }) => {
       <div className="flex justify-between *:text-darkBlue items-center box-shadow p-4 rounded-md">
         <div className="space-y-3">
           <h1 className="font-semibold">In Progress</h1>
-          <p>{orderDetails?.progress?.length}</p>
+          <p>{orderDetails?.progress}</p>
         </div>
         <div>
           <TbProgressAlert size={40}></TbProgressAlert>
+        </div>
+      </div>
+      <div className="flex justify-between *:text-lime-700 items-center box-shadow p-4 rounded-md">
+        <div className="space-y-3">
+          <h1 className="font-semibold">In Pending</h1>
+          <p>{orderDetails?.pending}</p>
+        </div>
+        <div>
+          <TbProgressAlert size={40}></TbProgressAlert>
+        </div>
+      </div>
+      <div className="flex justify-between *:text-pink-600 items-center box-shadow p-4 rounded-md">
+        <div className="space-y-3">
+          <h1 className="font-semibold">Payment unpaid</h1>
+          <p>{orderDetails?.unpaid}</p>
+        </div>
+        <div>
+          <IoLogoUsd size={30}></IoLogoUsd>
+        </div>
+      </div>
+      <div className="flex justify-between *:text-emerald-400 items-center box-shadow p-4 rounded-md">
+        <div className="space-y-3">
+          <h1 className="font-semibold">Payment paid</h1>
+          <p>{orderDetails?.unpaid}</p>
+        </div>
+        <div>
+          <IoLogoUsd size={30}></IoLogoUsd>
+        </div>
+      </div>
+      <div className="flex justify-between *:text-sky-600 items-center box-shadow p-4 rounded-md">
+        <div className="space-y-3">
+          <h1 className="font-semibold">Total Order</h1>
+          <p>{orderDetails?.total_order}</p>
+        </div>
+        <div>
+          <FaShoppingCart size={30}></FaShoppingCart>
         </div>
       </div>
     </div>
