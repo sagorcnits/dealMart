@@ -4,6 +4,7 @@ import About from "../pages/about/About";
 import Contact from "../pages/contact/Contact";
 import AdminDashboard from "../pages/dashboard/adminPages/adminHome/AdminDashboard";
 import Chat from "../pages/dashboard/adminPages/chat/Chat";
+import Customer_details from "../pages/dashboard/adminPages/customers/Customer_details";
 import Customers from "../pages/dashboard/adminPages/customers/Customers";
 import OrderDetails from "../pages/dashboard/adminPages/order_list/OrderDetails";
 import OrderList from "../pages/dashboard/adminPages/order_list/OrderList";
@@ -74,17 +75,20 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/product-details/:id",
         element: <ProductDetails></ProductDetails>,
-  
       },
       {
         path: "/dashboard/update-product/:id",
         element: <Product_update></Product_update>,
-  
       },
       // customer routes
       {
         path: "/dashboard/customers",
         element: <Customers></Customers>,
+      },
+
+      {
+        path: "/dashboard/customer-details/:id",
+        element: <Customer_details></Customer_details>,
       },
       // order routes
       {
@@ -96,7 +100,7 @@ const router = createBrowserRouter([
         path: "/dashboard/order-details/:id",
         element: <OrderDetails></OrderDetails>,
       },
-
+      // user routes
       {
         path: "/dashboard/users",
         element: <Users></Users>,

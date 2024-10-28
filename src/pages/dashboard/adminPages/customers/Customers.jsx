@@ -71,7 +71,7 @@ export default Customers;
 const Table = () => {
   const customers = [
     {
-      id: 1,
+      _id: 1,
       customer: "John Doe",
       customer_img:
         "https://lh3.googleusercontent.com/a/ACg8ocJHNtFThSGq16tvsVl2iDzNlEK1q6dDeDVVwJrQhVNtn7AUgug=s288-c-no",
@@ -80,7 +80,7 @@ const Table = () => {
       address: "123 Main St",
     },
     {
-      id: 2,
+      _id: 2,
       customer: "Jane Smith",
       customer_img:
         "https://lh3.googleusercontent.com/a/ACg8ocJHNtFThSGq16tvsVl2iDzNlEK1q6dDeDVVwJrQhVNtn7AUgug=s288-c-no",
@@ -89,7 +89,7 @@ const Table = () => {
       address: "456 Oak St",
     },
     {
-      id: 3,
+      _id: 3,
       customer: "Alice Johnson",
       customer_img:
         "https://lh3.googleusercontent.com/a/ACg8ocJHNtFThSGq16tvsVl2iDzNlEK1q6dDeDVVwJrQhVNtn7AUgug=s288-c-no",
@@ -98,7 +98,7 @@ const Table = () => {
       address: "789 Pine St",
     },
     {
-      id: 3,
+      _id: 3,
       customer: "Alice Johnson",
       customer_img:
         "https://lh3.googleusercontent.com/a/ACg8ocJHNtFThSGq16tvsVl2iDzNlEK1q6dDeDVVwJrQhVNtn7AUgug=s288-c-no",
@@ -107,7 +107,7 @@ const Table = () => {
       address: "789 Pine St",
     },
     {
-      id: 3,
+      _id: 3,
       customer: "Alice Johnson",
       customer_img:
         "https://lh3.googleusercontent.com/a/ACg8ocJHNtFThSGq16tvsVl2iDzNlEK1q6dDeDVVwJrQhVNtn7AUgug=s288-c-no",
@@ -116,7 +116,7 @@ const Table = () => {
       address: "789 Pine St",
     },
     {
-      id: 3,
+      _id: 3,
       customer: "Alice Johnson",
       customer_img:
         "https://lh3.googleusercontent.com/a/ACg8ocJHNtFThSGq16tvsVl2iDzNlEK1q6dDeDVVwJrQhVNtn7AUgug=s288-c-no",
