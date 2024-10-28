@@ -24,7 +24,6 @@ const OrderList = () => {
   const [itemPerPage, setItemPerPage] = useState(8);
   const [currentPage, setCurrentPage] = useState(1);
   const numberPages = Math.ceil(orders?.length / itemPerPage);
-  // console.log(numberPages)
   const totalbtn = [...Array(numberPages).keys()];
 
   // order data fetch
@@ -236,7 +235,7 @@ const Table = ({
       {orders?.length > 0 ? (
         <table className="w-full">
           <thead>
-            <tr className="text-left *:p-3 border-b">
+            <tr className="text-left *:p-3 border-b *:uppercase">
               <th>#Order Id</th>
               <th>Customer</th>
               <th>Date</th>
@@ -262,7 +261,7 @@ const Table = ({
               return (
                 <tr
                   key={id}
-                  className="*:p-3 border-b items-center hover:bg-[#f1efef] duration-500"
+                  className="*:p-3 border-b items-center hover:bg-[#f1efef] duration-500 *:text-gray-700"
                 >
                   <td>{orderId}</td>
                   <td>{customer}</td>
