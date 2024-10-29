@@ -322,7 +322,8 @@ const Table = ({
                     <div className="flex items-center gap-2">
                       <p
                         className={`${
-                          order_status?.status === "complated"
+                          order_status?.status === "complated" &&
+                          payment_status == "paid"
                             ? "text-green"
                             : order_status?.status === "courier"
                             ? "text-lime-700"
@@ -330,10 +331,14 @@ const Table = ({
                             ? "text-darkBlue"
                             : order_status?.status === "canceled"
                             ? "text-customRed"
+                            : payment_status == "refund"
+                            ? "text-customRed"
                             : ""
                         } font-semibold`}
                       >
-                        {order_status?.status}
+                        {payment_status == "refund"
+                          ? "canceled"
+                          : order_status?.status}
                       </p>
                       <div>
                         {order_status?.status == "complated" ? (
@@ -386,13 +391,15 @@ const Table = ({
                                   >
                                     <a>canceled</a>
                                   </li>
-                                  <li
-                                    onClick={() =>
-                                      updateOrder("complated", _id)
-                                    }
-                                  >
-                                    <a>complated</a>
-                                  </li>
+                                  {payment_status == "paid" && (
+                                    <li
+                                      onClick={() =>
+                                        updateOrder("complated", _id)
+                                      }
+                                    >
+                                      <a>complated</a>
+                                    </li>
+                                  )}
                                 </>
                               ) : (
                                 ""
@@ -439,20 +446,18 @@ const Card = ({ changeStatus }) => {
       .get("/orders")
       .then((res) => {
         setOrderDetails(res.data.orderDetails);
-        setLoading(false)
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
       });
   }, [changeStatus]);
 
-
-    if (loading) {
-      return (
-        <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-blue mx-auto"></div>
-      );
-    }
-  
+  if (loading) {
+    return (
+      <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-blue mx-auto"></div>
+    );
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 *:bg-white">
