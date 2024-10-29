@@ -1,12 +1,48 @@
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { IoEyeOutline } from "react-icons/io5";
 import { MdOutlineDeleteForever } from "react-icons/md";
 import { Link, useParams } from "react-router-dom";
+import useAxios from "../../../../hooks/useAxios";
 import useOrders from "../../../../hooks/useOrders";
 
 const Customer_details = () => {
-  const { id } = useParams();
-  console.log(id);
+  const { email } = useParams();
+  const axiosFetch = useAxios();
+
+  const [customer, setCustomer] = useState(null);
+  useEffect(() => {
+    axiosFetch
+      .get(`/customers/${email}`)
+      .then((res) => {
+        if (res.data._id) {
+          setCustomer(res.data);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [email]);
+
+
+// order data fetch
+const {
+  data: customerOrderHistory = [],
+  refetch,
+  isPending,
+} = useQuery({
+  queryKey: ["customerOrderHistory"],
+  queryFn: async () => {
+    const res = await axiosFetch.get(
+      `/orders?email=${email}`
+    );
+    return res.data;
+  },
+});
+
+  console.log(customerOrderHistory);
+
   return (
     <main className="mt-16">
       <section>
@@ -71,7 +107,7 @@ const Customer_profile = () => {
           />
         </figure>
       </div>
-      <div className="text-sm *:px-4 *:flex *:justify-between *:items-center space-y-3 mt-4">
+      <div className="text-sm *:px-4 *:flex *:justify-between *:items-center space-y-6 mt-4">
         <div>
           <span className="font-bold">Name :</span>
           <span>Sagor Hossain</span>
@@ -92,12 +128,8 @@ const Customer_profile = () => {
           <span className="font-bold">joined:</span>
           <span>20.29.2024</span>
         </div>
-        <div>
-          <span className="font-bold">Payment Method:</span>
-          <span>Cash on delivery</span>
-        </div>
       </div>
-      <div className="px-4 py-2 text-sm">
+      <div className="px-4 py-4 text-sm">
         <p className="font-bold">Address :</p>
         <p>Komorpur Bangla bazer road pabna, sadar pabna</p>
       </div>

@@ -87,7 +87,7 @@ const router = createBrowserRouter([
       },
 
       {
-        path: "/dashboard/customer-details/:id",
+        path: "/dashboard/customer-details/:email",
         element: <Customer_details></Customer_details>,
       },
       // order routes

@@ -1,15 +1,39 @@
+import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { IoEyeOutline } from "react-icons/io5";
 import { MdDoubleArrow, MdOutlineDeleteForever } from "react-icons/md";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
+import useAxios from "../../../../hooks/useAxios";
+import useCustomers from "../../../../hooks/useCustomers";
 
 const Customers = () => {
+  const axiosFetch = useAxios();
+  const [customers] = useCustomers();
   // pagination
   const [itemPerPage, setItemPerPage] = useState(8);
   const [currentPage, setCurrentPage] = useState(1);
+  const [filter, setFilter] = useState("all");
   const numberPages = Math.ceil(20 / itemPerPage);
   const totalbtn = [...Array(numberPages).keys()];
+
+  // order data fetch
+  const {
+    data: customersData = [],
+    refetch,
+    isPending,
+  } = useQuery({
+    queryKey: ["customersData", currentPage, itemPerPage, filter],
+    queryFn: async () => {
+      const res = await axiosFetch.get(
+        `/customers?page=${currentPage}&size=${itemPerPage}&filter=${filter}`
+      );
+      return res.data;
+    },
+  });
+
+  console.log(customersData);
 
   //  pagination next btn
   const nextbtn = () => {
@@ -23,13 +47,21 @@ const Customers = () => {
       setCurrentPage(currentPage - 1);
     }
   };
+
   return (
     <>
-      <main className="mt-16">
+      <main
+        className={`mt-16 bg-dashBgColor ${
+          customersData.length > 8 && customers.length > 8
+            ? "h-full"
+            : "h-screen"
+        }`}
+      >
         <div className="flex justify-between items-center ">
           <p className="font-semibold uppercase text-2xl">customer list</p>
           <div className="md:flex justify-between items-center  border px-3 rounded-md  hidden bg-white">
             <input
+              onChange={(e) => setFilter(e.target.value)}
               className="focus:outline-none py-2"
               type="text"
               placeholder="serach name"
@@ -37,30 +69,50 @@ const Customers = () => {
             <CiSearch className="cursor-pointer" size={20}></CiSearch>
           </div>
         </div>
-        <section className="mt-10 box-shadow bg-white rounded-md">
-          <Table></Table>
-        </section>
-        <section className="mt-6 flex gap-3 items-center *:size-10 *:box-shadow *:flex *:justify-center *:items-center *:rounded-full *:duration-500">
-          <button onClick={prevBtn} className=" hover:bg-blue hover:text-white">
-            <MdDoubleArrow className="rotate-180"></MdDoubleArrow>
-          </button>
-          {totalbtn?.slice(0, 7).map((item, id) => {
-            return (
-              <button
-                onClick={() => setCurrentPage(id + 1)}
-                className={`hover:bg-blue hover:text-white ${
-                  currentPage == id + 1 && "bg-blue text-white"
-                }`}
-                key={id}
-              >
-                {id + 1}
-              </button>
-            );
-          })}
-          <button onClick={nextbtn} className="hover:bg-blue hover:text-white">
-            <MdDoubleArrow></MdDoubleArrow>
-          </button>
-        </section>
+        {isPending ? (
+          <div>
+            <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-blue mx-auto"></div>
+          </div>
+        ) : customersData.length > 0 ? (
+          <section className="mt-10 box-shadow bg-white rounded-md">
+            <Table customersData={customersData} refetch={refetch}></Table>
+          </section>
+        ) : (
+          <div className="flex justify-center items-center h-[500px]">
+            <h1 className="font-semibold text-3xl">No Data</h1>
+          </div>
+        )}
+        {customersData.length > 8 && customers.length > 8 ? (
+          <section className="mt-6 flex gap-3 items-center *:size-10 *:box-shadow *:flex *:justify-center *:items-center *:rounded-full *:duration-500">
+            <button
+              onClick={prevBtn}
+              className=" hover:bg-blue hover:text-white"
+            >
+              <MdDoubleArrow className="rotate-180"></MdDoubleArrow>
+            </button>
+            {totalbtn?.slice(0, 7).map((item, id) => {
+              return (
+                <button
+                  onClick={() => setCurrentPage(id + 1)}
+                  className={`hover:bg-blue hover:text-white ${
+                    currentPage == id + 1 && "bg-blue text-white"
+                  }`}
+                  key={id}
+                >
+                  {id + 1}
+                </button>
+              );
+            })}
+            <button
+              onClick={nextbtn}
+              className="hover:bg-blue hover:text-white"
+            >
+              <MdDoubleArrow></MdDoubleArrow>
+            </button>
+          </section>
+        ) : (
+          " "
+        )}
       </main>
     </>
   );
@@ -68,64 +120,38 @@ const Customers = () => {
 
 export default Customers;
 
-const Table = () => {
-  const customers = [
-    {
-      _id: 1,
-      customer: "John Doe",
-      customer_img:
-        "https://lh3.googleusercontent.com/a/ACg8ocJHNtFThSGq16tvsVl2iDzNlEK1q6dDeDVVwJrQhVNtn7AUgug=s288-c-no",
-      email: "john@example.com",
-      phone: "123-456-7890",
-      address: "123 Main St",
-    },
-    {
-      _id: 2,
-      customer: "Jane Smith",
-      customer_img:
-        "https://lh3.googleusercontent.com/a/ACg8ocJHNtFThSGq16tvsVl2iDzNlEK1q6dDeDVVwJrQhVNtn7AUgug=s288-c-no",
-      email: "jane@example.com",
-      phone: "098-765-4321",
-      address: "456 Oak St",
-    },
-    {
-      _id: 3,
-      customer: "Alice Johnson",
-      customer_img:
-        "https://lh3.googleusercontent.com/a/ACg8ocJHNtFThSGq16tvsVl2iDzNlEK1q6dDeDVVwJrQhVNtn7AUgug=s288-c-no",
-      email: "alice@example.com",
-      phone: "567-890-1234",
-      address: "789 Pine St",
-    },
-    {
-      _id: 3,
-      customer: "Alice Johnson",
-      customer_img:
-        "https://lh3.googleusercontent.com/a/ACg8ocJHNtFThSGq16tvsVl2iDzNlEK1q6dDeDVVwJrQhVNtn7AUgug=s288-c-no",
-      email: "alice@example.com",
-      phone: "567-890-1234",
-      address: "789 Pine St",
-    },
-    {
-      _id: 3,
-      customer: "Alice Johnson",
-      customer_img:
-        "https://lh3.googleusercontent.com/a/ACg8ocJHNtFThSGq16tvsVl2iDzNlEK1q6dDeDVVwJrQhVNtn7AUgug=s288-c-no",
-      email: "alice@example.com",
-      phone: "567-890-1234",
-      address: "789 Pine St",
-    },
-    {
-      _id: 3,
-      customer: "Alice Johnson",
-      customer_img:
-        "https://lh3.googleusercontent.com/a/ACg8ocJHNtFThSGq16tvsVl2iDzNlEK1q6dDeDVVwJrQhVNtn7AUgug=s288-c-no",
-      email: "alice@example.com",
-      phone: "567-890-1234",
-      address: "789 Pine St",
-    },
-    // More customers can be added here
-  ];
+const Table = ({ customersData, refetch }) => {
+  const axiosFetch = useAxios();
+
+  const deleteCustomer = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosFetch
+          .delete(`/customers/${id}`)
+          .then((res) => {
+            if (res.data.message === "ok") {
+              Swal.fire({
+                title: "Deleted!",
+                text: "Your file has been deleted.",
+                icon: "success",
+              });
+              refetch();
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    });
+  };
 
   return (
     <div className="overflow-x-auto w-full">
@@ -150,7 +176,7 @@ const Table = () => {
           </tr>
         </thead>
         <tbody>
-          {customers.map((customer, id) => (
+          {customersData?.map((customer, id) => (
             <tr key={id} className="border-b hover:bg-gray-100 *:py-3 *:px-6">
               <td className=" text-gray-700">
                 <div className="flex gap-2">
@@ -166,10 +192,13 @@ const Table = () => {
               <td className="py-4 px-6 text-gray-700">
                 <div className="flex items-center gap-2">
                   <div className="flex items-center gap-2 *:cursor-pointer">
-                    <Link to={`/dashboard/customer-details/${customer?._id}`}>
+                    <Link to={`/dashboard/customer-details/${customer?.email}`}>
                       <IoEyeOutline size={20}></IoEyeOutline>
                     </Link>
-                    <MdOutlineDeleteForever size={20}></MdOutlineDeleteForever>
+                    <MdOutlineDeleteForever
+                      onClick={() => deleteCustomer(customer?._id)}
+                      size={20}
+                    ></MdOutlineDeleteForever>
                   </div>
                 </div>
               </td>
