@@ -1,13 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { CiShoppingCart } from "react-icons/ci";
 import { FaHandHoldingUsd, FaShoppingCart } from "react-icons/fa";
+import { FcProcess } from "react-icons/fc";
 import { IoLogoUsd } from "react-icons/io";
 import { IoEyeOutline } from "react-icons/io5";
 import {
+  MdDone,
   MdDoubleArrow,
-  MdDownloadDone,
+  MdOutlineCancel,
   MdOutlineDeleteForever,
 } from "react-icons/md";
 import { TbProgressAlert } from "react-icons/tb";
@@ -460,77 +461,79 @@ const Card = ({ changeStatus }) => {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 *:bg-white">
-      <div className="flex justify-between items-center box-shadow p-4 rounded-md">
-        <div className="space-y-3">
-          <h1 className="font-semibold">Payment Refund</h1>
-          <p className="text-paragraph">{orderDetails?.refund}</p>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 *:box-shadow *:bg-white *:px-3 *:py-6 *:items-center *:flex *:gap-4 *:rounded-md">
+      <div>
+        <div className="size-[50px] rounded-full bg-[#059669] flex justify-center items-center  text-white ">
+          <FaHandHoldingUsd size={30}></FaHandHoldingUsd>
         </div>
-        <div>
-          <FaHandHoldingUsd size={40}></FaHandHoldingUsd>
+        <div className="leading-8">
+          <h1 className="text-xl font-semibold">refund</h1>
+          <p>{orderDetails?.refund}</p>
         </div>
       </div>
-      <div className="flex justify-between *:text-customRed items-center box-shadow p-4 rounded-md">
-        <div className="space-y-3">
-          <h1 className="font-semibold ">Canceled Order</h1>
+      <div>
+        <div className="size-[50px] rounded-full bg-customRed flex justify-center items-center text-white">
+          <MdOutlineCancel size={25}></MdOutlineCancel>
+        </div>
+        <div className="leading-8">
+          <p className="text-xl font-semibold">Order canceled</p>
           <p>{orderDetails?.canceled}</p>
         </div>
-        <div>
-          <CiShoppingCart size={40}></CiShoppingCart>
-        </div>
       </div>
-      <div className="flex justify-between text-green items-center box-shadow p-4 rounded-md">
-        <div className="space-y-3">
-          <h1 className="font-semibold">Complated</h1>
+      <div>
+        <div className="size-[50px] rounded-full bg-[#059669] flex justify-center items-center text-white">
+          <MdDone size={25}></MdDone>
+        </div>
+        <div className="leading-8">
+          <p className="text-xl font-semibold">order complated</p>
           <p>{orderDetails?.complated}</p>
         </div>
-        <div>
-          <MdDownloadDone size={40}></MdDownloadDone>
-        </div>
       </div>
-      <div className="flex justify-between *:text-darkBlue items-center box-shadow p-4 rounded-md">
-        <div className="space-y-3">
-          <h1 className="font-semibold">In Progress</h1>
+      <div>
+        <div className="size-[50px] rounded-full bg-[#DBEAFE] flex justify-center items-center  text-white ">
+          <FcProcess size={25}></FcProcess>
+        </div>
+        <div className="leading-8">
+          <p className="text-xl font-semibold">order process</p>
           <p>{orderDetails?.progress}</p>
         </div>
-        <div>
-          <TbProgressAlert size={40}></TbProgressAlert>
-        </div>
       </div>
-      <div className="flex justify-between *:text-lime-700 items-center box-shadow p-4 rounded-md">
-        <div className="space-y-3">
-          <h1 className="font-semibold">In Pending</h1>
+      <div>
+        <div className="size-[50px] rounded-full bg-[#58677a] flex justify-center items-center  text-white ">
+          <TbProgressAlert size={25}></TbProgressAlert>
+        </div>
+        <div className="leading-8">
+          <p className="text-xl font-semibold">order pending</p>
           <p>{orderDetails?.pending}</p>
         </div>
-        <div>
-          <TbProgressAlert size={40}></TbProgressAlert>
-        </div>
       </div>
-      <div className="flex justify-between *:text-pink-600 items-center box-shadow p-4 rounded-md">
-        <div className="space-y-3">
-          <h1 className="font-semibold">Payment unpaid</h1>
+      <div>
+        <div className="size-[50px] rounded-full bg-[#cc7728] flex justify-center items-center  text-white ">
+          <IoLogoUsd size={25}></IoLogoUsd>
+        </div>
+        <div className="leading-8">
+          <p className="text-xl font-semibold">order unpaid</p>
           <p>{orderDetails?.unpaid}</p>
         </div>
-        <div>
-          <IoLogoUsd size={30}></IoLogoUsd>
-        </div>
       </div>
-      <div className="flex justify-between *:text-emerald-400 items-center box-shadow p-4 rounded-md">
-        <div className="space-y-3">
-          <h1 className="font-semibold">Payment paid</h1>
+      <div>
+        <div className="size-[50px] rounded-full bg-[#05fa73] flex justify-center items-center   ">
+          <IoLogoUsd size={25}></IoLogoUsd>
+        </div>
+        <div className="leading-8">
+          <p className="text-xl font-semibold">order paid</p>
           <p>{orderDetails?.paid}</p>
         </div>
-        <div>
-          <IoLogoUsd size={30}></IoLogoUsd>
-        </div>
       </div>
-      <div className="flex justify-between *:text-sky-600 items-center box-shadow p-4 rounded-md">
-        <div className="space-y-3">
-          <h1 className="font-semibold">Total Order</h1>
-          <p>{orderDetails?.total_order}</p>
+      <div>
+       
+
+        <div className="size-[50px] rounded-full bg-[#BB923A] flex justify-center items-center text-white">
+          <FaShoppingCart size={25}></FaShoppingCart>
         </div>
-        <div>
-          <FaShoppingCart size={30}></FaShoppingCart>
+        <div className="leading-8">
+          <p className="text-xl font-semibold">total order</p>
+          <p>{orderDetails?.total_order}</p>
         </div>
       </div>
     </div>

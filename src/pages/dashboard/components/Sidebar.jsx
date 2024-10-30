@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { FaUsers } from "react-icons/fa6";
 import { FiShoppingCart } from "react-icons/fi";
-import { HiUserPlus } from "react-icons/hi2";
 import { IoIosArrowForward, IoMdArrowRoundBack } from "react-icons/io";
 import {
   IoChatbubbleEllipsesOutline,
@@ -56,7 +55,7 @@ const SidebarItem = ({ handleMobileSideBar }) => {
     <ul>
       <li onClick={handleMobileSideBar}>
         <NavLink
-          to="/dashboard/dashboard"
+          to="/dashboard/admin_dashboard"
           className={({ isActive, isPending }) =>
             isPending
               ? "pending"
@@ -149,21 +148,7 @@ const SidebarItem = ({ handleMobileSideBar }) => {
           <p>Order List</p>
         </NavLink>
       </li>
-      <li onClick={handleMobileSideBar}>
-        <NavLink
-          to="/dashboard/users"
-          className={({ isActive, isPending }) =>
-            isPending
-              ? "pending"
-              : isActive
-              ? "active_sidbar_item sidebar_nav"
-              : "sidebar_nav"
-          }
-        >
-          <HiUserPlus></HiUserPlus>
-          <p>Users</p>
-        </NavLink>
-      </li>
+     
       <li onClick={handleMobileSideBar}>
         <NavLink
           to="/dashboard/chat"

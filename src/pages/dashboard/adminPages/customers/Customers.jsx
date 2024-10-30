@@ -15,7 +15,7 @@ const Customers = () => {
   const [itemPerPage, setItemPerPage] = useState(8);
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState("all");
-  const numberPages = Math.ceil(20 / itemPerPage);
+  const numberPages = Math.ceil(customers.length / itemPerPage);
   const totalbtn = [...Array(numberPages).keys()];
 
   // order data fetch
@@ -33,7 +33,12 @@ const Customers = () => {
     },
   });
 
-  console.log(customersData);
+  // console.log(customersData);
+
+  // showproduct in perPage
+  const showProductPerPage = (e) => {
+    setItemPerPage(e.target.value);
+  };
 
   //  pagination next btn
   const nextbtn = () => {
@@ -69,12 +74,27 @@ const Customers = () => {
             <CiSearch className="cursor-pointer" size={20}></CiSearch>
           </div>
         </div>
+        <select
+          onChange={showProductPerPage}
+          name="category"
+          className="p-2 rounded-md cursor-pointer max-w-xs focus:outline-none border mt-10"
+        >
+          <option disabled selected>
+            Show Orders
+          </option>
+          <option>5</option>
+          <option>10</option>
+          <option>15</option>
+          <option>20</option>
+          <option>30</option>
+          <option>50</option>
+        </select>
         {isPending ? (
           <div>
             <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-blue mx-auto"></div>
           </div>
         ) : customersData.length > 0 ? (
-          <section className="mt-10 box-shadow bg-white rounded-md">
+          <section className="mt-4 box-shadow bg-white rounded-md">
             <Table customersData={customersData} refetch={refetch}></Table>
           </section>
         ) : (
@@ -82,8 +102,8 @@ const Customers = () => {
             <h1 className="font-semibold text-3xl">No Data</h1>
           </div>
         )}
-        {customersData.length > 8 && customers.length > 8 ? (
-          <section className="mt-6 flex gap-3 items-center *:size-10 *:box-shadow *:flex *:justify-center *:items-center *:rounded-full *:duration-500">
+        {customers?.length > 8 ? (
+          <section className="mt-6 flex gap-3 items-center *:size-10 *:box-shadow *:flex *:justify-center *:items-center *:rounded-full *:duration-500 py-6">
             <button
               onClick={prevBtn}
               className=" hover:bg-blue hover:text-white"
