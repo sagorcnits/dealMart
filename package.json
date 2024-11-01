@@ -26,6 +26,7 @@
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.26.1",
     "react-toastify": "^10.0.6",
+    "recharts": "^2.13.1",
     "sort-by": "^1.2.0",
     "sweetalert2": "^11.12.4",
     "swiper": "^11.1.10"
