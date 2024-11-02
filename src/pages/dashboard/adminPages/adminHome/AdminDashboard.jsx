@@ -31,8 +31,6 @@ import {
 import Swal from "sweetalert2";
 import useAxios from "../../../../hooks/useAxios";
 
-
-
 const AdminDashboard = () => {
   const [changeStatus, setChangeStatus] = useState(false);
 
@@ -173,22 +171,21 @@ const SalesCard = ({ changeStatus }) => {
 
 // total sale and revenue chart
 const OrderSaleChart = () => {
+  const [data, setData] = useState([]);
+  const axiosFetch = useAxios();
+  // get revenue data from server
+  useEffect(() => {
+    axiosFetch
+      .get("/orders?revenue=revenue")
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
-  const data = [
-    { name: "January", "Total Sale": 4200, "Total Revenue": 100 },
-    { name: "February", "Total Sale": 3300, "Total Revenue": 1800 },
-    { name: "March", "Total Sale": 5000, "Total Revenue": 700 },
-    { name: "April", "Total Sale": 2000, "Total Revenue": 300 },
-    { name: "May", "Total Sale": 2500, "Total Revenue": 2900 },
-    { name: "June", "Total Sale": 400, "Total Revenue": 2000 },
-    { name: "July", "Total Sale": 500, "Total Revenue": 3100 },
-    { name: "August", "Total Sale": 4900, "Total Revenue": 200 },
-    { name: "September", "Total Sale": 4200, "Total Revenue": 400 },
-    { name: "October", "Total Sale": 5300, "Total Revenue": 2800 },
-    { name: "November", "Total Sale": 500, "Total Revenue": 600 },
-    { name: "December", "Total Sale": 5500, "Total Revenue": 3000 },
-  ];
-
+  console.log(data);
 
   return (
     <ResponsiveContainer width="100%" height="100%">
@@ -473,186 +470,204 @@ const OrderTable = ({ changeStatus, setChangeStatus }) => {
   }
 
   return (
-    <table className="w-full">
-      <thead>
-        <tr className="text-left *:p-3 border-b *:uppercase">
-          <th>#Order Id</th>
-          <th>Customer</th>
-          <th>Date</th>
-          <th>Total</th>
-          <th>Items</th>
-          <th>Payment Status</th>
-          <th>Order Status</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        {orders?.map((item, id) => {
-          const {
-            _id,
-            orderId,
-            products,
-            customer,
-            total_price,
-            payment_status,
-            order_status,
-            createdAt,
-          } = item;
-          return (
-            <tr
-              key={id}
-              className="*:p-3 border-b items-center hover:bg-[#f1efef] duration-500 *:text-gray-700"
-            >
-              <td>{orderId}</td>
-              <td>{customer}</td>
-              <td>{createdAt.slice(0, 10)}</td>
-              <td>${total_price}</td>
-              <td>{products.length}</td>
-              <td>
-                <div className="flex items-center gap-2">
-                  <p
-                    className={`${
-                      payment_status == "paid"
-                        ? "text-green"
-                        : payment_status == "refund"
-                        ? "text-customRed"
-                        : ""
-                    } font-semibold`}
-                  >
-                    {payment_status}
-                  </p>
-                  <div>
-                    {payment_status != "refund" && (
-                      <div className="dropdown dropdown-bottom dropdown-end">
-                        <div tabIndex={0} role="button" className="m-1">
-                          <BsThreeDotsVertical
-                            onClick={() => setActiveStatus(!activeStatus)}
-                            size={20}
-                            className="mx-auto cursor-pointer"
-                          ></BsThreeDotsVertical>
-                        </div>
-                        <ul
-                          tabIndex={0}
-                          className="dropdown-content menu bg-white rounded-box z-50 w-52 p-2 box-shadow"
-                        >
-                          {payment_status == "paid" ? (
-                            <>
-                              <li onClick={() => updateOrder("refund", _id)}>
-                                <a>refund</a>
-                              </li>
-                            </>
-                          ) : payment_status == "unpaid" ? (
-                            <li onClick={() => updateOrder("paid", _id)}>
-                              <a>paid</a>
-                            </li>
-                          ) : (
-                            <li onClick={() => updateOrder("unpaid", _id)}>
-                              <a>unpaid</a>
-                            </li>
-                          )}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </td>
-              <td>
-                <div className="flex items-center gap-2">
-                  <p
-                    className={`${
-                      order_status?.status === "complated" &&
-                      payment_status == "paid"
-                        ? "text-green"
-                        : order_status?.status === "courier"
-                        ? "text-lime-700"
-                        : order_status?.status === "progress"
-                        ? "text-darkBlue"
-                        : order_status?.status === "canceled"
-                        ? "text-customRed"
-                        : payment_status == "refund"
-                        ? "text-customRed"
-                        : ""
-                    } font-semibold`}
-                  >
-                    {payment_status == "refund"
-                      ? "canceled"
-                      : order_status?.status}
-                  </p>
-                  <div>
-                    {order_status?.status == "complated" ? (
-                      " "
-                    ) : order_status?.status == "canceled" ? (
-                      " "
-                    ) : (
-                      <div className="dropdown dropdown-bottom dropdown-end">
-                        <div tabIndex={0} role="button" className="m-1">
-                          <BsThreeDotsVertical
-                            onClick={() => setActiveStatus(!activeStatus)}
-                            size={20}
-                            className="mx-auto cursor-pointer"
-                          ></BsThreeDotsVertical>
-                        </div>
-                        <ul
-                          tabIndex={0}
-                          className="dropdown-content menu bg-white rounded-box z-50 w-52 p-2 box-shadow"
-                        >
-                          {order_status?.status == "pending" ? (
-                            <>
-                              <li onClick={() => updateOrder("canceled", _id)}>
-                                <a>canceled</a>
-                              </li>
-                              <li onClick={() => updateOrder("progress", _id)}>
-                                <a>progress</a>
-                              </li>
-                            </>
-                          ) : order_status?.status == "progress" ? (
-                            <>
-                              <li onClick={() => updateOrder("canceled", _id)}>
-                                <a>canceled</a>
-                              </li>
-                              <li onClick={() => updateOrder("courier", _id)}>
-                                <a>courier</a>
-                              </li>
-                            </>
-                          ) : order_status?.status == "courier" ? (
-                            <>
-                              <li onClick={() => updateOrder("canceled", _id)}>
-                                <a>canceled</a>
-                              </li>
-                              {payment_status == "paid" && (
-                                <li
-                                  onClick={() => updateOrder("complated", _id)}
-                                >
-                                  <a>complated</a>
+    <>
+      {orders?.length > 0 && (
+        <table className="w-full">
+          <thead>
+            <tr className="text-left *:p-3 border-b *:uppercase">
+              <th>#Order Id</th>
+              <th>Customer</th>
+              <th>Date</th>
+              <th>Total</th>
+              <th>Items</th>
+              <th>Payment Status</th>
+              <th>Order Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {orders?.map((item, id) => {
+              const {
+                _id,
+                orderId,
+                products,
+                customer,
+                total_price,
+                payment_status,
+                order_status,
+                createdAt,
+              } = item;
+              return (
+                <tr
+                  key={id}
+                  className="*:p-3 border-b items-center hover:bg-[#f1efef] duration-500 *:text-gray-700"
+                >
+                  <td>{orderId}</td>
+                  <td>{customer}</td>
+                  <td>{createdAt.slice(0, 10)}</td>
+                  <td>${total_price}</td>
+                  <td>{products.length}</td>
+                  <td>
+                    <div className="flex items-center gap-2">
+                      <p
+                        className={`${
+                          payment_status == "paid"
+                            ? "text-green"
+                            : payment_status == "refund"
+                            ? "text-customRed"
+                            : ""
+                        } font-semibold`}
+                      >
+                        {payment_status}
+                      </p>
+                      <div>
+                        {payment_status != "refund" && (
+                          <div className="dropdown dropdown-bottom dropdown-end">
+                            <div tabIndex={0} role="button" className="m-1">
+                              <BsThreeDotsVertical
+                                onClick={() => setActiveStatus(!activeStatus)}
+                                size={20}
+                                className="mx-auto cursor-pointer"
+                              ></BsThreeDotsVertical>
+                            </div>
+                            <ul
+                              tabIndex={0}
+                              className="dropdown-content menu bg-white rounded-box z-50 w-52 p-2 box-shadow"
+                            >
+                              {payment_status == "paid" ? (
+                                <>
+                                  <li
+                                    onClick={() => updateOrder("refund", _id)}
+                                  >
+                                    <a>refund</a>
+                                  </li>
+                                </>
+                              ) : payment_status == "unpaid" ? (
+                                <li onClick={() => updateOrder("paid", _id)}>
+                                  <a>paid</a>
+                                </li>
+                              ) : (
+                                <li onClick={() => updateOrder("unpaid", _id)}>
+                                  <a>unpaid</a>
                                 </li>
                               )}
-                            </>
-                          ) : (
-                            ""
-                          )}
-                        </ul>
+                            </ul>
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                </div>
-              </td>
-              <td>
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center gap-2 *:cursor-pointer">
-                    <Link to={`/dashboard/order-details/${_id}`}>
-                      <IoEyeOutline size={20}></IoEyeOutline>
-                    </Link>
-                    <MdOutlineDeleteForever
-                      onClick={() => deleteOrder(_id)}
-                      size={20}
-                    ></MdOutlineDeleteForever>
-                  </div>
-                </div>
-              </td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+                    </div>
+                  </td>
+                  <td>
+                    <div className="flex items-center gap-2">
+                      <p
+                        className={`${
+                          order_status?.status === "complated" &&
+                          payment_status == "paid"
+                            ? "text-green"
+                            : order_status?.status === "courier"
+                            ? "text-lime-700"
+                            : order_status?.status === "progress"
+                            ? "text-darkBlue"
+                            : order_status?.status === "canceled"
+                            ? "text-customRed"
+                            : payment_status == "refund"
+                            ? "text-customRed"
+                            : ""
+                        } font-semibold`}
+                      >
+                        {payment_status == "refund"
+                          ? "canceled"
+                          : order_status?.status}
+                      </p>
+                      <div>
+                        {order_status?.status == "complated" ? (
+                          " "
+                        ) : order_status?.status == "canceled" ? (
+                          " "
+                        ) : (
+                          <div className="dropdown dropdown-bottom dropdown-end">
+                            <div tabIndex={0} role="button" className="m-1">
+                              <BsThreeDotsVertical
+                                onClick={() => setActiveStatus(!activeStatus)}
+                                size={20}
+                                className="mx-auto cursor-pointer"
+                              ></BsThreeDotsVertical>
+                            </div>
+                            <ul
+                              tabIndex={0}
+                              className="dropdown-content menu bg-white rounded-box z-50 w-52 p-2 box-shadow"
+                            >
+                              {order_status?.status == "pending" ? (
+                                <>
+                                  <li
+                                    onClick={() => updateOrder("canceled", _id)}
+                                  >
+                                    <a>canceled</a>
+                                  </li>
+                                  <li
+                                    onClick={() => updateOrder("progress", _id)}
+                                  >
+                                    <a>progress</a>
+                                  </li>
+                                </>
+                              ) : order_status?.status == "progress" ? (
+                                <>
+                                  <li
+                                    onClick={() => updateOrder("canceled", _id)}
+                                  >
+                                    <a>canceled</a>
+                                  </li>
+                                  <li
+                                    onClick={() => updateOrder("courier", _id)}
+                                  >
+                                    <a>courier</a>
+                                  </li>
+                                </>
+                              ) : order_status?.status == "courier" ? (
+                                <>
+                                  <li
+                                    onClick={() => updateOrder("canceled", _id)}
+                                  >
+                                    <a>canceled</a>
+                                  </li>
+                                  {payment_status == "paid" && (
+                                    <li
+                                      onClick={() =>
+                                        updateOrder("complated", _id)
+                                      }
+                                    >
+                                      <a>complated</a>
+                                    </li>
+                                  )}
+                                </>
+                              ) : (
+                                ""
+                              )}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 *:cursor-pointer">
+                        <Link to={`/dashboard/order-details/${_id}`}>
+                          <IoEyeOutline size={20}></IoEyeOutline>
+                        </Link>
+                        <MdOutlineDeleteForever
+                          onClick={() => deleteOrder(_id)}
+                          size={20}
+                        ></MdOutlineDeleteForever>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      )}
+    </>
   );
 };
