@@ -442,6 +442,7 @@ const Card = ({ changeStatus }) => {
   const axiosFetch = useAxios();
   const [orderDetails, setOrderDetails] = useState(null);
   const [loading, setLoading] = useState(true);
+  // get order
   useEffect(() => {
     axiosFetch
       .get("/orders")

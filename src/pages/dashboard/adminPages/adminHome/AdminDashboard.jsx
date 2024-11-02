@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaHandHoldingUsd } from "react-icons/fa";
 import { FaUsersLine, FaUsersRectangle } from "react-icons/fa6";
 import { FcProcess, FcSalesPerformance } from "react-icons/fc";
 import { FiShoppingCart } from "react-icons/fi";
-import { MdDone, MdOutlineCancel } from "react-icons/md";
+import { IoEyeOutline } from "react-icons/io5";
+import {
+  MdDone,
+  MdOutlineCancel,
+  MdOutlineDeleteForever,
+} from "react-icons/md";
+import { Link } from "react-router-dom";
 
+import { useQuery } from "@tanstack/react-query";
+import { BsThreeDotsVertical } from "react-icons/bs";
 import {
   Bar,
   BarChart,
@@ -20,31 +28,22 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import Swal from "sweetalert2";
+import useAxios from "../../../../hooks/useAxios";
 
-const data = [
-  { name: "January", "Total Sale": 4200, "Total Revenue": 100 },
-  { name: "February", "Total Sale": 3300, "Total Revenue": 1800 },
-  { name: "March", "Total Sale": 5000, "Total Revenue": 700 },
-  { name: "April", "Total Sale": 2000, "Total Revenue": 300 },
-  { name: "May", "Total Sale": 2500, "Total Revenue": 2900 },
-  { name: "June", "Total Sale": 400, "Total Revenue": 2000 },
-  { name: "July", "Total Sale": 500, "Total Revenue": 3100 },
-  { name: "August", "Total Sale": 4900, "Total Revenue": 200 },
-  { name: "September", "Total Sale": 4200, "Total Revenue": 400 },
-  { name: "October", "Total Sale": 5300, "Total Revenue": 2800 },
-  { name: "November", "Total Sale": 500, "Total Revenue": 600 },
-  { name: "December", "Total Sale": 5500, "Total Revenue": 3000 },
-];
+
 
 const AdminDashboard = () => {
+  const [changeStatus, setChangeStatus] = useState(false);
+
   return (
     <div className="bg-dashBgColor  mt-16">
       <h1 className="text-3xl font-bold">Dashboard</h1>
       <section>
-        <SalesCard></SalesCard>
+        <SalesCard changeStatus={changeStatus}></SalesCard>
       </section>
 
-      <div className="mt-4 h-[300px] md:h-[400px] flex justify-center items-center col-span-4 box-shadow bg-white rounded-md w-full">
+      <div className="mt-4 h-[300px] md:h-[400px]  box-shadow bg-white rounded-md w-full">
         <OrderSaleChart></OrderSaleChart>
       </div>
 
@@ -56,13 +55,12 @@ const AdminDashboard = () => {
           <SalesByCountry></SalesByCountry>
         </div>
       </div>
-      <div className="grid grid-cols-4 gap-4 mt-4 *:h-[300px]">
-        <div className="flex justify-center items-center col-span-2 box-shadow bg-white">
-          <h1>Comming soon.....</h1>
-        </div>
-        <div className="flex justify-center items-center col-span-2 box-shadow bg-white">
-          <h1>Comming soon.....</h1>
-        </div>
+      <h1 className="font-semibold mt-10">Recent Order</h1>
+      <div className="mt-4 items-center col-span-4 box-shadow bg-white rounded-md w-full">
+        <OrderTable
+          setChangeStatus={setChangeStatus}
+          changeStatus={changeStatus}
+        ></OrderTable>
       </div>
     </div>
   );
@@ -70,7 +68,31 @@ const AdminDashboard = () => {
 
 export default AdminDashboard;
 // sales card
-const SalesCard = () => {
+const SalesCard = ({ changeStatus }) => {
+  const axiosFetch = useAxios();
+  const [salseInformation, setSalseInformation] = useState(null);
+  const [loading, setLoading] = useState(true);
+  // get order
+  useEffect(() => {
+    axiosFetch
+      .get("/orders")
+      .then((res) => {
+        setSalseInformation(res.data.orderDetails);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [changeStatus]);
+
+  if (loading) {
+    return (
+      <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-blue mx-auto"></div>
+    );
+  }
+
+  // console.log(salseInformation)
+
   return (
     <div className="grid grid-cols-4 gap-4 mt-6 *:box-shadow *:bg-white *:px-3 *:py-6 *:items-center *:flex *:gap-4 *:rounded-md">
       <div>
@@ -79,7 +101,7 @@ const SalesCard = () => {
         </div>
         <div className="leading-8">
           <p className="text-xl font-semibold">Total Sales</p>
-          <h1>3799</h1>
+          <h1>{salseInformation?.complated}</h1>
         </div>
       </div>
       <div>
@@ -88,7 +110,7 @@ const SalesCard = () => {
         </div>
         <div className="leading-8">
           <p className="text-xl font-semibold">Total Revenue</p>
-          <h1>$3799.00</h1>
+          <h1>${salseInformation?.total_revenue}</h1>
         </div>
       </div>
       <div>
@@ -124,7 +146,7 @@ const SalesCard = () => {
         </div>
         <div className="leading-8">
           <p className="text-xl font-semibold">order pending</p>
-          <h1>5034</h1>
+          <h1>{salseInformation?.pending}</h1>
         </div>
       </div>
       <div>
@@ -133,7 +155,7 @@ const SalesCard = () => {
         </div>
         <div className="leading-8">
           <p className="text-xl font-semibold">order canceled</p>
-          <h1>5034</h1>
+          <h1>{salseInformation?.canceled}</h1>
         </div>
       </div>
       <div>
@@ -142,7 +164,7 @@ const SalesCard = () => {
         </div>
         <div className="leading-8">
           <p className="text-xl font-semibold">order complated</p>
-          <h1>5034</h1>
+          <h1>{salseInformation?.complated}</h1>
         </div>
       </div>
     </div>
@@ -151,6 +173,23 @@ const SalesCard = () => {
 
 // total sale and revenue chart
 const OrderSaleChart = () => {
+
+  const data = [
+    { name: "January", "Total Sale": 4200, "Total Revenue": 100 },
+    { name: "February", "Total Sale": 3300, "Total Revenue": 1800 },
+    { name: "March", "Total Sale": 5000, "Total Revenue": 700 },
+    { name: "April", "Total Sale": 2000, "Total Revenue": 300 },
+    { name: "May", "Total Sale": 2500, "Total Revenue": 2900 },
+    { name: "June", "Total Sale": 400, "Total Revenue": 2000 },
+    { name: "July", "Total Sale": 500, "Total Revenue": 3100 },
+    { name: "August", "Total Sale": 4900, "Total Revenue": 200 },
+    { name: "September", "Total Sale": 4200, "Total Revenue": 400 },
+    { name: "October", "Total Sale": 5300, "Total Revenue": 2800 },
+    { name: "November", "Total Sale": 500, "Total Revenue": 600 },
+    { name: "December", "Total Sale": 5500, "Total Revenue": 3000 },
+  ];
+
+
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart width={830} data={data}>
@@ -284,9 +323,7 @@ const OrderChart = () => {
     </ResponsiveContainer>
   );
 };
-
 // pie chart for sales by country
-
 const SalesByCountry = () => {
   const data = [
     { name: "Bangladesh", value: 400 },
@@ -296,7 +333,7 @@ const SalesByCountry = () => {
     { name: "China", value: 400 },
   ];
 
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042","#454545"];
+  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#454545"];
 
   const RADIAN = Math.PI / 180;
   const renderCustomizedLabel = ({
@@ -313,16 +350,23 @@ const SalesByCountry = () => {
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
     return (
-      <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="central" fontSize={10}>
-      {`${(percent * 100).toFixed(0)}%`}
-    </text>
+      <text
+        x={x}
+        y={y}
+        fill="white"
+        textAnchor="middle"
+        dominantBaseline="central"
+        fontSize={10}
+      >
+        {`${(percent * 100).toFixed(0)}%`}
+      </text>
     );
   };
 
   return (
     <ResponsiveContainer width="100%" height="100%">
       <PieChart width={700} height={400}>
-      <Legend layout="horizontal" verticalAlign="top" align="center" />
+        <Legend layout="horizontal" verticalAlign="top" align="center" />
         <Pie
           data={data}
           cx="50%"
@@ -337,11 +381,278 @@ const SalesByCountry = () => {
           height="100%"
         >
           {data.map((entry, index) => (
-            <Cell  key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>
-        
       </PieChart>
     </ResponsiveContainer>
+  );
+};
+
+// recent Order Table
+
+const OrderTable = ({ changeStatus, setChangeStatus }) => {
+  const axiosFetch = useAxios();
+
+  const {
+    data: orders = [],
+    refetch,
+    isPending,
+  } = useQuery({
+    queryKey: ["recent_order"],
+    queryFn: async () => {
+      const res = await axiosFetch.get(`/orders?recent_order=sort`);
+      console.log("ok");
+      return res.data;
+    },
+  });
+
+  console.log(orders);
+  // remove order product
+  const deleteOrder = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosFetch
+          .delete(`/orders/${id}`)
+          .then((res) => {
+            if (res.data.message === "ok") {
+              Swal.fire({
+                title: "Deleted!",
+                text: "Your file has been deleted.",
+                icon: "success",
+              });
+              refetch();
+              setChangeStatus(!changeStatus);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    });
+  };
+
+  //  update data by order status
+  const updateOrder = (status, id) => {
+    axiosFetch
+      .put(`/orders/${id}`, { status: status })
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.acknowledged) {
+          Swal.fire({
+            title: "Update",
+            text: "Your file has been Updated.",
+            icon: "success",
+          });
+          refetch();
+          setChangeStatus(!changeStatus);
+        }
+      })
+      .catch((error) => {
+        Swal.fire({
+          title: "Update is not working",
+          text: "Somthong Wrong",
+          icon: "warning",
+        });
+        console.log(error);
+      });
+  };
+  // loader
+  if (isPending) {
+    return (
+      <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-blue mx-auto"></div>
+    );
+  }
+
+  return (
+    <table className="w-full">
+      <thead>
+        <tr className="text-left *:p-3 border-b *:uppercase">
+          <th>#Order Id</th>
+          <th>Customer</th>
+          <th>Date</th>
+          <th>Total</th>
+          <th>Items</th>
+          <th>Payment Status</th>
+          <th>Order Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {orders?.map((item, id) => {
+          const {
+            _id,
+            orderId,
+            products,
+            customer,
+            total_price,
+            payment_status,
+            order_status,
+            createdAt,
+          } = item;
+          return (
+            <tr
+              key={id}
+              className="*:p-3 border-b items-center hover:bg-[#f1efef] duration-500 *:text-gray-700"
+            >
+              <td>{orderId}</td>
+              <td>{customer}</td>
+              <td>{createdAt.slice(0, 10)}</td>
+              <td>${total_price}</td>
+              <td>{products.length}</td>
+              <td>
+                <div className="flex items-center gap-2">
+                  <p
+                    className={`${
+                      payment_status == "paid"
+                        ? "text-green"
+                        : payment_status == "refund"
+                        ? "text-customRed"
+                        : ""
+                    } font-semibold`}
+                  >
+                    {payment_status}
+                  </p>
+                  <div>
+                    {payment_status != "refund" && (
+                      <div className="dropdown dropdown-bottom dropdown-end">
+                        <div tabIndex={0} role="button" className="m-1">
+                          <BsThreeDotsVertical
+                            onClick={() => setActiveStatus(!activeStatus)}
+                            size={20}
+                            className="mx-auto cursor-pointer"
+                          ></BsThreeDotsVertical>
+                        </div>
+                        <ul
+                          tabIndex={0}
+                          className="dropdown-content menu bg-white rounded-box z-50 w-52 p-2 box-shadow"
+                        >
+                          {payment_status == "paid" ? (
+                            <>
+                              <li onClick={() => updateOrder("refund", _id)}>
+                                <a>refund</a>
+                              </li>
+                            </>
+                          ) : payment_status == "unpaid" ? (
+                            <li onClick={() => updateOrder("paid", _id)}>
+                              <a>paid</a>
+                            </li>
+                          ) : (
+                            <li onClick={() => updateOrder("unpaid", _id)}>
+                              <a>unpaid</a>
+                            </li>
+                          )}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div className="flex items-center gap-2">
+                  <p
+                    className={`${
+                      order_status?.status === "complated" &&
+                      payment_status == "paid"
+                        ? "text-green"
+                        : order_status?.status === "courier"
+                        ? "text-lime-700"
+                        : order_status?.status === "progress"
+                        ? "text-darkBlue"
+                        : order_status?.status === "canceled"
+                        ? "text-customRed"
+                        : payment_status == "refund"
+                        ? "text-customRed"
+                        : ""
+                    } font-semibold`}
+                  >
+                    {payment_status == "refund"
+                      ? "canceled"
+                      : order_status?.status}
+                  </p>
+                  <div>
+                    {order_status?.status == "complated" ? (
+                      " "
+                    ) : order_status?.status == "canceled" ? (
+                      " "
+                    ) : (
+                      <div className="dropdown dropdown-bottom dropdown-end">
+                        <div tabIndex={0} role="button" className="m-1">
+                          <BsThreeDotsVertical
+                            onClick={() => setActiveStatus(!activeStatus)}
+                            size={20}
+                            className="mx-auto cursor-pointer"
+                          ></BsThreeDotsVertical>
+                        </div>
+                        <ul
+                          tabIndex={0}
+                          className="dropdown-content menu bg-white rounded-box z-50 w-52 p-2 box-shadow"
+                        >
+                          {order_status?.status == "pending" ? (
+                            <>
+                              <li onClick={() => updateOrder("canceled", _id)}>
+                                <a>canceled</a>
+                              </li>
+                              <li onClick={() => updateOrder("progress", _id)}>
+                                <a>progress</a>
+                              </li>
+                            </>
+                          ) : order_status?.status == "progress" ? (
+                            <>
+                              <li onClick={() => updateOrder("canceled", _id)}>
+                                <a>canceled</a>
+                              </li>
+                              <li onClick={() => updateOrder("courier", _id)}>
+                                <a>courier</a>
+                              </li>
+                            </>
+                          ) : order_status?.status == "courier" ? (
+                            <>
+                              <li onClick={() => updateOrder("canceled", _id)}>
+                                <a>canceled</a>
+                              </li>
+                              {payment_status == "paid" && (
+                                <li
+                                  onClick={() => updateOrder("complated", _id)}
+                                >
+                                  <a>complated</a>
+                                </li>
+                              )}
+                            </>
+                          ) : (
+                            ""
+                          )}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 *:cursor-pointer">
+                    <Link to={`/dashboard/order-details/${_id}`}>
+                      <IoEyeOutline size={20}></IoEyeOutline>
+                    </Link>
+                    <MdOutlineDeleteForever
+                      onClick={() => deleteOrder(_id)}
+                      size={20}
+                    ></MdOutlineDeleteForever>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
   );
 };
