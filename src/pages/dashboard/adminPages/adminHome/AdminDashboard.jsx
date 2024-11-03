@@ -103,7 +103,7 @@ const SalesCard = ({ changeStatus }) => {
         </div>
       </div>
       <div>
-        <div className="size-[50px] rounded-full bg-[#059669] flex justify-center items-center  text-white ">
+        <div className="size-[50px] rounded-full bg-[#2471a3] flex justify-center items-center  text-white ">
           <FaHandHoldingUsd size={25}></FaHandHoldingUsd>
         </div>
         <div className="leading-8">
@@ -172,34 +172,47 @@ const SalesCard = ({ changeStatus }) => {
 // total sale and revenue chart
 const OrderSaleChart = () => {
   const [data, setData] = useState([]);
+
   const axiosFetch = useAxios();
-  // get revenue data from server
+
   useEffect(() => {
     axiosFetch
       .get("/orders?revenue=revenue")
       .then((res) => {
-        setData(res.data);
+        // setData(res.data);
+        const newData = res.data.map((item,id) => {
+          return {
+            ...item,
+            "Total Sale": item._id * id * 30,
+            "Total Revenue" : item._id * id * 50,
+          };
+        });
+
+        setData(newData);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
 
-  console.log(data);
-
   return (
-    <ResponsiveContainer width="100%" height="100%">
-      <BarChart width={830} data={data}>
-        <Legend layout="horizontal" verticalAlign="top" align="center" />
-        <Bar dataKey="Total Sale" fill="#17827D" />
-        <Bar dataKey="Total Revenue" fill="#059669" />
-
-        {/* <CartesianGrid strokeDasharray="3 3" /> */}
-        <XAxis dataKey="name" fontSize={10} />
-        <YAxis dataKey="Total Sale" />
-        <Tooltip />
-      </BarChart>
-    </ResponsiveContainer>
+    <>
+      {data?.length > 0 && (
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            data={data}
+            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+          >
+            <XAxis dataKey="name" fontSize={10} interval={0} />
+            <YAxis domain={[0, "dataMax + 1"]} />
+            <Tooltip />
+            <Legend layout="horizontal" verticalAlign="top" align="center" />
+            <Bar dataKey="Total Sale" fill="#17827D" barSize={30} />
+            <Bar dataKey="Total Revenue" fill="#2471a3" barSize={30} />
+          </BarChart>
+        </ResponsiveContainer>
+      )}
+    </>
   );
 };
 
