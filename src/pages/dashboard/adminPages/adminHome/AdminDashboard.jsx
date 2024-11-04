@@ -30,13 +30,30 @@ import {
 } from "recharts";
 import Swal from "sweetalert2";
 import useAxios from "../../../../hooks/useAxios";
+import useCustomers from "../../../../hooks/useCustomers";
 
 const AdminDashboard = () => {
   const [changeStatus, setChangeStatus] = useState(false);
 
   return (
     <div className="bg-dashBgColor  mt-16">
-      <h1 className="text-3xl font-bold">Dashboard</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold">Dashboard</h1>
+        <select
+          name="report_by_day"
+          className="p-2 rounded-md  max-w-xs focus:outline-none border"
+        >
+          <option disabled selected>
+            filter by
+          </option>
+          <option>Today</option>
+          <option>Yesterday</option>
+          <option>This Week</option>
+          <option>This Month</option>
+          <option>This Year</option>
+          <option>Custom Range</option>
+        </select>
+      </div>
       <section>
         <SalesCard changeStatus={changeStatus}></SalesCard>
       </section>
@@ -45,11 +62,11 @@ const AdminDashboard = () => {
         <OrderSaleChart></OrderSaleChart>
       </div>
 
-      <div className="grid  lg:grid-cols-4 gap-4 mt-4">
+      <div className="grid xl:grid-cols-4 gap-4 mt-4">
         <div className="h-[300px] md:h-[400px] flex justify-center items-center  lg:col-span-3 box-shadow bg-white rounded-md w-full">
           <OrderChart></OrderChart>
         </div>
-        <div className="flex justify-center items-center col-span-1 box-shadow bg-white rounded-md">
+        <div className="w-full flex justify-center items-center xl:col-span-1 box-shadow bg-white rounded-md">
           <SalesByCountry></SalesByCountry>
         </div>
       </div>
@@ -69,6 +86,7 @@ export default AdminDashboard;
 const SalesCard = ({ changeStatus }) => {
   const axiosFetch = useAxios();
   const [salseInformation, setSalseInformation] = useState(null);
+  const [customers, refetch, isPending] = useCustomers();
   const [loading, setLoading] = useState(true);
   // get order
   useEffect(() => {
@@ -108,7 +126,9 @@ const SalesCard = ({ changeStatus }) => {
         </div>
         <div className="leading-8">
           <p className="text-sm xl:text-xl font-semibold">Total Revenue</p>
-          <h1 className="text-xs xl:text-xl">${salseInformation?.total_revenue}</h1>
+          <h1 className="text-xs xl:text-xl">
+            ${salseInformation?.total_revenue}
+          </h1>
         </div>
       </div>
       <div>
@@ -126,7 +146,7 @@ const SalesCard = ({ changeStatus }) => {
         </div>
         <div className="leading-8">
           <p className="text-sm xl:text-xl font-semibold">Total Customer</p>
-          <h1 className="text-xs xl:text-xl">5034</h1>
+          <h1 className="text-xs xl:text-xl">{customers?.length}</h1>
         </div>
       </div>
       <div>
@@ -135,7 +155,9 @@ const SalesCard = ({ changeStatus }) => {
         </div>
         <div className="leading-8">
           <p className="text-sm xl:text-xl font-semibold">Total order</p>
-          <h1 className="text-xs xl:text-xl">5034</h1>
+          <h1 className="text-xs xl:text-xl">
+            {salseInformation?.total_order}
+          </h1>
         </div>
       </div>
       <div>
@@ -295,7 +317,17 @@ const SalesByCountry = () => {
   const [data, setData] = useState([]);
   const axiosFetch = useAxios();
 
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#454545",, "#009eff", "#ff009e", "#03f90e"];
+  const COLORS = [
+    "#0088FE",
+    "#00C49F",
+    "#FFBB28",
+    "#FF8042",
+    "#454545",
+    ,
+    "#009eff",
+    "#ff009e",
+    "#03f90e",
+  ];
 
   const RADIAN = Math.PI / 180;
   const renderCustomizedLabel = ({
@@ -331,19 +363,19 @@ const SalesByCountry = () => {
     axiosFetch
       .get("/customers?sales_by_country=country")
       .then((res) => {
-       setData(res.data);
+        setData(res.data);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
 
-  console.log(data)
+  console.log(data);
 
   return (
     <ResponsiveContainer width="100%" height="100%">
       <PieChart width={700} height={400}>
-        <Legend layout="horizontal" verticalAlign="top" align="center"/>
+        <Legend layout="horizontal" verticalAlign="top" align="center" />
         <Pie
           data={data}
           cx="50%"

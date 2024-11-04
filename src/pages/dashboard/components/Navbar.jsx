@@ -1,4 +1,3 @@
-import { CiSearch } from "react-icons/ci";
 import { FaRegMessage } from "react-icons/fa6";
 import { IoMdMenu } from "react-icons/io";
 import { IoNotificationsOutline } from "react-icons/io5";
@@ -24,14 +23,14 @@ const Navbar = ({ handleSideBar, handleMobileSideBar, sidebar }) => {
           size={30}
           onClick={handleMobileSideBar}
         ></IoMdMenu>
-        <div className="md:flex justify-between items-center w-[400px] border px-3 rounded-md  hidden">
+        {/* <div className="md:flex justify-between items-center w-[400px] border px-3 rounded-md  hidden">
           <input
             className="focus:outline-none py-2"
             type="text"
             placeholder="serach here"
           />
           <CiSearch className="cursor-pointer" size={20}></CiSearch>
-        </div>
+        </div> */}
       </div>
 
       <div className="flex items-center gap-4">
