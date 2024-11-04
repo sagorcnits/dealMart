@@ -34,12 +34,20 @@ import useCustomers from "../../../../hooks/useCustomers";
 
 const AdminDashboard = () => {
   const [changeStatus, setChangeStatus] = useState(false);
+  const [filterDate, setFilterDate] = useState("all");
+
+  const filter_by_date = (e) => {
+    setFilterDate(e.target.value);
+  };
+
+  // console.log(filterDate)
 
   return (
     <div className="bg-dashBgColor  mt-16">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Dashboard</h1>
         <select
+          onChange={filter_by_date}
           name="report_by_day"
           className="p-2 rounded-md  max-w-xs focus:outline-none border"
         >
@@ -55,7 +63,7 @@ const AdminDashboard = () => {
         </select>
       </div>
       <section>
-        <SalesCard changeStatus={changeStatus}></SalesCard>
+        <SalesCard changeStatus={changeStatus} filterDate={filterDate}></SalesCard>
       </section>
 
       <div className="mt-4 h-[300px] md:h-[400px]  box-shadow bg-white rounded-md w-full">
@@ -83,7 +91,9 @@ const AdminDashboard = () => {
 
 export default AdminDashboard;
 // sales card
-const SalesCard = ({ changeStatus }) => {
+const SalesCard = ({ changeStatus, filterDate }) => {
+
+
   const axiosFetch = useAxios();
   const [salseInformation, setSalseInformation] = useState(null);
   const [customers, refetch, isPending] = useCustomers();
@@ -91,15 +101,16 @@ const SalesCard = ({ changeStatus }) => {
   // get order
   useEffect(() => {
     axiosFetch
-      .get("/orders")
+      .get(`/orders?filterDate=${filterDate}`)
       .then((res) => {
+        console.log(res.data)
         setSalseInformation(res.data.orderDetails);
         setLoading(false);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [changeStatus]);
+  }, [changeStatus, filterDate]);
 
   if (loading) {
     return (
@@ -265,7 +276,7 @@ const OrderChart = () => {
       });
   }, []);
 
-  console.log(data);
+  // console.log(data);
 
   return (
     <ResponsiveContainer width="100%" height="100%">
@@ -415,7 +426,7 @@ const OrderTable = ({ changeStatus, setChangeStatus }) => {
     },
   });
 
-  console.log(orders);
+  // console.log(orders);
   // remove order product
   const deleteOrder = (id) => {
     Swal.fire({

@@ -20,6 +20,7 @@ const OrderList = () => {
   const [orders] = useOrders();
   const axiosFetch = useAxios();
   const [filter, setFilter] = useState("all");
+  const [filterDate, setFilterDate] = useState("all");
   const [changeStatus, setChangeStatus] = useState(false);
   // pagination
   const [itemPerPage, setItemPerPage] = useState(8);
@@ -67,14 +68,36 @@ const OrderList = () => {
     }
   };
 
+  // filter by date
+
+  const filter_by_date = (e) => {
+    setFilterDate(e.target.value);
+  };
+
   return (
     <>
       <main>
-        <div className="pt-16">
+        <div className="pt-16 flex justify-between items-center">
           <h1 className="text-3xl font-bold">Order List</h1>
+          <select
+            onChange={filter_by_date}
+            name="report_by_day"
+            className="p-2 rounded-md  max-w-xs focus:outline-none border"
+          >
+            <option disabled selected>
+              filter by
+            </option>
+            <option>Today</option>
+            <option>Yesterday</option>
+            <option>This Week</option>
+            <option>This Month</option>
+            <option>This Year</option>
+            <option>Custom Range</option>
+          </select>
         </div>
+
         <section className="mt-6">
-          <Card changeStatus={changeStatus}></Card>
+          <Card changeStatus={changeStatus} filterDate={filterDate}></Card>
         </section>
         <section className="mt-6 bg-white rounded-md">
           <div className="flex justify-between items-center p-3">
@@ -438,14 +461,14 @@ const Table = ({
   );
 };
 
-const Card = ({ changeStatus }) => {
+const Card = ({ changeStatus, filterDate }) => {
   const axiosFetch = useAxios();
   const [orderDetails, setOrderDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   // get order
   useEffect(() => {
     axiosFetch
-      .get("/orders")
+      .get(`/orders?filterDate=${filterDate}`)
       .then((res) => {
         setOrderDetails(res.data.orderDetails);
         setLoading(false);
@@ -527,8 +550,6 @@ const Card = ({ changeStatus }) => {
         </div>
       </div>
       <div>
-       
-
         <div className="size-[50px] rounded-full bg-[#BB923A] flex justify-center items-center text-white">
           <FaShoppingCart size={25}></FaShoppingCart>
         </div>
