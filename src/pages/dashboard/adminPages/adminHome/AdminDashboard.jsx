@@ -58,12 +58,13 @@ const AdminDashboard = () => {
           <option>Yesterday</option>
           <option>This Week</option>
           <option>This Month</option>
-          <option>This Year</option>
-          <option>Custom Range</option>
         </select>
       </div>
       <section>
-        <SalesCard changeStatus={changeStatus} filterDate={filterDate}></SalesCard>
+        <SalesCard
+          changeStatus={changeStatus}
+          filterDate={filterDate}
+        ></SalesCard>
       </section>
 
       <div className="mt-4 h-[300px] md:h-[400px]  box-shadow bg-white rounded-md w-full">
@@ -92,8 +93,6 @@ const AdminDashboard = () => {
 export default AdminDashboard;
 // sales card
 const SalesCard = ({ changeStatus, filterDate }) => {
-
-
   const axiosFetch = useAxios();
   const [salseInformation, setSalseInformation] = useState(null);
   const [customers, refetch, isPending] = useCustomers();
@@ -103,7 +102,7 @@ const SalesCard = ({ changeStatus, filterDate }) => {
     axiosFetch
       .get(`/orders?filterDate=${filterDate}`)
       .then((res) => {
-        console.log(res.data)
+        console.log(res.data);
         setSalseInformation(res.data.orderDetails);
         setLoading(false);
       })

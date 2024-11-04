@@ -91,8 +91,7 @@ const OrderList = () => {
             <option>Yesterday</option>
             <option>This Week</option>
             <option>This Month</option>
-            <option>This Year</option>
-            <option>Custom Range</option>
+            
           </select>
         </div>
 
@@ -476,7 +475,7 @@ const Card = ({ changeStatus, filterDate }) => {
       .catch((err) => {
         console.log(err);
       });
-  }, [changeStatus]);
+  }, [changeStatus, filterDate]);
 
   if (loading) {
     return (
