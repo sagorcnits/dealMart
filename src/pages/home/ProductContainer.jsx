@@ -22,12 +22,14 @@ const ProductContainer = () => {
     }
   };
 
+  console.log(products)
+
   return (
     <div className="relative">
       <div
         className={`w-full px-2 flex ${
           prevScroll ? "justify-between" : "justify-end"
-        } absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 *:size-12 *:rounded-full *:bg-green *:text-white *:justify-center *:items-center *:text-xl *:duration-500`}
+        } absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 *:size-12 *:rounded-full *:bg-green *:text-white *:justify-center *:items-center *:text-xl *:duration-500 z-50`}
       >
         <button
           onClick={prevProduct}
@@ -41,7 +43,7 @@ const ProductContainer = () => {
       </div>
       <div ref={trendingRef} className="overflow-auto w-full scrollbar-none">
         <div className="grid grid-cols-8 gap-6 mt-10 overflow-auto w-[2600px] ">
-          {products?.map((item, id) => (
+          {products?.slice(0,8).map((item, id) => (
             <ProductCard key={id} item={item}></ProductCard>
           ))}
         </div>

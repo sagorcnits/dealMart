@@ -5,7 +5,7 @@ import Banner from "./Banner";
 
 const Product = () => {
 
-const products = useProducts()
+const [products] = useProducts()
 
 
   return (

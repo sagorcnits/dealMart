@@ -1,10 +1,9 @@
 import { FaRegMessage } from "react-icons/fa6";
 import { IoMdMenu } from "react-icons/io";
-import { IoNotificationsOutline } from "react-icons/io5";
+import { IoNotificationsOutline, IoSunnyOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { removeUser } from "../../../features/user/userSlice";
-
 
 const Navbar = ({ handleSideBar, handleMobileSideBar, sidebar }) => {
   const user = useSelector((state) => state.user.user);
@@ -34,12 +33,16 @@ const Navbar = ({ handleSideBar, handleMobileSideBar, sidebar }) => {
       </div>
 
       <div className="flex items-center gap-4">
-        <div className="size-8 rounded-full bg-slate-200 flex justify-center items-center">
-          <FaRegMessage></FaRegMessage>
+        <div  className="size-8 rounded-full bg-slate-200 flex justify-center items-center cursor-pointer">
+          <IoSunnyOutline 
+           ></IoSunnyOutline>
         </div>
-        <div className="size-8 rounded-full bg-slate-200 flex justify-center items-center">
+        <div className="size-8 rounded-full bg-slate-200 flex justify-center items-center cursor-pointer">
+          <FaRegMessage  
+           ></FaRegMessage>
+        </div>
+        <div className="size-8 rounded-full bg-slate-200 flex justify-center items-center cursor-pointer">
           <IoNotificationsOutline
-            className="cursor-pointer"
             size={25}
           ></IoNotificationsOutline>
         </div>
