@@ -29,7 +29,7 @@ const ProductContainer = () => {
       <div
         className={`w-full px-2 flex ${
           prevScroll ? "justify-between" : "justify-end"
-        } absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 *:size-12 *:rounded-full *:bg-green *:text-white *:justify-center *:items-center *:text-xl *:duration-500 z-50`}
+        } absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 *:size-12 *:rounded-full *:bg-green *:text-white *:justify-center *:items-center *:text-xl *:duration-500 z-40`}
       >
         <button
           onClick={prevProduct}

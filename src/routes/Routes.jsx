@@ -18,6 +18,7 @@ import Settings from "../pages/dashboard/shared/settings/Settings";
 import Home from "../pages/home/Home";
 import Login from "../pages/login/Login";
 import NotFound from "../pages/notFound/NotFound";
+import Product_details from "../pages/product_details/Product_details";
 import Product from "../pages/products/Product";
 import Register from "../pages/register/Register";
 
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
       {
         path: "/contact",
         element: <Contact></Contact>,
+      },
+      {
+        path: "/product/details",
+        element: <Product_details></Product_details>,
       },
     ],
   },

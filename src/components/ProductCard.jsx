@@ -1,25 +1,41 @@
 import { GiSelfLove } from "react-icons/gi";
+import { IoEyeOutline } from "react-icons/io5";
+import { Link } from "react-router-dom";
 import { addCart } from "../features/cartItem/cartSlice";
 
-const ProductCard = ({item}) => {
+const ProductCard = ({ item }) => {
+  const {
+    _id,
+    product_name,
+    reguler_price,
+    sale_price,
+    brand_name,
+    category_name,
+    images,
+    description,
+    quantity_in_stock,
+    stock_status,
+  } = item;
 
-const {_id, product_name,reguler_price,sale_price,brand_name,category_name,images,description,quantity_in_stock,stock_status} = item;
-
-// console.log(item)
+  // console.log(item)
 
   return (
-    <div className="card-compact relative bg-white border poppins  md:h-[400px] cursor-pointer hover:border-green duration-500 rounded-md overflow-hidden z-0">
-      <figure className="h-[170px] overflow-hidden">
-        <img
-          src={images[0]}
-          alt={product_name}
-        />
+    <div className="dashboard_card card-compact relative bg-white border poppins  md:h-[400px] cursor-pointer hover:border-green duration-500 rounded-md overflow-hidden z-0">
+      <figure className="h-[170px] overflow-hidden relative">
+        <img src={images[0]} alt={product_name} />
+        <div className="flex z-10  justify-center items-center gap-6 absolute dashboard_card_effect right-0 top-0 bottom-0 left-0  bg-black opacity-80 px-4">
+          <Link to={`/product/details`}>
+            <div className="logo bg-darkBlue size-10 hover:bg-gray-500 duration-500 flex justify-center items-center  text-white">
+              <IoEyeOutline></IoEyeOutline>
+            </div>
+          </Link>
+        </div>
       </figure>
       <div className="card-body">
         <h2 className="text-sm md:text-[17px] font-semibold leading-6">
-         {product_name}
+          {product_name}
         </h2>
-        <p className="text-paragraph">{description?.slice(0,50)}</p>
+        <p className="text-paragraph">{description?.slice(0, 50)}</p>
         <div className="flex items-center justify-between *:flex *:items-center *:gap-2">
           <div>
             {/* <div className="flex items-center gap-1">
@@ -39,7 +55,10 @@ const {_id, product_name,reguler_price,sale_price,brand_name,category_name,image
           <button className="w-[30%] h-[45px] bg-white border border-darkBlue flex justify-center items-center text-xl  hover:bg-darkBlue duration-500 hover:text-white">
             <GiSelfLove></GiSelfLove>
           </button>
-          <button onClick={() => dispatch(addCart(item))} className="w-[70%] h-[45px] border border-darkBlue bg-white text-darkBlue hover:bg-darkBlue duration-500 hover:text-white">
+          <button
+            onClick={() => dispatch(addCart(item))}
+            className="w-[70%] h-[45px] border border-darkBlue bg-white text-darkBlue hover:bg-darkBlue duration-500 hover:text-white"
+          >
             Add to cart
           </button>
         </div>

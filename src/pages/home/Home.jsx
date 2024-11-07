@@ -2,7 +2,6 @@ import headphone from "../../../public/images/headphone.png";
 import SectionIntro from "../../components/SectionIntro";
 
 import Banner from "./Banner";
-import Category from "./Category";
 import Discount from "./Discount";
 import ProductContainer from "./ProductContainer";
 const Home = () => {
@@ -11,13 +10,13 @@ const Home = () => {
       <section className="mt-4 max-w-7xl mx-auto px-2">
         <Banner></Banner>
       </section>
-      <section className="py-12 max-w-7xl mx-auto px-2">
+      {/* <section className="py-12 max-w-7xl mx-auto px-2">
         <SectionIntro title="Categories"></SectionIntro>
         <div className="w-full overflow-auto scrollbar-none">
           <Category></Category>
         </div>
-      </section>
-      <section className="py-12 bg-[#e9f6f6]">
+      </section> */}
+      <section className="py-12 bg-[#e9f6f6] mt-10">
         <div className="max-w-7xl mx-auto px-2">
           <SectionIntro title="Trending"></SectionIntro>
           <ProductContainer></ProductContainer>
