@@ -118,7 +118,7 @@ const Navbar = () => {
                     />
                   </svg>
                   <span className="badge badge-sm indicator-item text-red-500 poppins">
-                    {carts.length}
+                    {carts?.length}
                   </span>
                 </div>
               </div>
@@ -187,7 +187,7 @@ const Order = ({ openCart, setOpenCart }) => {
   const [isChecked, setIsChecked] = useState(false);
   const { carts } = useSelector((state) => state.carts);
   const price =
-    carts.length > 0 &&
+    carts?.length > 0 &&
     carts?.reduce((prev, current) => {
       return parseInt(prev) + parseInt(current.price);
     }, 0);
@@ -252,7 +252,7 @@ const Order = ({ openCart, setOpenCart }) => {
           );
         })}
       </div>
-      {carts.length > 0 && (
+      {carts?.length > 0 && (
         <>
           <div className="flex gap-2 items-center poppins justify-between text-white  px-6 py-2">
             <h1>Subtitle</h1>

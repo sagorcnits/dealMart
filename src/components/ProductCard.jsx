@@ -1,7 +1,8 @@
 import { GiSelfLove } from "react-icons/gi";
 import { IoEyeOutline } from "react-icons/io5";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { addCart } from "../features/cartItem/cartSlice";
+import { addToCart } from "../features/cartItem/cartSlice";
 
 const ProductCard = ({ item }) => {
   const {
@@ -19,12 +20,14 @@ const ProductCard = ({ item }) => {
 
   // console.log(item)
 
+  const dispatch = useDispatch();
+
   return (
     <div className="dashboard_card card-compact relative bg-white border poppins  md:h-[400px] cursor-pointer hover:border-green duration-500 rounded-md overflow-hidden z-0">
       <figure className="h-[170px] overflow-hidden relative">
         <img src={images[0]} alt={product_name} />
         <div className="flex z-10  justify-center items-center gap-6 absolute dashboard_card_effect right-0 top-0 bottom-0 left-0  bg-black opacity-80 px-4">
-          <Link to={`/product/details`}>
+          <Link to={`/product/details/${_id}`}>
             <div className="logo bg-darkBlue size-10 hover:bg-gray-500 duration-500 flex justify-center items-center  text-white">
               <IoEyeOutline></IoEyeOutline>
             </div>
@@ -56,7 +59,7 @@ const ProductCard = ({ item }) => {
             <GiSelfLove></GiSelfLove>
           </button>
           <button
-            onClick={() => dispatch(addCart(item))}
+            onClick={() => dispatch(addToCart("sagor"))}
             className="w-[70%] h-[45px] border border-darkBlue bg-white text-darkBlue hover:bg-darkBlue duration-500 hover:text-white"
           >
             Add to cart
