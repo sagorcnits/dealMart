@@ -6,7 +6,7 @@ import { IoMdClose } from "react-icons/io";
 import { MdDeleteForever } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
-import { removeCart } from "../features/cartItem/cartSlice";
+import { addToCart, minusCart, removeCart } from "../features/cartItem/cartSlice";
 import { removeUser } from "../features/user/userSlice";
 
 const Navbar = () => {
@@ -26,6 +26,7 @@ const Navbar = () => {
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
 
+  // console.log(carts)
   return (
     <div className={active ? "activeNav" : "duration-700 border-b"}>
       <Order openCart={openCart} setOpenCart={setOpenCart}></Order>
@@ -139,7 +140,7 @@ const Navbar = () => {
                 </div>
                 <ul
                   tabIndex={0}
-                  className="menu menu-sm dropdown-content bg-darkBlue text-white poppins rounded-box z-50 mt-3 w-52 p-2 shadow space-y-3"
+                  className="menu menu-sm dropdown-content bg-darkBlue  poppins rounded-box z-50 mt-3 w-52 p-2 shadow space-y-3"
                 >
                   {admin && (
                     <Link to="/dashboard">
@@ -189,7 +190,7 @@ const Order = ({ openCart, setOpenCart }) => {
   const price =
     carts?.length > 0 &&
     carts?.reduce((prev, current) => {
-      return parseInt(prev) + parseInt(current.price);
+      return parseInt(prev) + parseInt(current.sale_price);
     }, 0);
   // const price = carts.length > 0 && carts.map((item) => {
   //   const price = parseInt(item.price) +  parseInt(item.price)
@@ -201,44 +202,51 @@ const Order = ({ openCart, setOpenCart }) => {
     <div
       className={`fixed z-50 top-0 ${
         openCart ? "right-0" : "-right-[400px]"
-      } w-[380px] bg-darkBlue bottom-0 overflow-auto duration-500`}
+      } w-[380px] bg-white box-shadow bottom-0 overflow-auto duration-500`}
     >
-      <div className="flex gap-2 items-center poppins justify-between text-white  px-4 py-5">
+      <div className="flex gap-2 items-center poppins justify-between px-4 py-5">
         <h1>Shopping Cart</h1>
         <IoMdClose
           onClick={() => setOpenCart(false)}
           className="cursor-pointer text-xl"
         ></IoMdClose>
       </div>
-      <div className="border-b pb-1">
+      <div>
         {carts?.map((item, id) => {
           const {
             _id,
             product_name,
-            price,
-            brand,
-            category,
-            photo_url,
+            sale_price,
+            brand_name,
+            category_name,
+            images,
             description,
             quantity,
           } = item;
+
+          console.log(images);
           return (
-            <div key={id} className="flex gap-2 p-2 text-white poppins">
-              <div className="w-[150px] overflow-hidden rounded-md">
+            <div
+              key={id}
+              className="flex gap-2 p-2 items-center poppins border-b"
+            >
+              <div className="w-[120px] h-[90px] overflow-hidden rounded-md">
                 <img
                   className="w-full h-full"
-                  src={photo_url}
+                  src={images[0]}
                   alt="product_card"
                 />
               </div>
-              <div className="space-y-2">
-                <h3>{category}</h3>
-                <p>${price}</p>
+              <div className="space-y-2 text-sm">
+                <h3>{product_name}</h3>
+                <p>${sale_price}</p>
                 <div className="flex gap-6">
-                  <div className="flex items-center gap-10 bg-gray-400 py-2 rounded-md px-4">
-                    <button>-</button>
+                  <div className="flex items-center gap-10 bg-darkBlue py-2 rounded-md px-4 *:text-white">
+                    <button onClick={() => dispatch(minusCart(item))}>
+                      -
+                    </button>
                     <p>{quantity}</p>
-                    <button>+</button>
+                    <button onClick={() => dispatch(addToCart(item))}>+</button>
                   </div>
                   <button
                     onClick={() => dispatch(removeCart(item))}
@@ -254,11 +262,11 @@ const Order = ({ openCart, setOpenCart }) => {
       </div>
       {carts?.length > 0 && (
         <>
-          <div className="flex gap-2 items-center poppins justify-between text-white  px-6 py-2">
+          <div className="flex gap-2 items-center poppins justify-between px-6 py-2">
             <h1>Subtitle</h1>
             <p>{price}</p>
           </div>
-          <div className="flex items-center text-white p-3 poppins">
+          <div className="flex items-center  p-3 poppins">
             <input
               checked={isChecked}
               onChange={(e) => setIsChecked(e.target.checked)}
@@ -275,11 +283,11 @@ const Order = ({ openCart, setOpenCart }) => {
           {isChecked && <Card></Card>}
           <div className="px-2 py-4">
             {isChecked ? (
-              <button className="w-full bg-green py-3 text-center text-white rounded-md hover:bg-black duration-500 poppins">
+              <button className="w-full bg-green py-3 text-center  rounded-md text-white hover:bg-black duration-500 poppins">
                 Order now
               </button>
             ) : (
-              <button className="w-full bg-green py-3 text-center text-white rounded-md hover:bg-black duration-500 poppins">
+              <button className="w-full bg-green py-3 text-center  rounded-md text-white hover:bg-black duration-500 poppins">
                 Check Out
               </button>
             )}
@@ -294,17 +302,21 @@ const Card = () => {
   return (
     <div className="px-2">
       <div className="flex gap-4 *:w-full *:rounded-md  *:p-2 ">
-        <input type="text" placeholder="name" className="focus:outline-none" />
+        <input
+          type="text"
+          placeholder="name"
+          className="focus:outline-none border"
+        />
         <input
           type="number"
           placeholder="phone"
-          className="focus:outline-none"
+          className="focus:outline-none border"
         />
       </div>
       <textarea
         type="text"
         placeholder="address"
-        className="focus:outline-none h-[100px] overflow-auto w-full mt-4 rounded-md p-2 resize-none"
+        className="focus:outline-none h-[100px] overflow-auto w-full mt-4 rounded-md p-2 resize-none border"
       />
     </div>
   );

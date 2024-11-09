@@ -18,6 +18,15 @@ const ProductCard = ({ item }) => {
     stock_status,
   } = item;
 
+  const addToCartProduct = {
+    _id,
+    product_name,
+    reguler_price,
+    sale_price,
+    images,
+    quantity: 1,
+  };
+
   // console.log(item)
 
   const dispatch = useDispatch();
@@ -59,7 +68,7 @@ const ProductCard = ({ item }) => {
             <GiSelfLove></GiSelfLove>
           </button>
           <button
-            onClick={() => dispatch(addToCart("sagor"))}
+            onClick={() => dispatch(addToCart(addToCartProduct))}
             className="w-[70%] h-[45px] border border-darkBlue bg-white text-darkBlue hover:bg-darkBlue duration-500 hover:text-white"
           >
             Add to cart
