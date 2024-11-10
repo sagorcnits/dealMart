@@ -6,8 +6,13 @@ import { IoMdClose } from "react-icons/io";
 import { MdDeleteForever } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
-import { addToCart, minusCart, removeCart } from "../features/cartItem/cartSlice";
+import {
+  addToCart,
+  minusCart,
+  removeCart,
+} from "../features/cartItem/cartSlice";
 import { removeUser } from "../features/user/userSlice";
+import useAxios from "../hooks/useAxios";
 
 const Navbar = () => {
   const [openCart, setOpenCart] = useState(false);
@@ -23,6 +28,10 @@ const Navbar = () => {
   });
   // get the carts form redux store
   const { carts } = useSelector((state) => state.carts);
+  const totalCartQuantity = carts.reduce(
+    (prev, curr) => prev + curr.quantity,
+    0
+  );
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
 
@@ -119,7 +128,7 @@ const Navbar = () => {
                     />
                   </svg>
                   <span className="badge badge-sm indicator-item text-red-500 poppins">
-                    {carts?.length}
+                    {totalCartQuantity}
                   </span>
                 </div>
               </div>
@@ -140,7 +149,7 @@ const Navbar = () => {
                 </div>
                 <ul
                   tabIndex={0}
-                  className="menu menu-sm dropdown-content bg-darkBlue  poppins rounded-box z-50 mt-3 w-52 p-2 shadow space-y-3"
+                  className="menu menu-sm dropdown-content bg-darkBlue text-white  poppins rounded-box z-50 mt-3 w-52 p-2 shadow space-y-3"
                 >
                   {admin && (
                     <Link to="/dashboard">
@@ -186,18 +195,83 @@ export default Navbar;
 
 const Order = ({ openCart, setOpenCart }) => {
   const [isChecked, setIsChecked] = useState(false);
+  const [shippingVat, setShippingVat] = useState(0);
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const axiosFetch = useAxios();
+  // all carts and user
   const { carts } = useSelector((state) => state.carts);
-  const price =
-    carts?.length > 0 &&
-    carts?.reduce((prev, current) => {
-      return parseInt(prev) + parseInt(current.sale_price);
-    }, 0);
-  // const price = carts.length > 0 && carts.map((item) => {
-  //   const price = parseInt(item.price) +  parseInt(item.price)
-  //   console.log(price)
-  // })
+  const { user } = useSelector((state) => state.user);
+  const orderProducts = carts.map((item, id) => {
+    return {
+      product_id: item._id,
+      quantity: item.quantity,
+      total_price: item.totalAmount,
+    };
+  });
+  // total price function
+  let totalPrice = carts.reduce((prev, curr) => {
+    return prev + curr.totalAmount;
+  }, 0);
+
   const dispatch = useDispatch();
-  // console.log(isChecked);
+
+  // shipping amount function
+  const handleShippping = (data) => {
+    const shipping = data.target.value;
+    if (shipping === "inside_dhaka") {
+      setShippingVat(60);
+    } else {
+      setShippingVat(120);
+    }
+  };
+  // order information function
+  const orderData = (name, phone, address) => {
+    setName(name);
+    setPhone(phone);
+    setAddress(address);
+  };
+
+  // order add function
+  const handleOrder = () => {
+    if (!name && !phone && !address) {
+      return alert("please share your shipping address");
+    }
+
+    const orderData = {
+      products: orderProducts,
+      customer: name,
+      customer_img: user.photoUrl,
+      shipping_address: address,
+      shipping_price: shippingVat,
+      phone: phone,
+      email: user.email,
+      payment_infor: isChecked ? "cash on delivery" : "online payment",
+      total_price: totalPrice,
+      payment_status: isChecked ? "upaid" : "paid",
+      order_status: {
+        status: "pending",
+        track_order: [
+          {
+            status: "pending",
+          },
+        ],
+      },
+    };
+
+    axiosFetch
+      .post("/orders", orderData)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    console.log("ok");
+  };
+
   return (
     <div
       className={`fixed z-50 top-0 ${
@@ -224,7 +298,6 @@ const Order = ({ openCart, setOpenCart }) => {
             quantity,
           } = item;
 
-          console.log(images);
           return (
             <div
               key={id}
@@ -242,9 +315,7 @@ const Order = ({ openCart, setOpenCart }) => {
                 <p>${sale_price}</p>
                 <div className="flex gap-6">
                   <div className="flex items-center gap-10 bg-darkBlue py-2 rounded-md px-4 *:text-white">
-                    <button onClick={() => dispatch(minusCart(item))}>
-                      -
-                    </button>
+                    <button onClick={() => dispatch(minusCart(item))}>-</button>
                     <p>{quantity}</p>
                     <button onClick={() => dispatch(addToCart(item))}>+</button>
                   </div>
@@ -262,9 +333,36 @@ const Order = ({ openCart, setOpenCart }) => {
       </div>
       {carts?.length > 0 && (
         <>
-          <div className="flex gap-2 items-center poppins justify-between px-6 py-2">
+          <div className="flex gap-2 items-center poppins justify-between px-4 py-2">
             <h1>Subtitle</h1>
-            <p>{price}</p>
+            <p>{totalPrice}</p>
+          </div>
+          <div className="flex items-center justify-between">
+            <div className="border-b py-2 px-4">
+              <p className="font-bold">Shipping</p>
+              <div className="mt-2 flex gap-3 *:cursor-pointer">
+                <input
+                  type="radio"
+                  name="shipping"
+                  id="inside_dhaka"
+                  value="inside_dhaka"
+                  onChange={handleShippping}
+                />
+                <label htmlFor="inside_dhaka">inside Dhaka City :</label>
+                <p className="font-bold"> 60 TK</p>
+              </div>
+              <div className="flex gap-3 *:cursor-pointer">
+                <input
+                  type="radio"
+                  name="shipping"
+                  id="outside_dhaka"
+                  value="outside_dhaka"
+                  onChange={handleShippping}
+                />
+                <label htmlFor="outside_dhaka">Outside Dhaka City :</label>
+                <p className="font-bold"> 120 Tk</p>
+              </div>
+            </div>
           </div>
           <div className="flex items-center  p-3 poppins">
             <input
@@ -280,10 +378,13 @@ const Order = ({ openCart, setOpenCart }) => {
               Cash On delivery
             </label>
           </div>
-          {isChecked && <Card></Card>}
+          {isChecked && <OrderInput orderData={orderData}></OrderInput>}
           <div className="px-2 py-4">
             {isChecked ? (
-              <button className="w-full bg-green py-3 text-center  rounded-md text-white hover:bg-black duration-500 poppins">
+              <button
+                onClick={handleOrder}
+                className="w-full bg-green py-3 text-center  rounded-md text-white hover:bg-black duration-500 poppins"
+              >
                 Order now
               </button>
             ) : (
@@ -298,24 +399,38 @@ const Order = ({ openCart, setOpenCart }) => {
   );
 };
 
-const Card = () => {
+const OrderInput = ({ orderData }) => {
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+
+  orderData(name, phone, address);
+
   return (
     <div className="px-2">
       <div className="flex gap-4 *:w-full *:rounded-md  *:p-2 ">
         <input
+          onChange={(e) => setName(e.target.value)}
           type="text"
           placeholder="name"
           className="focus:outline-none border"
+          value={name}
         />
         <input
+          onChange={(e) => setPhone(e.target.value)}
           type="number"
           placeholder="phone"
           className="focus:outline-none border"
+          value={phone}
+          name="phone"
         />
       </div>
       <textarea
+        onChange={(e) => setAddress(e.target.value)}
         type="text"
         placeholder="address"
+        value={address}
+        name="address"
         className="focus:outline-none h-[100px] overflow-auto w-full mt-4 rounded-md p-2 resize-none border"
       />
     </div>

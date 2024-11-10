@@ -24,6 +24,7 @@ const ProductCard = ({ item }) => {
     reguler_price,
     sale_price,
     images,
+    totalAmount : sale_price,
     quantity: 1,
   };
 
