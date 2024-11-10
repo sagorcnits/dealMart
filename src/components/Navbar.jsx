@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaBars } from "react-icons/fa";
 import { GiSelfLove } from "react-icons/gi";
@@ -6,6 +6,7 @@ import { IoMdClose } from "react-icons/io";
 import { MdDeleteForever } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
+import Swal from "sweetalert2";
 import {
   addToCart,
   minusCart,
@@ -192,7 +193,7 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
+// order process
 const Order = ({ openCart, setOpenCart }) => {
   const [isChecked, setIsChecked] = useState(false);
   const [shippingVat, setShippingVat] = useState(0);
@@ -233,9 +234,10 @@ const Order = ({ openCart, setOpenCart }) => {
     setAddress(address);
   };
 
+
   // order add function
   const handleOrder = () => {
-    if (!name && !phone && !address) {
+    if (!name || !phone || !address || shippingVat == 0) {
       return alert("please share your shipping address");
     }
 
@@ -263,7 +265,16 @@ const Order = ({ openCart, setOpenCart }) => {
     axiosFetch
       .post("/orders", orderData)
       .then((res) => {
-        console.log(res.data);
+        if (res.data.message == "ok") {
+          Swal.fire({
+            icon: "success",
+            title: "Your Order has been success",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          dispatch(removeCart("order_done"));
+          setOpenCart(!openCart)
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -398,26 +409,38 @@ const Order = ({ openCart, setOpenCart }) => {
     </div>
   );
 };
-
+// order input
 const OrderInput = ({ orderData }) => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
-
-  orderData(name, phone, address);
-
+  // data changes
+  const changeOrderInfo = (e) => {
+    if (e.target.name == "name") {
+      setName(e.target.value);
+    } else if (e.target.name == "phone") {
+      setPhone(e.target.value);
+    } else {
+      setAddress(e.target.value);
+    }
+  };
+  // send data parent conatiner
+  useEffect(() => {
+    orderData(name, phone, address);
+  }, [name, phone, address]);
   return (
     <div className="px-2">
       <div className="flex gap-4 *:w-full *:rounded-md  *:p-2 ">
         <input
-          onChange={(e) => setName(e.target.value)}
+          onChange={changeOrderInfo}
           type="text"
           placeholder="name"
           className="focus:outline-none border"
           value={name}
+          name="name"
         />
         <input
-          onChange={(e) => setPhone(e.target.value)}
+          onChange={changeOrderInfo}
           type="number"
           placeholder="phone"
           className="focus:outline-none border"
@@ -426,7 +449,7 @@ const OrderInput = ({ orderData }) => {
         />
       </div>
       <textarea
-        onChange={(e) => setAddress(e.target.value)}
+        onChange={changeOrderInfo}
         type="text"
         placeholder="address"
         value={address}

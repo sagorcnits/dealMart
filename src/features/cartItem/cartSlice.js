@@ -17,7 +17,9 @@ const cartSlice = createSlice({
 
       if (existingProduct >= 0) {
         state.carts[existingProduct].quantity += 1;
-        state.carts[existingProduct].totalAmount += parseInt(action.payload.sale_price);
+        state.carts[existingProduct].totalAmount += parseInt(
+          action.payload.sale_price
+        );
         localStorage.setItem("cart", JSON.stringify(state.carts));
       } else {
         state.carts.push(action.payload);
@@ -33,7 +35,9 @@ const cartSlice = createSlice({
       if (existingProduct >= 0) {
         if (state.carts[existingProduct].quantity > 1) {
           state.carts[existingProduct].quantity -= 1;
-          state.carts[existingProduct].totalAmount -= parseInt(action.payload.sale_price);
+          state.carts[existingProduct].totalAmount -= parseInt(
+            action.payload.sale_price
+          );
 
           localStorage.setItem("cart", JSON.stringify(state.carts));
         }
@@ -44,6 +48,11 @@ const cartSlice = createSlice({
     },
     // remove from cart items
     removeCart: (state, action) => {
+      if (action.payload == "order_done") {
+        localStorage.removeItem("cart");
+        state.carts = []
+      }
+
       const filterProducts = state.carts.filter(
         (item) => item._id !== action.payload._id
       );

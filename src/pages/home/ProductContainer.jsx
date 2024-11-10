@@ -6,13 +6,13 @@ import useProducts from "../../hooks/useProducts";
 const ProductContainer = () => {
   const trendingRef = useRef(null);
   const [prevScroll, setPrevScroll] = useState(false);
-  const [products] = useProducts()
+  const [products] = useProducts();
   // next scroll product
   const nextProduct = () => {
     trendingRef.current.scrollLeft += 700;
     setPrevScroll(true);
   };
-// previous scroll product
+  // previous scroll product
   const prevProduct = () => {
     trendingRef.current.scrollLeft -= 700;
     console.log(trendingRef.current.scrollLeft);
@@ -21,8 +21,6 @@ const ProductContainer = () => {
       console.log(trendingRef.current.scrollLeft);
     }
   };
-
-  console.log(products)
 
   return (
     <div className="relative">
@@ -43,7 +41,7 @@ const ProductContainer = () => {
       </div>
       <div ref={trendingRef} className="overflow-auto w-full scrollbar-none">
         <div className="grid grid-cols-8 gap-6 mt-10 overflow-auto w-[2600px] ">
-          {products?.slice(0,8).map((item, id) => (
+          {products?.slice(0, 8).map((item, id) => (
             <ProductCard key={id} item={item}></ProductCard>
           ))}
         </div>
