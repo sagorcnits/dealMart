@@ -21,6 +21,7 @@ import NotFound from "../pages/notFound/NotFound";
 import Product_details from "../pages/product_details/Product_details";
 import Product from "../pages/products/Product";
 import Register from "../pages/register/Register";
+import Wish_Products from "../pages/wish_list/Wish_Products";
 
 const router = createBrowserRouter([
   {
@@ -32,9 +33,14 @@ const router = createBrowserRouter([
         path: "/",
         element: <Home></Home>,
       },
+
       {
         path: "/products",
         element: <Product></Product>,
+      },
+      {
+        path: "/product/details/:id",
+        element: <Product_details></Product_details>,
       },
       {
         path: "/about",
@@ -45,9 +51,10 @@ const router = createBrowserRouter([
         element: <Contact></Contact>,
       },
       {
-        path: "/product/details/:id",
-        element: <Product_details></Product_details>,
+        path: "/wish-products",
+        element: <Wish_Products></Wish_Products>,
       },
+     
     ],
   },
 

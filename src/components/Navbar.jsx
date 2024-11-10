@@ -3,6 +3,7 @@ import { CiSearch } from "react-icons/ci";
 import { FaBars } from "react-icons/fa";
 import { GiSelfLove } from "react-icons/gi";
 import { IoMdClose } from "react-icons/io";
+import { LuShoppingBag } from "react-icons/lu";
 import { MdDeleteForever } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
@@ -106,7 +107,9 @@ const Navbar = () => {
           </ul>
           <div className="flex items-center gap-4">
             <div className="dropdown dropdown-end flex items-center gap-4">
-              <GiSelfLove className="text-xl cursor-pointer hover:text-green duration-500"></GiSelfLove>
+              <Link to="/wish-products">
+                <GiSelfLove className="text-xl cursor-pointer hover:text-green duration-500"></GiSelfLove>
+              </Link>
               <div
                 tabIndex={0}
                 role="button"
@@ -234,7 +237,6 @@ const Order = ({ openCart, setOpenCart }) => {
     setAddress(address);
   };
 
-
   // order add function
   const handleOrder = () => {
     if (!name || !phone || !address || shippingVat == 0) {
@@ -273,7 +275,7 @@ const Order = ({ openCart, setOpenCart }) => {
             timer: 1500,
           });
           dispatch(removeCart("order_done"));
-          setOpenCart(!openCart)
+          setOpenCart(!openCart);
         }
       })
       .catch((error) => {
@@ -296,54 +298,58 @@ const Order = ({ openCart, setOpenCart }) => {
           className="cursor-pointer text-xl"
         ></IoMdClose>
       </div>
-      <div>
-        {carts?.map((item, id) => {
-          const {
-            _id,
-            product_name,
-            sale_price,
-            brand_name,
-            category_name,
-            images,
-            description,
-            quantity,
-          } = item;
-
-          return (
-            <div
-              key={id}
-              className="flex gap-2 p-2 items-center poppins border-b"
-            >
-              <div className="w-[120px] h-[90px] overflow-hidden rounded-md">
-                <img
-                  className="w-full h-full"
-                  src={images[0]}
-                  alt="product_card"
-                />
-              </div>
-              <div className="space-y-2 text-sm">
-                <h3>{product_name}</h3>
-                <p>${sale_price}</p>
-                <div className="flex gap-6">
-                  <div className="flex items-center gap-10 bg-darkBlue py-2 rounded-md px-4 *:text-white">
-                    <button onClick={() => dispatch(minusCart(item))}>-</button>
-                    <p>{quantity}</p>
-                    <button onClick={() => dispatch(addToCart(item))}>+</button>
-                  </div>
-                  <button
-                    onClick={() => dispatch(removeCart(item))}
-                    className="text-xl text-red-500"
-                  >
-                    <MdDeleteForever></MdDeleteForever>
-                  </button>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-      {carts?.length > 0 && (
+      {carts?.length > 0 ? (
         <>
+          <div>
+            {carts?.map((item, id) => {
+              const {
+                _id,
+                product_name,
+                sale_price,
+                brand_name,
+                category_name,
+                images,
+                description,
+                quantity,
+              } = item;
+
+              return (
+                <div
+                  key={id}
+                  className="flex gap-2 p-2 items-center poppins border-b"
+                >
+                  <div className="w-[120px] h-[90px] overflow-hidden rounded-md">
+                    <img
+                      className="w-full h-full"
+                      src={images[0]}
+                      alt="product_card"
+                    />
+                  </div>
+                  <div className="space-y-2 text-sm">
+                    <h3>{product_name}</h3>
+                    <p>${sale_price}</p>
+                    <div className="flex gap-6">
+                      <div className="flex items-center gap-10 bg-darkBlue py-2 rounded-md px-4 *:text-white">
+                        <button onClick={() => dispatch(minusCart(item))}>
+                          -
+                        </button>
+                        <p>{quantity}</p>
+                        <button onClick={() => dispatch(addToCart(item))}>
+                          +
+                        </button>
+                      </div>
+                      <button
+                        onClick={() => dispatch(removeCart(item))}
+                        className="text-xl text-red-500"
+                      >
+                        <MdDeleteForever></MdDeleteForever>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
           <div className="flex gap-2 items-center poppins justify-between px-4 py-2">
             <h1>Subtitle</h1>
             <p>{totalPrice}</p>
@@ -405,6 +411,11 @@ const Order = ({ openCart, setOpenCart }) => {
             )}
           </div>{" "}
         </>
+      ) : (
+        <div className="mt-52">
+          <LuShoppingBag size={60} className="mx-auto"></LuShoppingBag>
+          <h1 className="font-bold text-center py-2 text-2xl">No Data</h1>
+        </div>
       )}
     </div>
   );

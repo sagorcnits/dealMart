@@ -65,7 +65,7 @@ const ProductCard = ({ item }) => {
           </div>
         </div>
         <div className="flex items-center gap-4 *:rounded-md mt-4 absolute bottom-4 left-0 w-full px-4">
-          <button className="w-[30%] h-[45px] bg-white border border-darkBlue flex justify-center items-center text-xl  hover:bg-darkBlue duration-500 hover:text-white">
+          <button  className="w-[30%] h-[45px] bg-white border border-darkBlue flex justify-center items-center text-xl  hover:bg-darkBlue duration-500 hover:text-white">
             <GiSelfLove></GiSelfLove>
           </button>
           <button
