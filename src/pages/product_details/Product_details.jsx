@@ -16,7 +16,9 @@ const Product_details = () => {
     axiosFetch
       .get(`/products/${id}`)
       .then((res) => {
-        setProductData(res.data);
+        if (res.data.message == "ok") {
+          setProductData(res.data.data);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -35,6 +37,9 @@ const Product_details = () => {
   };
 
   const disptach = useDispatch();
+
+  const category = productData?.category_name;
+
 
   return (
     <div className="p-4">
@@ -105,14 +110,14 @@ const Product_details = () => {
       </div>
 
       <div className="container mx-auto lg:px-8 mt-6 ">
-        <CustomerReviews></CustomerReviews>
+        <CustomerReviews id={id}></CustomerReviews>
       </div>
 
       <div className="container mx-auto lg:px-8 mt-6 ">
         <h1 className="text-3xl font-poppins font-semibold pb-10">
           Related Products
         </h1>
-        <Related_products></Related_products>
+        <Related_products category={category}></Related_products>
       </div>
     </div>
   );
@@ -151,7 +156,7 @@ const Review = ({ name, rating, text, image, likes, dislikes }) => {
 };
 
 // Main Customer Reviews Component
-const CustomerReviews = () => {
+const CustomerReviews = ({ id }) => {
   const [reviewForm, setReviewForm] = useState(false);
 
   const reviews = [
@@ -201,7 +206,7 @@ const CustomerReviews = () => {
           {reviewForm ? "Close a Review" : "Write A Review"}
         </button>
         {/* review form */}
-        {reviewForm && <RatingStar></RatingStar>}
+        {reviewForm && <RatingStar id={id}></RatingStar>}
       </div>
 
       {/* Right Section - Individual Reviews */}
@@ -215,7 +220,7 @@ const CustomerReviews = () => {
 };
 
 // rating star
-const RatingStar = () => {
+const RatingStar = ({ id }) => {
   const [starValue, setStarValue] = useState();
   const [hoverValue, setHoverValue] = useState(0);
   const user = useSelector((state) => state.user.user);
@@ -229,6 +234,7 @@ const RatingStar = () => {
     const review = form.review.value;
 
     const reviewData = {
+      product_id: id,
       name,
       review,
       rating: starValue,
@@ -242,7 +248,6 @@ const RatingStar = () => {
     }
 
     //  review post of the server
-
     axiosFetch
       .post("/reviews", reviewData)
       .then((res) => {
@@ -303,20 +308,22 @@ const RatingStar = () => {
 };
 
 // related Products
-const Related_products = () => {
+const Related_products = ({ category }) => {
+  // console.log(category);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const axiosFetch = useAxios();
 
   useEffect(() => {
     axiosFetch
-      .get(`/products`)
+      .get(`/products?category=${category}`)
       .then((res) => {
-        setRelatedProducts(res.data);
+        // console.log(res.data);
+        setRelatedProducts(res.data.data);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [category]);
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 ">
       {relatedProducts?.slice(0, 8).map((item, id) => (
