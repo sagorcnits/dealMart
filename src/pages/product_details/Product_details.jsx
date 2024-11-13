@@ -40,7 +40,6 @@ const Product_details = () => {
 
   const category = productData?.category_name;
 
-
   return (
     <div className="p-4">
       <div className="container mx-auto bg-white lg:p-8 rounded-lg">
@@ -126,9 +125,9 @@ const Product_details = () => {
 export default Product_details;
 
 // Individual Review Component
-const Review = ({ name, rating, text, image, likes, dislikes }) => {
+const Review = ({ name, rating, review, image }) => {
   return (
-    <div className="border p-4 rounded-lg mb-4">
+    <div className="p-4 rounded-lg mb-4">
       <div className="flex items-center mb-2">
         <img src={image} alt={name} className="w-10 h-10 rounded-full mr-3" />
         <div>
@@ -142,13 +141,13 @@ const Review = ({ name, rating, text, image, likes, dislikes }) => {
           </div>
         </div>
       </div>
-      <p className="text-gray-600 mb-2">{text}</p>
+      <p className="text-gray-600 mb-2">{review}</p>
       <div className="flex items-center text-gray-500">
         <button className="mr-2 flex items-center">
-          ❤️ <span className="ml-1">{likes}</span>
+          ❤️ <span className="ml-1">10</span>
         </button>
         <button className="flex items-center">
-          👎 <span className="ml-1">{dislikes}</span>
+          👎 <span className="ml-1">1</span>
         </button>
       </div>
     </div>
@@ -158,23 +157,84 @@ const Review = ({ name, rating, text, image, likes, dislikes }) => {
 // Main Customer Reviews Component
 const CustomerReviews = ({ id }) => {
   const [reviewForm, setReviewForm] = useState(false);
+  const [productReview, setProductReview] = useState([]);
+  const [productStar, setProductStar] = useState(null);
+  // product star rating function
+  const productStarRating = () => {
+    const starCounts = {
+      fiveStar: 0,
+      fourStar: 0,
+      threeStar: 0,
+      twoStar: 0,
+      oneStar: 0,
+    };
 
-  const reviews = [
+    productReview.forEach((item) => {
+      if (item.rating === 5) {
+        starCounts.fiveStar += 1;
+      } else if (item.rating === 4) {
+        starCounts.fourStar += 1;
+      } else if (item.rating === 3) {
+        starCounts.threeStar += 1;
+      } else if (item.rating === 2) {
+        starCounts.twoStar += 1;
+      } else if (item.rating === 1) {
+        starCounts.oneStar += 1;
+      }
+    });
+
+    // Update state only once with the final counts
+    setProductStar(starCounts);
+  };
+
+  const axiosFetch = useAxios();
+
+  // get this product review from server
+  useEffect(() => {
+    axiosFetch
+      .get(`/reviews/${id}`)
+      .then((res) => {
+        if (res.data.message == "ok") {
+          setProductReview(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+  // rating filter
+  useEffect(() => {
+    try {
+      productStarRating();
+    } catch (err) {
+      console.log(err.message);
+    }
+  }, [productReview]);
+
+  // filtering by reviews rating
+
+  console.log(productStar);
+
+  const ratingArray = [
     {
-      name: "Hannah D",
-      rating: 5,
-      text: "It's better than I thought it would be for that price. We got the grey one and our family is pleased! It's super easy to wash which is top priority for me since I have two toddlers. I can definitely recommend it to other mums!",
-      image: "https://via.placeholder.com/40",
-      likes: 7,
-      dislikes: 1,
+      id: 5,
+      rating: productStar?.fiveStar,
     },
     {
-      name: "G",
-      rating: 4,
-      text: "Very soft and fluffy fur. My wife loves it! Just had to let the others know that this is worth every penny!",
-      image: "https://via.placeholder.com/40",
-      likes: 9,
-      dislikes: 0,
+      id: 4,
+      rating: productStar?.fourStar,
+    },
+    {
+      id: 3,
+      rating: productStar?.threeStar,
+    },
+    {
+      id: 2,
+      rating: productStar?.twoStar,
+    },
+    {
+      id: 1,
+      rating: productStar?.oneStar,
     },
   ];
 
@@ -185,18 +245,18 @@ const CustomerReviews = ({ id }) => {
         <h3 className="text-lg font-semibold mb-4">Customer Reviews</h3>
         <div className="flex items-center mb-2">
           <div className="text-yellow-400 text-2xl mr-2">★★★★★</div>
-          <span className="text-gray-600">11 reviews</span>
+          <span className="text-gray-600">{productReview?.length} reviews</span>
         </div>
-        {[5, 4, 3, 2, 1].map((rating) => (
-          <div key={rating} className="flex items-center mb-1">
-            <span className="w-4 text-gray-500">{rating}</span>
+        {ratingArray?.map((rating, id) => (
+          <div key={id} className="flex items-center mb-1">
+            <span className="w-4 text-gray-500">{rating?.id}</span>
             <div className="w-full h-2 bg-gray-200 mx-2 rounded">
               <div
                 className={`h-2 bg-yellow-400 rounded`}
-                style={{ width: `${rating * 20}%` }}
+                style={{ width: `${rating?.id * 20}%` }}
               ></div>
             </div>
-            <span className="text-gray-500">{rating * 2}</span>
+            <span className="text-gray-500">{rating?.rating}</span>
           </div>
         ))}
         <button
@@ -210,8 +270,8 @@ const CustomerReviews = ({ id }) => {
       </div>
 
       {/* Right Section - Individual Reviews */}
-      <div className="md:w-2/3">
-        {reviews.map((review, index) => (
+      <div className="md:w-2/3 grid grid-cols-2 gap-2 *:box-shadow">
+        {productReview?.map((review, index) => (
           <Review key={index} {...review} />
         ))}
       </div>
@@ -312,7 +372,7 @@ const Related_products = ({ category }) => {
   // console.log(category);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const axiosFetch = useAxios();
-
+  // get related product by category_name
   useEffect(() => {
     axiosFetch
       .get(`/products?category=${category}`)
