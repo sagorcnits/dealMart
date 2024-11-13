@@ -24,9 +24,6 @@ const photoUrl = data.photo_url;
 const password = data.password;
 const userData = {name,email,photoUrl, password,  role:"user"}
 
-
-
-
     createUserWithEmailAndPassword(auth, data.email, data.password)
       .then((res) => {
         updateProfile(auth.currentUser, {

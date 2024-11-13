@@ -213,7 +213,7 @@ const CustomerReviews = ({ id }) => {
 
   // filtering by reviews rating
 
-  console.log(productStar);
+
 
   const ratingArray = [
     {
@@ -240,7 +240,6 @@ const CustomerReviews = ({ id }) => {
 
   return (
     <div className="flex flex-col md:flex-row gap-8">
-      {/* Left Section - Rating Summary */}
       <div className="md:w-1/3">
         <h3 className="text-lg font-semibold mb-4">Customer Reviews</h3>
         <div className="flex items-center mb-2">
@@ -265,11 +264,10 @@ const CustomerReviews = ({ id }) => {
         >
           {reviewForm ? "Close a Review" : "Write A Review"}
         </button>
-        {/* review form */}
         {reviewForm && <RatingStar id={id}></RatingStar>}
       </div>
 
-      {/* Right Section - Individual Reviews */}
+
       <div className="md:w-2/3 grid grid-cols-2 gap-2 *:box-shadow">
         {productReview?.map((review, index) => (
           <Review key={index} {...review} />
