@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FaRegStar } from "react-icons/fa";
 import { GiSelfLove } from "react-icons/gi";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import ProductCard from "../../components/ProductCard";
 import { addToCart } from "../../features/cartItem/cartSlice";
@@ -109,7 +109,9 @@ const Product_details = () => {
       </div>
 
       <div className="container mx-auto lg:px-8 mt-6 ">
-        <h1 className="text-3xl font-poppins font-semibold pb-10">Related Products</h1>
+        <h1 className="text-3xl font-poppins font-semibold pb-10">
+          Related Products
+        </h1>
         <Related_products></Related_products>
       </div>
     </div>
@@ -199,30 +201,7 @@ const CustomerReviews = () => {
           {reviewForm ? "Close a Review" : "Write A Review"}
         </button>
         {/* review form */}
-        {reviewForm && (
-          <form className="mt-10">
-            <RatingStar></RatingStar>
-            <div>
-              <label className="font-bold">Name</label>
-              <input
-                type="text"
-                placeholder="name"
-                className="w-full border p-2 focus:outline-none"
-              />
-            </div>
-            <div className="mt-2">
-              <label className="font-bold">Review</label>
-              <textarea
-                type="text"
-                placeholder="comment"
-                className="w-full h-[100px] resize-none border p-2 focus:outline-none"
-              />
-            </div>
-            <button className="w-full mt-2 py-2 bg-darkBlue text-white hover:bg-black duration-500 rounded-md font-semibold">
-              Submit Your Review
-            </button>
-          </form>
-        )}
+        {reviewForm && <RatingStar></RatingStar>}
       </div>
 
       {/* Right Section - Individual Reviews */}
@@ -237,21 +216,93 @@ const CustomerReviews = () => {
 
 // rating star
 const RatingStar = () => {
+  const [starValue, setStarValue] = useState();
+  const [hoverValue, setHoverValue] = useState(0);
+  const user = useSelector((state) => state.user.user);
+
+  const axiosFetch = useAxios();
+  // handle review submit
+  const handleReview = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const name = form.name.value;
+    const review = form.review.value;
+
+    const reviewData = {
+      name,
+      review,
+      rating: starValue,
+      image:
+        user?.photoUrl ||
+        "https://static.vecteezy.com/system/resources/previews/019/879/186/non_2x/user-icon-on-transparent-background-free-png.png",
+    };
+
+    if (!name || !review || !starValue) {
+      return alert("Please Rating complated");
+    }
+
+    //  review post of the server
+
+    axiosFetch
+      .post("/reviews", reviewData)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
-    <div className="flex items-center gap-2 *:cursor-pointer *:text-[20px] justify-center">
-      {new Array(5).fill(0).map((_, index) => {
-        return (
-          <span key={index}>
-            <FaRegStar></FaRegStar>
-          </span>
-        );
-      })}
-    </div>
+    <>
+      <div className="flex items-center gap-2 *:cursor-pointer *:text-[20px] justify-center mt-10">
+        {new Array(5).fill(0).map((_, index) => {
+          return (
+            <span
+              className={`${
+                (hoverValue == 0 && index < starValue) || index < hoverValue
+                  ? "text-yellow-500"
+                  : ""
+              }`}
+              key={index}
+              onClick={() => setStarValue(index + 1)}
+              onMouseEnter={() => setHoverValue(index + 1)}
+              onMouseLeave={() => setHoverValue(0)}
+            >
+              <FaRegStar></FaRegStar>
+            </span>
+          );
+        })}
+      </div>
+
+      <form onSubmit={handleReview}>
+        <div>
+          <label className="font-bold">Name</label>
+          <input
+            type="text"
+            placeholder="name"
+            className="w-full border p-2 focus:outline-none"
+            name="name"
+          />
+        </div>
+        <div className="mt-2">
+          <label className="font-bold">Review</label>
+          <textarea
+            type="text"
+            placeholder="review"
+            className="w-full h-[100px] resize-none border p-2 focus:outline-none"
+            name="review"
+          />
+        </div>
+        <button className="w-full mt-2 py-2 bg-darkBlue text-white hover:bg-black duration-500 rounded-md font-semibold">
+          Submit Your Review
+        </button>
+      </form>
+    </>
   );
 };
 
 // related Products
-
 const Related_products = () => {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const axiosFetch = useAxios();
@@ -268,9 +319,9 @@ const Related_products = () => {
   }, []);
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 ">
-     {
-      relatedProducts?.slice(0,8).map((item,id) =>  <ProductCard key={id} item={item}></ProductCard>)
-     }
+      {relatedProducts?.slice(0, 8).map((item, id) => (
+        <ProductCard key={id} item={item}></ProductCard>
+      ))}
     </div>
   );
 };
