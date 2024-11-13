@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+import { FaRegStar } from "react-icons/fa";
 import { GiSelfLove } from "react-icons/gi";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
+import ProductCard from "../../components/ProductCard";
 import { addToCart } from "../../features/cartItem/cartSlice";
 import useAxios from "../../hooks/useAxios";
 import Detail_slider from "../dashboard/adminPages/product/product_details/Detail_slider";
-
 const Product_details = () => {
   const axiosFetch = useAxios();
   const { id } = useParams();
@@ -37,13 +38,13 @@ const Product_details = () => {
 
   return (
     <div className="p-4">
-      <div className="container mx-auto bg-white p-8 rounded-lg">
+      <div className="container mx-auto bg-white lg:p-8 rounded-lg">
         <h1 className="text-3xl font-bold mb-6 text-gray-800">
           Product Details
         </h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1  lg:grid-cols-2 gap-6 border-b pb-10">
           {/* Product Image */}
-          <div className="flex justify-center h-[400px] overflow-hidden">
+          <div className="flex justify-center xl:h-[500px] lg:h-[400px]">
             <Detail_slider productImage={productData?.images}></Detail_slider>
           </div>
 
@@ -102,8 +103,174 @@ const Product_details = () => {
           </div>
         </div>
       </div>
+
+      <div className="container mx-auto lg:px-8 mt-6 ">
+        <CustomerReviews></CustomerReviews>
+      </div>
+
+      <div className="container mx-auto lg:px-8 mt-6 ">
+        <h1 className="text-3xl font-poppins font-semibold pb-10">Related Products</h1>
+        <Related_products></Related_products>
+      </div>
     </div>
   );
 };
 
 export default Product_details;
+
+// Individual Review Component
+const Review = ({ name, rating, text, image, likes, dislikes }) => {
+  return (
+    <div className="border p-4 rounded-lg mb-4">
+      <div className="flex items-center mb-2">
+        <img src={image} alt={name} className="w-10 h-10 rounded-full mr-3" />
+        <div>
+          <h4 className="font-semibold">{name}</h4>
+          <div className="flex">
+            {[...Array(rating)].map((_, index) => (
+              <span key={index} className="text-yellow-400">
+                ★
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+      <p className="text-gray-600 mb-2">{text}</p>
+      <div className="flex items-center text-gray-500">
+        <button className="mr-2 flex items-center">
+          ❤️ <span className="ml-1">{likes}</span>
+        </button>
+        <button className="flex items-center">
+          👎 <span className="ml-1">{dislikes}</span>
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// Main Customer Reviews Component
+const CustomerReviews = () => {
+  const [reviewForm, setReviewForm] = useState(false);
+
+  const reviews = [
+    {
+      name: "Hannah D",
+      rating: 5,
+      text: "It's better than I thought it would be for that price. We got the grey one and our family is pleased! It's super easy to wash which is top priority for me since I have two toddlers. I can definitely recommend it to other mums!",
+      image: "https://via.placeholder.com/40",
+      likes: 7,
+      dislikes: 1,
+    },
+    {
+      name: "G",
+      rating: 4,
+      text: "Very soft and fluffy fur. My wife loves it! Just had to let the others know that this is worth every penny!",
+      image: "https://via.placeholder.com/40",
+      likes: 9,
+      dislikes: 0,
+    },
+  ];
+
+  return (
+    <div className="flex flex-col md:flex-row gap-8">
+      {/* Left Section - Rating Summary */}
+      <div className="md:w-1/3">
+        <h3 className="text-lg font-semibold mb-4">Customer Reviews</h3>
+        <div className="flex items-center mb-2">
+          <div className="text-yellow-400 text-2xl mr-2">★★★★★</div>
+          <span className="text-gray-600">11 reviews</span>
+        </div>
+        {[5, 4, 3, 2, 1].map((rating) => (
+          <div key={rating} className="flex items-center mb-1">
+            <span className="w-4 text-gray-500">{rating}</span>
+            <div className="w-full h-2 bg-gray-200 mx-2 rounded">
+              <div
+                className={`h-2 bg-yellow-400 rounded`}
+                style={{ width: `${rating * 20}%` }}
+              ></div>
+            </div>
+            <span className="text-gray-500">{rating * 2}</span>
+          </div>
+        ))}
+        <button
+          onClick={() => setReviewForm(!reviewForm)}
+          className="mt-4 px-4 py-2 bg-black hover:bg-green duration-500 font-semibold text-white rounded"
+        >
+          {reviewForm ? "Close a Review" : "Write A Review"}
+        </button>
+        {/* review form */}
+        {reviewForm && (
+          <form className="mt-10">
+            <RatingStar></RatingStar>
+            <div>
+              <label className="font-bold">Name</label>
+              <input
+                type="text"
+                placeholder="name"
+                className="w-full border p-2 focus:outline-none"
+              />
+            </div>
+            <div className="mt-2">
+              <label className="font-bold">Review</label>
+              <textarea
+                type="text"
+                placeholder="comment"
+                className="w-full h-[100px] resize-none border p-2 focus:outline-none"
+              />
+            </div>
+            <button className="w-full mt-2 py-2 bg-darkBlue text-white hover:bg-black duration-500 rounded-md font-semibold">
+              Submit Your Review
+            </button>
+          </form>
+        )}
+      </div>
+
+      {/* Right Section - Individual Reviews */}
+      <div className="md:w-2/3">
+        {reviews.map((review, index) => (
+          <Review key={index} {...review} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// rating star
+const RatingStar = () => {
+  return (
+    <div className="flex items-center gap-2 *:cursor-pointer *:text-[20px] justify-center">
+      {new Array(5).fill(0).map((_, index) => {
+        return (
+          <span key={index}>
+            <FaRegStar></FaRegStar>
+          </span>
+        );
+      })}
+    </div>
+  );
+};
+
+// related Products
+
+const Related_products = () => {
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const axiosFetch = useAxios();
+
+  useEffect(() => {
+    axiosFetch
+      .get(`/products`)
+      .then((res) => {
+        setRelatedProducts(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 ">
+     {
+      relatedProducts?.slice(0,8).map((item,id) =>  <ProductCard key={id} item={item}></ProductCard>)
+     }
+    </div>
+  );
+};

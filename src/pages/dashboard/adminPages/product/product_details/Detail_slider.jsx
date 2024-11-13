@@ -7,7 +7,7 @@ const Detail_slider = ({ productImage }) => {
       <Carousel showStatus={false} autoPlay={true} infiniteLoop={true}>
         {productImage?.map((image, id) => {
           return (
-            <div key={id} className="h-auto max-h-[600px] overflow-hidden">
+            <div key={id} className="h-[400px] overflow-hidden">
               <img
                 className="h-full object-cover"
                 src={image}
