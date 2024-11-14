@@ -1,12 +1,37 @@
+import { useEffect, useState } from "react";
 import { IoEyeOutline } from "react-icons/io5";
 import { RiDeleteBin2Fill } from "react-icons/ri";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import useProducts from "../../hooks/useProducts";
+import Swal from "sweetalert2";
+import { addToCart } from "../../features/cartItem/cartSlice";
+import useAxios from "../../hooks/useAxios";
 import Banner from "./Banner";
 
 const Wish_Products = () => {
-  const [products] = useProducts();
+  const [wishlists, setWishlists] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [reload, setReload] = useState(true);
+  const axiosFetch = useAxios();
+  const user = useSelector((state) => state.user.user);
+  // get wishlist data by user email from server
+  useEffect(() => {
+    if (user?.email) {
+      axiosFetch
+        .get(`/wishlists?email=${user?.email}`)
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.message == "ok") {
+            setWishlists(res.data.data);
+            setLoading(false);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+        });
+    }
+  }, [user, reload]);
 
   return (
     <div className="max-w-7xl mx-auto px-2 xl:px-0">
@@ -15,19 +40,32 @@ const Wish_Products = () => {
       </section>
       <section className="mt-10">
         <h1 className="text-center font-semibold text-3xl">Your Wishlist</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-16">
-          {products?.map((item, id) => (
-            <ProductCard key={id} item={item}></ProductCard>
-          ))}
-        </div>
+        {wishlists.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-16">
+            {wishlists?.map((item, id) => (
+              <ProductCard
+                reload={reload}
+                setReload={setReload}
+                loading={loading}
+                key={id}
+                item={item}
+              ></ProductCard>
+            ))}
+          </div>
+        ) : (
+          <div className="h-[300px] flex justify-center items-center">
+            <h1 className="text-3xl font-bold">wishlist NotFound</h1>
+          </div>
+        )}
       </section>
     </div>
   );
 };
 
 export default Wish_Products;
-
-const ProductCard = ({ item }) => {
+// product card
+const ProductCard = ({ item, loading, reload, setReload }) => {
+  const axiosFetch = useAxios();
   const {
     _id,
     product_name,
@@ -39,7 +77,7 @@ const ProductCard = ({ item }) => {
     description,
     quantity_in_stock,
     stock_status,
-  } = item;
+  } = item?.product_id;
 
   const addToCartProduct = {
     _id,
@@ -51,9 +89,33 @@ const ProductCard = ({ item }) => {
     quantity: 1,
   };
 
-  // console.log(item)
-
   const dispatch = useDispatch();
+  // remove function in the wishlist
+  const removeWishlist = (id) => {
+    axiosFetch
+      .delete(`/wishlists/${id}`)
+      .then((res) => {
+        if (res.data.message == "ok") {
+          Swal.fire({
+            icon: "success",
+            title: "deleted !",
+            text: "remove your wish product",
+          });
+
+          setReload(!reload);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  // loader
+  if (loading) {
+    return (
+      <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-blue mx-auto"></div>
+    );
+  }
 
   return (
     <div className="dashboard_card card-compact relative bg-white border poppins  md:h-[400px] cursor-pointer hover:border-green duration-500 rounded-md overflow-hidden z-0">
@@ -88,7 +150,10 @@ const ProductCard = ({ item }) => {
           </div>
         </div>
         <div className="flex items-center gap-4 *:rounded-md mt-4 absolute bottom-4 left-0 w-full px-4">
-          <button className="w-[30%] h-[45px] bg-white border border-darkBlue flex justify-center items-center text-xl  hover:bg-darkBlue duration-500 hover:text-white">
+          <button
+            onClick={() => removeWishlist(item?._id)}
+            className="w-[30%] h-[45px] bg-white border border-darkBlue flex justify-center items-center text-xl  hover:bg-darkBlue duration-500 hover:text-white"
+          >
             <RiDeleteBin2Fill></RiDeleteBin2Fill>
           </button>
           <button

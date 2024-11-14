@@ -1,10 +1,13 @@
 import { GiSelfLove } from "react-icons/gi";
 import { IoEyeOutline } from "react-icons/io5";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { addToCart } from "../features/cartItem/cartSlice";
+import useAxios from "../hooks/useAxios";
 
 const ProductCard = ({ item }) => {
+  const user = useSelector((state) => state.user.user);
+  const axiosFetch = useAxios();
   const {
     _id,
     product_name,
@@ -24,13 +27,31 @@ const ProductCard = ({ item }) => {
     reguler_price,
     sale_price,
     images,
-    totalAmount : sale_price,
+    totalAmount: sale_price,
     quantity: 1,
   };
 
   // console.log(item)
-
   const dispatch = useDispatch();
+
+  const addWishlistProduct = () => {
+    const productInfo = {
+      name: user?.name,
+      email: user?.email,
+      product_id: _id,
+    };
+
+    console.log(productInfo);
+
+    axiosFetch
+      .post("/wishlists", productInfo)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <div className="dashboard_card card-compact relative bg-white border poppins  md:h-[400px] cursor-pointer hover:border-green duration-500 rounded-md overflow-hidden z-0">
@@ -65,7 +86,10 @@ const ProductCard = ({ item }) => {
           </div>
         </div>
         <div className="flex items-center gap-4 *:rounded-md mt-4 absolute bottom-4 left-0 w-full px-4">
-          <button  className="w-[30%] h-[45px] bg-white border border-darkBlue flex justify-center items-center text-xl  hover:bg-darkBlue duration-500 hover:text-white">
+          <button
+            onClick={addWishlistProduct}
+            className="w-[30%] h-[45px] bg-white border border-darkBlue flex justify-center items-center text-xl  hover:bg-darkBlue duration-500 hover:text-white"
+          >
             <GiSelfLove></GiSelfLove>
           </button>
           <button
