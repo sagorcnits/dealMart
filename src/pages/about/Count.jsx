@@ -1,23 +1,59 @@
-const countArr = [
-  {
-    name: "Products",
-    count: "1000+",
-  },
-  {
-    name: "Visitor",
-    count: "10000+",
-  },
-  {
-    name: "Clients",
-    count: "3000+",
-  },
-  {
-    name: "Sell",
-    count: "100000+",
-  },
-];
+import { useEffect, useState } from "react";
+import useAxios from "../../hooks/useAxios";
+import useCustomers from "../../hooks/useCustomers";
+import useProducts from "../../hooks/useProducts";
+
 
 const Count = () => {
+  const [salseInformation, setSalseInformation] = useState(null);
+  const axiosFetch = useAxios();
+  const [loading, setLoading] = useState(true);
+  const [products] = useProducts()
+  const [customers] = useCustomers()
+  // total sale get the data
+  useEffect(() => {
+    axiosFetch
+      .get(`/orders?filterDate=all`)
+      .then((res) => {
+        setSalseInformation(res.data.orderDetails);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [ ]);
+
+
+
+//  count arraye
+  const countArr = [
+    {
+      name: "Products",
+      count: products?.length,
+    },
+    {
+      name: "Visitor",
+      count: "10000+",
+    },
+    {
+      name: "Clients",
+      count: customers?.length,
+    },
+    {
+      name: "Sale",
+      count: salseInformation?.complated,
+    },
+  ];
+
+
+// data pending
+  if (loading) {
+    return (
+      <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-blue mx-auto"></div>
+    );
+  }
+
+
   return (
     <div className="flex flex-col md:flex-row gap-6 *:flex-1 max-w-7xl mx-auto poppins">
       <div>
@@ -41,7 +77,7 @@ const Count = () => {
 };
 
 export default Count;
-
+// count card 
 const Card = ({item}) => {
   return (
     <div className="border flex justify-center items-center p-4 rounded-md *:text-center">

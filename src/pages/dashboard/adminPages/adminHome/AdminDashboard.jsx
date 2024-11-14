@@ -102,7 +102,6 @@ const SalesCard = ({ changeStatus, filterDate }) => {
     axiosFetch
       .get(`/orders?filterDate=${filterDate}`)
       .then((res) => {
-        console.log(res.data);
         setSalseInformation(res.data.orderDetails);
         setLoading(false);
       })

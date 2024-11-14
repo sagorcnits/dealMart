@@ -112,7 +112,7 @@ const Product_details = () => {
         <CustomerReviews id={id}></CustomerReviews>
       </div>
 
-      <div className="container mx-auto lg:px-8 mt-6 ">
+      <div className="container mx-auto lg:px-8 mt-10">
         <h1 className="text-3xl font-poppins font-semibold pb-10">
           Related Products
         </h1>
