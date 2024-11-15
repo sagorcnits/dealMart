@@ -2,12 +2,16 @@ import { GiSelfLove } from "react-icons/gi";
 import { IoEyeOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Swal from "sweetalert2";
 import { addToCart } from "../features/cartItem/cartSlice";
 import useAxios from "../hooks/useAxios";
-
+import useWishlists from "../hooks/useWishlists";
 const ProductCard = ({ item }) => {
   const user = useSelector((state) => state.user.user);
   const axiosFetch = useAxios();
+  const [wishlists, refetch] = useWishlists();
   const {
     _id,
     product_name,
@@ -41,12 +45,21 @@ const ProductCard = ({ item }) => {
       product_id: _id,
     };
 
-    console.log(productInfo);
-
     axiosFetch
       .post("/wishlists", productInfo)
       .then((res) => {
-        console.log(res.data);
+        if (res.data.message == "ok") {
+          // toast.success("success your add wishlist!");
+          Swal.fire({
+            icon: "success",
+            title: "added",
+            text: "has been added your product in wishlists",
+            timer: 2000,
+          });
+          refetch();
+        } else if (res.data.message == "exist") {
+          toast.warn("already added in wishlist!");
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -55,6 +68,7 @@ const ProductCard = ({ item }) => {
 
   return (
     <div className="dashboard_card card-compact relative bg-white border poppins  md:h-[400px] cursor-pointer hover:border-green duration-500 rounded-md overflow-hidden z-0">
+      <ToastContainer className="mt-20"></ToastContainer>
       <figure className="h-[170px] overflow-hidden relative">
         <img src={images[0]} alt={product_name} />
         <div className="flex z-10  justify-center items-center gap-6 absolute dashboard_card_effect right-0 top-0 bottom-0 left-0  bg-black opacity-80 px-4">
@@ -82,7 +96,7 @@ const ProductCard = ({ item }) => {
           </div>
           <div>
             <del className="text-paragraph text-sm">${reguler_price}</del>
-            <h2 className="font-semibold text-xl md:text-3xl">${sale_price}</h2>
+            <h2 className="font-semibold text-xl md:text-2xl">${sale_price}</h2>
           </div>
         </div>
         <div className="flex items-center gap-4 *:rounded-md mt-4 absolute bottom-4 left-0 w-full px-4">

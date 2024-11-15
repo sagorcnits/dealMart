@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { addToCart } from "../../features/cartItem/cartSlice";
 import useAxios from "../../hooks/useAxios";
+import useWishlists from "../../hooks/useWishlists";
 import Banner from "./Banner";
 
 const Wish_Products = () => {
@@ -20,7 +21,6 @@ const Wish_Products = () => {
       axiosFetch
         .get(`/wishlists?email=${user?.email}`)
         .then((res) => {
-          console.log(res.data);
           if (res.data.message == "ok") {
             setWishlists(res.data.data);
             setLoading(false);
@@ -66,6 +66,7 @@ export default Wish_Products;
 // product card
 const ProductCard = ({ item, loading, reload, setReload }) => {
   const axiosFetch = useAxios();
+  const [wishlists, refetch] = useWishlists()
   const {
     _id,
     product_name,
@@ -95,14 +96,16 @@ const ProductCard = ({ item, loading, reload, setReload }) => {
     axiosFetch
       .delete(`/wishlists/${id}`)
       .then((res) => {
+        console.log(res.data);
         if (res.data.message == "ok") {
           Swal.fire({
             icon: "success",
             title: "deleted !",
             text: "remove your wish product",
+            timer: 3000,
           });
-
           setReload(!reload);
+          refetch()
         }
       })
       .catch((error) => {

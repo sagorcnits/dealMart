@@ -15,10 +15,14 @@ import {
 } from "../features/cartItem/cartSlice";
 import { removeUser } from "../features/user/userSlice";
 import useAxios from "../hooks/useAxios";
+import useWishlists from "../hooks/useWishlists";
 
 const Navbar = () => {
   const [openCart, setOpenCart] = useState(false);
   const [active, setActive] = useState(false);
+  const [wishlists] = useWishlists();
+
+  // console.log(wishlists)
   const admin = true;
   // scroll effect of navabr
   window.addEventListener("scroll", () => {
@@ -108,7 +112,14 @@ const Navbar = () => {
           <div className="flex items-center gap-4">
             <div className="dropdown dropdown-end flex items-center gap-4">
               <Link to="/wish-products">
-                <GiSelfLove className="text-xl cursor-pointer hover:text-green duration-500"></GiSelfLove>
+                <div className="relative">
+                  <GiSelfLove className="text-xl cursor-pointer hover:text-green duration-500 ral"></GiSelfLove>
+                  {wishlists?.length > 0 && (
+                    <span className="badge badge-sm indicator-item text-red-500 poppins absolute -top-3 right-0">
+                      {wishlists?.length}
+                    </span>
+                  )}
+                </div>
               </Link>
               <div
                 tabIndex={0}
@@ -131,9 +142,11 @@ const Navbar = () => {
                       d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
                     />
                   </svg>
-                  <span className="badge badge-sm indicator-item text-red-500 poppins">
-                    {totalCartQuantity}
-                  </span>
+                  {totalCartQuantity > 0 && (
+                    <span className="badge badge-sm indicator-item text-red-500 poppins">
+                      {totalCartQuantity}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
