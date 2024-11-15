@@ -70,7 +70,7 @@ const ProductCard = ({ item }) => {
     <div className="dashboard_card card-compact relative bg-white border poppins  md:h-[400px] cursor-pointer hover:border-green duration-500 rounded-md overflow-hidden z-0">
       <ToastContainer className="mt-20"></ToastContainer>
       <figure className="h-[170px] overflow-hidden relative">
-        <img src={images[0]} alt={product_name} />
+        <img className="w-full h-full" src={images[0]} alt={product_name} />
         <div className="flex z-10  justify-center items-center gap-6 absolute dashboard_card_effect right-0 top-0 bottom-0 left-0  bg-black opacity-80 px-4">
           <Link to={`/product/details/${_id}`}>
             <div className="logo bg-darkBlue size-10 hover:bg-gray-500 duration-500 flex justify-center items-center  text-white">

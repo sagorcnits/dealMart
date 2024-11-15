@@ -32,7 +32,7 @@ const Product = () => {
             <select
               // onChange={showProductPerPage}
               name="category"
-              className="p-2 rounded-md max-w-xs focus:outline-none border"
+              className="p-2 rounded-md max-w-xs focus:outline-none border cursor-pointer"
             >
               <option disabled selected>
                 Show Orders
@@ -47,7 +47,7 @@ const Product = () => {
             <select
               // onChange={filterOrders}
               name="category"
-              className="p-2 rounded-md  max-w-xs focus:outline-none border"
+              className="p-2 rounded-md  max-w-xs focus:outline-none border cursor-pointer"
             >
               <option disabled selected>
                 filter by
@@ -77,12 +77,12 @@ const Product = () => {
             </div>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 w-[80%]">
-            {products?.map((item, id) => (
+            {products?.slice(0,8).map((item, id) => (
               <ProductCard key={id} item={item}></ProductCard>
             ))}
           </div>
         </div>
-        <nav
+        {/* <nav
           aria-label="Pagination"
           className="inline-flex -space-x-px rounded-md shadow-sm dark:bg-gray-100 dark:text-gray-800 mt-10"
         >
@@ -137,7 +137,7 @@ const Product = () => {
               ></path>
             </svg>
           </button>
-        </nav>
+        </nav> */}
       </section>
     </main>
   );
