@@ -86,6 +86,14 @@ const Home = () => {
             </div>
           </div>
         </div>
+
+        {/* <FacebookProvider appId="1128117002226119" chatSupport>
+        <CustomChat
+          pageId="
+453562511181059"
+          minimized={false}
+        />
+      </FacebookProvider> */}
       </section>
     </main>
   );

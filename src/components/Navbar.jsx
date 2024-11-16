@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { CiSearch } from "react-icons/ci";
 import { FaBars } from "react-icons/fa";
 import { GiSelfLove } from "react-icons/gi";
 import { IoMdClose } from "react-icons/io";
@@ -53,7 +52,7 @@ const Navbar = () => {
               Deal<span className="text-green">Mart</span>
             </h1>
           </div>
-          <div className="hidden sm:flex items-center border rounded-md overflow-hidden">
+          {/* <div className="hidden sm:flex items-center border rounded-md overflow-hidden">
             <input
               type="text"
               placeholder="search"
@@ -62,7 +61,7 @@ const Navbar = () => {
             <button className="bg-green px-3 py-3 border-none text-white hover:bg-black duration-500">
               <CiSearch></CiSearch>
             </button>
-          </div>
+          </div> */}
         </div>
 
         <div className="flex-none justify-end lg:justify-between">
