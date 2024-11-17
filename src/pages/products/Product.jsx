@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { MdDoubleArrow } from "react-icons/md";
+import { RiLayoutGrid2Fill } from "react-icons/ri";
+import { TbLayoutGridFilled } from "react-icons/tb";
+import { TfiLayoutGrid4Alt } from "react-icons/tfi";
 import ProductCard from "../../components/ProductCard";
 import useProducts from "../../hooks/useProducts";
 import Banner from "./Banner";
-
 const Product = () => {
   const [products] = useProducts();
-
+  const [layout, setLayout] = useState(4);
+  console.log(layout);
   // pagination
   const [itemPerPage, setItemPerPage] = useState(8);
   const [currentPage, setCurrentPage] = useState(1);
@@ -37,38 +40,53 @@ const Product = () => {
         <Banner></Banner>
       </section>
       <section className="py-12">
-        {/* <h1 className="text-center font-bold poppins text-green text-3xl py-6">
-          Our Products
-        </h1> */}
-
-        <section className="flex justify-between items-center">
+        <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold text-green">Our Products</h1>
-          <fieldset className="space-y-1 w-[300px]">
-            <div className="flex">
-              <input
-                type="text"
-                name="price"
-                id="price"
-                placeholder="search products"
-                className="flex flex-1 focus:outline-none py-2 border sm:text-sm rounded-l-md pl-2"
-              />
-              <span className="flex items-center px-3  sm:text-sm  rounded-r-md bg-green hover:bg-black duration-500 text-white cursor-pointer">
-                <CiSearch></CiSearch>
-              </span>
+          <div className="flex gap-4 items-center">
+            <div className="*:cursor-pointer flex items-center gap-3">
+              <TfiLayoutGrid4Alt
+                onClick={() => setLayout(4)}
+                className="hover:text-green duration-500 hidden xl:block"
+                size={25}
+              ></TfiLayoutGrid4Alt>
+              <RiLayoutGrid2Fill
+                onClick={() => setLayout(3)}
+                className="hover:text-green duration-500"
+                size={30}
+              ></RiLayoutGrid2Fill>
+              <TbLayoutGridFilled
+                onClick={() => setLayout(2)}
+                className="hover:text-green duration-500"
+                size={30}
+              ></TbLayoutGridFilled>
             </div>
-          </fieldset>
-        </section>
+            <fieldset className="space-y-1 w-[300px]">
+              <div className="flex">
+                <input
+                  type="text"
+                  name="price"
+                  id="price"
+                  placeholder="search products"
+                  className="flex flex-1 focus:outline-none py-2 border sm:text-sm rounded-l-md pl-2"
+                />
+                <span className="flex items-center px-3  sm:text-sm  rounded-r-md bg-green hover:bg-black duration-500 text-white cursor-pointer">
+                  <CiSearch></CiSearch>
+                </span>
+              </div>
+            </fieldset>
+          </div>
+        </div>
 
-        <section className="flex gap-4 mt-10">
+        <div className="flex gap-4 mt-10">
           <div className="w-[20%]">
-            <div className="flex gap-2 items-center *:text-sm">
+            <div className="flex gap-2 items-center *:text-sm *:w-[50%]">
               <select
                 onChange={showProductPerPage}
                 name="category"
-                className="p-2 rounded-md max-w-xs focus:outline-none border cursor-pointer"
+                className="p-2 rounded-md  focus:outline-none border cursor-pointer"
               >
                 <option disabled selected>
-                  Show Orders
+                  Show Products
                 </option>
                 <option>5</option>
                 <option>10</option>
@@ -80,23 +98,25 @@ const Product = () => {
               <select
                 // onChange={filterOrders}
                 name="category"
-                className="p-2 rounded-md  max-w-xs focus:outline-none border cursor-pointer"
+                className="p-2 rounded-md   focus:outline-none border cursor-pointer"
               >
                 <option disabled selected>
                   filter by
                 </option>
-                <option>canceled</option>
-                <option>complated</option>
-                <option>progress</option>
-                <option>refund</option>
-                <option>unpaid</option>
+                {["watch", "headphone", "phone", "tv", "laptop", "monitor"].map(
+                  (item, id) => {
+                    return <option key={id}>{item}</option>;
+                  }
+                )}
               </select>
             </div>
             <Filter_by_category></Filter_by_category>
             <TopProduct products={products}></TopProduct>
           </div>
           <div className="w-[80%]">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 ">
+            <div
+              className={`grid md:grid-cols-${layout} lg:grid-cols-${layout} xl:grid-cols-${layout} gap-6 `}
+            >
               {products?.slice(0, 12).map((item, id) => (
                 <ProductCard key={id} item={item}></ProductCard>
               ))}
@@ -132,7 +152,7 @@ const Product = () => {
               </div>
             </div>
           </div>
-        </section>
+        </div>
       </section>
     </main>
   );
@@ -185,7 +205,9 @@ const TopProduct = ({ products }) => {
               </figure>
               <div className="w-[70%]">
                 <h3>{product_name}</h3>
-                <p className="text-sm text-paragraph">{description.slice(0,30)}</p>
+                <p className="text-sm text-paragraph">
+                  {description.slice(0, 30)}
+                </p>
               </div>
             </div>
           );
