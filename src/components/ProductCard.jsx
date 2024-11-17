@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 import { addToCart } from "../features/cartItem/cartSlice";
 import useAxios from "../hooks/useAxios";
 import useWishlists from "../hooks/useWishlists";
-const ProductCard = ({ item }) => {
+const ProductCard = ({ item , layout}) => {
   const user = useSelector((state) => state.user.user);
   const axiosFetch = useAxios();
   const [wishlists, refetch] = useWishlists();
@@ -84,19 +84,16 @@ const ProductCard = ({ item }) => {
           {product_name}
         </h2>
         <p className="text-paragraph">{description?.slice(0, 50)}</p>
-        <div className="flex items-center justify-between *:flex *:items-center *:gap-2">
+        <div className="flex items-center justify-between ">
           <div>
-            {/* <div className="flex items-center gap-1">
-              <span className="rating bg-orange-500 size-4"></span>
-              <p>4.1</p>
-            </div> */}
-            <span className="bg-[#e9f6f6] px-3 py-2 rounded-md text-darkBlue font-semibold">
+         
+            <span className={`bg-[#e9f6f6] px-3 py-2 rounded-md text-darkBlue font-semibold `}>
               {quantity_in_stock} sold
             </span>
           </div>
           <div>
+            <h2 className={`font-semibold text-xl ${layout == 4 ? "md:text-sm" : "md:text-2xl"}`}>${sale_price}</h2>
             <del className="text-paragraph text-sm">${reguler_price}</del>
-            <h2 className="font-semibold text-xl md:text-2xl">${sale_price}</h2>
           </div>
         </div>
         <div className="flex items-center gap-4 *:rounded-md mt-4 absolute bottom-4 left-0 w-full px-4">

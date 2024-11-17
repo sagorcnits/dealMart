@@ -40,10 +40,43 @@ const Product = () => {
         <Banner></Banner>
       </section>
       <section className="py-12">
-        <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-green">Our Products</h1>
-          <div className="flex gap-4 items-center">
-            <div className="*:cursor-pointer flex items-center gap-3">
+        <h1 className="text-3xl font-bold text-green lg:hidden block text-center pb-5">
+          Our Products
+        </h1>
+
+        <div className="flex justify-between items-center ">
+          <h1 className="text-3xl font-bold text-green hidden lg:block w-[40%]">
+            Our Products
+          </h1>
+          <div className="flex flex-col-reverse lg:flex-row gap-4 items-center justify-evenly overflow-hidden w-full lg:w-[60%]">
+            <div className="flex *:w-1/2 gap-4 w-full">
+              <select
+                // onChange={filterOrders}
+                name="category"
+                className="p-2 rounded-md focus:outline-none border cursor-pointer w-[100px]"
+              >
+                <option disabled selected>
+                  Categories
+                </option>
+                {["watch", "headphone", "phone", "tv", "laptop", "monitor"].map(
+                  (item, id) => {
+                    return <option key={id}>{item}</option>;
+                  }
+                )}
+              </select>
+              <select
+                // onChange={filterOrders}
+                name="category"
+                className="p-2 rounded-md focus:outline-none border cursor-pointer"
+              >
+                <option disabled selected>
+                  sort by
+                </option>
+                <option>Price : Low to High</option>
+                <option>Price : High to Low</option>
+              </select>
+            </div>
+            <div className="*:cursor-pointer lg:flex items-center gap-3 hidden">
               <TfiLayoutGrid4Alt
                 onClick={() => setLayout(4)}
                 className="hover:text-green duration-500 hidden xl:block"
@@ -60,14 +93,14 @@ const Product = () => {
                 size={30}
               ></TbLayoutGridFilled>
             </div>
-            <fieldset className="space-y-1 w-[300px]">
+            <fieldset className="space-y-1 w-full lg:w-[300px]">
               <div className="flex">
                 <input
                   type="text"
                   name="price"
                   id="price"
                   placeholder="search products"
-                  className="flex flex-1 focus:outline-none py-2 border sm:text-sm rounded-l-md pl-2"
+                  className="flex flex-1 focus:outline-none py-2 border sm:text-sm rounded-l-md pl-2 w-"
                 />
                 <span className="flex items-center px-3  sm:text-sm  rounded-r-md bg-green hover:bg-black duration-500 text-white cursor-pointer">
                   <CiSearch></CiSearch>
@@ -77,56 +110,25 @@ const Product = () => {
           </div>
         </div>
 
-        <div className="flex gap-4 mt-10">
-          <div className="w-[20%]">
-            <div className="flex gap-2 items-center *:text-sm *:w-[50%]">
-              <select
-                onChange={showProductPerPage}
-                name="category"
-                className="p-2 rounded-md  focus:outline-none border cursor-pointer"
-              >
-                <option disabled selected>
-                  Show Products
-                </option>
-                <option>5</option>
-                <option>10</option>
-                <option>15</option>
-                <option>20</option>
-                <option>30</option>
-                <option>50</option>
-              </select>
-              <select
-                // onChange={filterOrders}
-                name="category"
-                className="p-2 rounded-md   focus:outline-none border cursor-pointer"
-              >
-                <option disabled selected>
-                  filter by
-                </option>
-                {["watch", "headphone", "phone", "tv", "laptop", "monitor"].map(
-                  (item, id) => {
-                    return <option key={id}>{item}</option>;
-                  }
-                )}
-              </select>
-            </div>
+        <div className="md:flex gap-4 mt-10">
+          <div className="w-[20%] hidden lg:block">
             <Filter_by_category></Filter_by_category>
             <TopProduct products={products}></TopProduct>
           </div>
-          <div className="w-[80%]">
+          <div className="lg:w-[80%]">
             <div
-              className={`grid md:grid-cols-${layout} lg:grid-cols-${layout} xl:grid-cols-${layout} gap-6 `}
+              className={`grid md:grid-cols-2 lg:grid-cols-${layout} xl:grid-cols-${layout} gap-6 `}
             >
               {products?.slice(0, 12).map((item, id) => (
-                <ProductCard key={id} item={item}></ProductCard>
+                <ProductCard layout={layout} key={id} item={item}></ProductCard>
               ))}
             </div>
             {/* pagination container */}
             <div className="flex justify-end">
-              <div className="mt-6 flex gap-3 items-center *:size-10 *:box-shadow *:flex *:justify-center *:items-center *:rounded-full *:duration-500">
+              <div className="mt-6 flex gap-3 items-center  *:box-shadow *:flex *:justify-center *:items-center *:rounded-full *:duration-500">
                 <button
                   onClick={prevBtn}
-                  className=" hover:bg-blue hover:text-white"
+                  className=" hover:bg-blue hover:text-white size-10"
                 >
                   <MdDoubleArrow className="rotate-180"></MdDoubleArrow>
                 </button>
@@ -134,7 +136,7 @@ const Product = () => {
                   return (
                     <button
                       onClick={() => setCurrentPage(id + 1)}
-                      className={`hover:bg-blue hover:text-white ${
+                      className={`hover:bg-blue hover:text-white size-10 ${
                         currentPage == id + 1 && "bg-blue text-white"
                       }`}
                       key={id}
@@ -145,10 +147,25 @@ const Product = () => {
                 })}
                 <button
                   onClick={nextbtn}
-                  className="hover:bg-blue hover:text-white"
+                  className="hover:bg-blue hover:text-white size-10"
                 >
                   <MdDoubleArrow></MdDoubleArrow>
                 </button>
+                <select
+                  onChange={showProductPerPage}
+                  name="category"
+                  className="p-2 rounded-md size-30 focus:outline-none border cursor-pointer"
+                >
+                  <option disabled selected>
+                    Show
+                  </option>
+                  <option>5</option>
+                  <option>10</option>
+                  <option>15</option>
+                  <option>20</option>
+                  <option>30</option>
+                  <option>50</option>
+                </select>
               </div>
             </div>
           </div>
@@ -164,7 +181,9 @@ export default Product;
 const Filter_by_category = () => {
   return (
     <div>
-      <h1 className="text-2xl font-semibold mt-4">Filter by categories</h1>
+      <h1 className="text-xl xl:text-2xl font-semibold">
+        Filter by categories
+      </h1>
       <div className="space-y-2 mt-4 *:cursor-pointer *:font-semibold">
         {["watch", "headphone", "phone", "tv", "laptop", "monitor"].map(
           (item, id) => (
@@ -183,7 +202,7 @@ const Filter_by_category = () => {
 const TopProduct = ({ products }) => {
   return (
     <div>
-      <h1 className="text-2xl font-semibold mt-4">Top 5 Products</h1>
+      <h1 className="text-xl xl:text-2xl font-semibold mt-4">Top 5 Products</h1>
       <div className="space-y-6 mt-4 *:cursor-pointer *:font-semibold *:flex *:gap-3 *:box-shadow *:rounded-md *:p-2">
         {products?.slice(0, 5).map((item, id) => {
           const {
