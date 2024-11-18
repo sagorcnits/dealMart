@@ -251,6 +251,7 @@ const OrderSaleChart = () => {
 // bar chart for order details
 const OrderChart = () => {
   const [data, setData] = useState([]);
+
   const axiosFetch = useAxios();
   // get order_status_chart data from server
   useEffect(() => {
@@ -287,12 +288,12 @@ const OrderChart = () => {
           bottom: 10,
         }}
       >
-        <Legend layout="horizontal" verticalAlign="top" align="center" />
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" fontSize={10} interval={0} />
+        <XAxis dataKey="month" fontSize={10} interval={0} />
         <YAxis domain={[0, "dataMax + 1"]} />
         <Tooltip />
-        <Legend />
+        <Legend layout="horizontal" verticalAlign="top" align="center" />
+        
         <Line
           type="monotone"
           dataKey="Total Orders"
@@ -406,7 +407,6 @@ const SalesByCountry = () => {
     </ResponsiveContainer>
   );
 };
-
 // recent Order Table
 const OrderTable = ({ changeStatus, setChangeStatus }) => {
   const axiosFetch = useAxios();

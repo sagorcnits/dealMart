@@ -8,12 +8,18 @@ const Banner = () => {
           25% discount on all types Products
         </h3>
         <p className="text-paragraph text-sm hidden md:block">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Itaque
-          maxime blanditiis nam veritatis{" "}
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Non
+          consequatur porro, hic officiis totam quod qui rem sunt dolorem,
+          facere unde beatae, accusamus voluptas veritatis eum iusto. Temporibus
+          suscipit vitae a, officiis maxime delectus asperiores nam totam
+          aperiam placeat? Libero quos placeat illo rerum. Odit ad perspiciatis
+          et qui, provident ducimus ratione quis itaque optio quo. Autem sint,
+          
         </p>
-        <button className="px-8 py-2 bg-white border border-darkBlue rounded-md hover:bg-darkBlue duration-500 hover:text-white">
+
+        {/* <button className="px-8 py-2 bg-white border border-darkBlue rounded-md hover:bg-darkBlue duration-500 hover:text-white">
           Shop Now
-        </button>
+        </button> */}
       </div>
       <div>
         <img src={shopImg} alt="Shop_img" />
