@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { MdDoubleArrow } from "react-icons/md";
@@ -5,17 +6,43 @@ import { RiLayoutGrid2Fill } from "react-icons/ri";
 import { TbLayoutGridFilled } from "react-icons/tb";
 import { TfiLayoutGrid4Alt } from "react-icons/tfi";
 import ProductCard from "../../components/ProductCard";
+import useAxios from "../../hooks/useAxios";
 import useProducts from "../../hooks/useProducts";
 import Banner from "./Banner";
 const Product = () => {
   const [products] = useProducts();
   const [layout, setLayout] = useState(4);
-  console.log(layout);
+  const [category, setCategory] = useState("all");
+  const [sort, setSorted] = useState("all");
+  const [search, setSearch] = useState("");
   // pagination
   const [itemPerPage, setItemPerPage] = useState(8);
   const [currentPage, setCurrentPage] = useState(1);
-  const numberPages = Math.ceil(40 / itemPerPage);
+  const numberPages = Math.ceil(products?.length / itemPerPage);
   const totalbtn = [...Array(numberPages).keys()];
+  const axiosFetch = useAxios();
+  // get product form server
+
+  const {
+    data: productsData = [],
+    refetch,
+    isPending,
+  } = useQuery({
+    queryKey: [
+      "productsPage",
+      currentPage,
+      itemPerPage,
+      category,
+      sort,
+      search,
+    ],
+    queryFn: async () => {
+      const res = await axiosFetch.get(
+        `/products?page=${currentPage}&size=${itemPerPage}&category=${category}&sort=${sort}&search=${search}`
+      );
+      return res.data;
+    },
+  });
 
   // setitem par page
   const showProductPerPage = (e) => {
@@ -34,11 +61,23 @@ const Product = () => {
       setCurrentPage(currentPage - 1);
     }
   };
+
+  // filter by category
+  const filterProducts = (e) => {
+    setCategory(e.target.value);
+  };
+
+  // filter by price
+  const filterByPrice = (e) => {
+    setSorted(e.target.value);
+  };
+
   return (
     <main className="max-w-7xl mx-auto px-2 xl:px-0">
       <section className="mt-6">
         <Banner></Banner>
       </section>
+
       <section className="py-12">
         <h1 className="text-3xl font-bold text-green lg:hidden block text-center pb-5">
           Our Products
@@ -51,7 +90,7 @@ const Product = () => {
           <div className="flex flex-col-reverse lg:flex-row gap-4 items-center justify-evenly overflow-hidden w-full lg:w-[60%]">
             <div className="flex *:w-1/2 gap-4 w-full">
               <select
-                // onChange={filterOrders}
+                onChange={filterProducts}
                 name="category"
                 className="p-2 rounded-md focus:outline-none border cursor-pointer w-[100px]"
               >
@@ -65,15 +104,15 @@ const Product = () => {
                 )}
               </select>
               <select
-                // onChange={filterOrders}
-                name="category"
+                onChange={filterByPrice}
                 className="p-2 rounded-md focus:outline-none border cursor-pointer"
               >
                 <option disabled selected>
                   sort by
                 </option>
-                <option>Price : Low to High</option>
-                <option>Price : High to Low</option>
+                <option>high to low price</option>
+                <option>low to high price</option>
+                <option>available</option>
               </select>
             </div>
             <div className="*:cursor-pointer lg:flex items-center gap-3 hidden">
@@ -96,9 +135,11 @@ const Product = () => {
             <fieldset className="space-y-1 w-full lg:w-[300px]">
               <div className="flex">
                 <input
+                  onChange={(e) => setSearch(e.target.value)}
                   type="text"
                   name="price"
                   id="price"
+                  value={search}
                   placeholder="search products"
                   className="flex flex-1 focus:outline-none py-2 border sm:text-sm rounded-l-md pl-2 w-"
                 />
@@ -112,63 +153,75 @@ const Product = () => {
 
         <div className="md:flex gap-4 mt-10">
           <div className="w-[20%] hidden lg:block">
-            <Filter_by_category></Filter_by_category>
-            <TopProduct products={products}></TopProduct>
+            <Filter_by_category
+              category={category}
+              setCategory={setCategory}
+            ></Filter_by_category>
+            {/* <TopProduct products={products}></TopProduct> */}
           </div>
-          <div className="lg:w-[80%]">
-            <div
-              className={`grid md:grid-cols-2 lg:grid-cols-${layout} xl:grid-cols-${layout} gap-6 `}
-            >
-              {products?.slice(0, 12).map((item, id) => (
-                <ProductCard layout={layout} key={id} item={item}></ProductCard>
-              ))}
-            </div>
-            {/* pagination container */}
-            <div className="flex justify-end">
-              <div className="mt-6 flex gap-3 items-center  *:box-shadow *:flex *:justify-center *:items-center *:rounded-full *:duration-500">
-                <button
-                  onClick={prevBtn}
-                  className=" hover:bg-blue hover:text-white size-10"
-                >
-                  <MdDoubleArrow className="rotate-180"></MdDoubleArrow>
-                </button>
-                {totalbtn?.slice(0, 7).map((item, id) => {
-                  return (
-                    <button
-                      onClick={() => setCurrentPage(id + 1)}
-                      className={`hover:bg-blue hover:text-white size-10 ${
-                        currentPage == id + 1 && "bg-blue text-white"
-                      }`}
-                      key={id}
-                    >
-                      {id + 1}
-                    </button>
-                  );
-                })}
-                <button
-                  onClick={nextbtn}
-                  className="hover:bg-blue hover:text-white size-10"
-                >
-                  <MdDoubleArrow></MdDoubleArrow>
-                </button>
-                <select
-                  onChange={showProductPerPage}
-                  name="category"
-                  className="p-2 rounded-md size-30 focus:outline-none border cursor-pointer"
-                >
-                  <option disabled selected>
-                    Show
-                  </option>
-                  <option>5</option>
-                  <option>10</option>
-                  <option>15</option>
-                  <option>20</option>
-                  <option>30</option>
-                  <option>50</option>
-                </select>
+          {isPending && (
+            <div className="w-16 h-16 mt-20 border-4 border-dashed rounded-full animate-spin border-blue mx-auto"></div>
+          )}
+          {productsData?.length > 0 && (
+            <div className="lg:w-[80%]">
+              <div
+                className={`grid md:grid-cols-2 lg:grid-cols-${layout} xl:grid-cols-${layout} gap-6 `}
+              >
+                {productsData?.slice(0, 12).map((item, id) => (
+                  <ProductCard
+                    layout={layout}
+                    key={id}
+                    item={item}
+                  ></ProductCard>
+                ))}
+              </div>
+              {/* pagination container */}
+              <div className="flex justify-end">
+                <div className="mt-6 flex gap-3 items-center  *:box-shadow *:flex *:justify-center *:items-center *:rounded-full *:duration-500">
+                  <button
+                    onClick={prevBtn}
+                    className=" hover:bg-blue hover:text-white size-10"
+                  >
+                    <MdDoubleArrow className="rotate-180"></MdDoubleArrow>
+                  </button>
+                  {totalbtn?.slice(0, 7).map((item, id) => {
+                    return (
+                      <button
+                        onClick={() => setCurrentPage(id + 1)}
+                        className={`hover:bg-blue hover:text-white size-10 ${
+                          currentPage == id + 1 && "bg-blue text-white"
+                        }`}
+                        key={id}
+                      >
+                        {id + 1}
+                      </button>
+                    );
+                  })}
+                  <button
+                    onClick={nextbtn}
+                    className="hover:bg-blue hover:text-white size-10"
+                  >
+                    <MdDoubleArrow></MdDoubleArrow>
+                  </button>
+                  <select
+                    onChange={showProductPerPage}
+                    name="category"
+                    className="p-2 rounded-md size-30 focus:outline-none border cursor-pointer"
+                  >
+                    <option disabled selected>
+                      Show
+                    </option>
+                    <option>5</option>
+                    <option>10</option>
+                    <option>15</option>
+                    <option>20</option>
+                    <option>30</option>
+                    <option>50</option>
+                  </select>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
     </main>
@@ -178,17 +231,22 @@ const Product = () => {
 export default Product;
 
 // filter by categories
-const Filter_by_category = () => {
+const Filter_by_category = ({ category, setCategory }) => {
   return (
     <div>
       <h1 className="text-xl xl:text-2xl font-semibold">
         Filter by categories
       </h1>
-      <div className="space-y-2 mt-4 *:cursor-pointer *:font-semibold">
+      <div className="space-y-2 mt-4  *:font-semibold">
         {["watch", "headphone", "phone", "tv", "laptop", "monitor"].map(
           (item, id) => (
             <p key={id}>
-              <span className="hover:text-green hover:underline duration-500 text-paragraph">
+              <span
+                onClick={() => setCategory(item)}
+                className={`hover:text-green hover:underline duration-500  cursor-pointer ${
+                  item == category ? "text-green underline" : "text-paragraph"
+                }`}
+              >
                 {item}
               </span>
             </p>

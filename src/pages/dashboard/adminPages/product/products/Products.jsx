@@ -9,6 +9,7 @@ import useProducts from "../../../../../hooks/useProducts";
 const Products = () => {
   const axiosFetch = useAxios();
   const [products] = useProducts();
+  // console.log(products)
   const [category, setCategory] = useState("all");
   const [sort, setSorted] = useState("all");
   // pagination
@@ -31,6 +32,8 @@ const Products = () => {
       return res.data;
     },
   });
+
+  // console.log(productsData)
   // showproduct in perPage
   const showProductPerPage = (e) => {
     setItemPerPage(e.target.value);
@@ -113,7 +116,7 @@ const Products = () => {
         {isPending && (
           <div className="mt-10 w-16 h-16 border-4 border-dashed rounded-full animate-spin border-blue mx-auto"></div>
         )}
-        {productsData.length > 0 && (
+        {productsData?.length > 0 && (
           <section className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-4 mt-5">
             {productsData?.map((item, id) => (
               <Card refetch={refetch} key={id} item={item}></Card>

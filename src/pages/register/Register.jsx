@@ -15,14 +15,14 @@ const Register = () => {
   } = useForm();
 
   const navigate = useNavigate();
-const axiosFetch = useAxios()
+  const axiosFetch = useAxios();
+  // register submit
   const submit = (data) => {
-
-const name = data.name;
-const email = data.email;
-const photoUrl = data.photo_url;
-const password = data.password;
-const userData = {name,email,photoUrl, password,  role:"user"}
+    const name = data.name;
+    const email = data.email;
+    const photoUrl = data.photo_url;
+    const password = data.password;
+    const userData = { name, email, photoUrl, password, role: "user" };
 
     createUserWithEmailAndPassword(auth, data.email, data.password)
       .then((res) => {
@@ -31,31 +31,32 @@ const userData = {name,email,photoUrl, password,  role:"user"}
           photoURL: data.photo_url,
         })
           .then(() => {
-            axiosFetch.post("/users",userData).then(res => {
-              console.log(res.data)
-              if(res.data.insertedId){
+            axiosFetch
+              .post("/users", userData)
+              .then((res) => {
+                console.log(res.data);
+                if (res.data.insertedId) {
+                  Swal.fire({
+                    icon: "success",
+                    title: "Your Register has been Success",
+                    showConfirmButton: false,
+                    timer: 1500,
+                  });
+                  setTimeout(() => {
+                    navigate("/login");
+                  }, 2000);
+                  reset();
+                }
+              })
+              .catch((error) => {
+                console.log(error.message);
                 Swal.fire({
-                  icon: "success",
-                  title: "Your Register has been Success",
+                  icon: "warning",
+                  title: "Your Register Failed",
                   showConfirmButton: false,
                   timer: 1500,
                 });
-                setTimeout(() => {
-                  navigate("/login");
-                }, 2000);
-                reset()
-              }
-            }).catch(error => {
-              console.log(error.message)
-              Swal.fire({
-                icon: "warning",
-                title: "Your Register Failed",
-                showConfirmButton: false,
-                timer: 1500,
               });
-            })
-
-           
           })
           .catch((error) => {
             console.log(error.message);
