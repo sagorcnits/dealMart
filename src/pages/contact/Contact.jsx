@@ -1,5 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
 import useAxios from "../../hooks/useAxios";
 import Address from "./Address";
@@ -24,13 +25,14 @@ const Contact = () => {
           </div>
           <ContactForm></ContactForm>
         </div>
+        {/* <SendPushNotification></SendPushNotification> */}
       </section>
     </main>
   );
 };
 
 export default Contact;
-
+// contact form
 const ContactForm = () => {
   const {
     register,
@@ -134,3 +136,6 @@ const ContactForm = () => {
     </form>
   );
 };
+
+// send push notification realtime
+

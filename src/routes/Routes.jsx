@@ -21,6 +21,9 @@ import NotFound from "../pages/notFound/NotFound";
 import Product_details from "../pages/product_details/Product_details";
 import Product from "../pages/products/Product";
 import Register from "../pages/register/Register";
+import Order from "../pages/user_account/orders/Order";
+import Profile from "../pages/user_account/profile/Profile";
+import Review from "../pages/user_account/review/Review";
 import Wish_Products from "../pages/wish_list/Wish_Products";
 
 const router = createBrowserRouter([
@@ -53,6 +56,18 @@ const router = createBrowserRouter([
       {
         path: "/wish-products",
         element: <Wish_Products></Wish_Products>,
+      },
+      {
+        path: "/my-profile",
+        element: <Profile></Profile>,
+      },
+      {
+        path: "/my-orders",
+        element: <Order></Order>,
+      },
+      {
+        path: "/my-review",
+        element: <Review></Review>,
       },
      
     ],

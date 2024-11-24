@@ -40,7 +40,6 @@ const Navbar = () => {
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
 
-  // console.log(carts)
   return (
     <div className={active ? "activeNav" : "duration-700 border-b"}>
       <Order openCart={openCart} setOpenCart={setOpenCart}></Order>
@@ -167,22 +166,31 @@ const Navbar = () => {
                   tabIndex={0}
                   className="menu menu-sm dropdown-content bg-darkBlue text-white  poppins rounded-box z-50 mt-3 w-52 p-2 shadow space-y-3"
                 >
-                  {admin && (
+                  {user?.role == "admin" && (
                     <Link to="/dashboard">
                       <li className="hover:text-green duration-500 pl-3">
                         Dashboard
                       </li>
                     </Link>
                   )}
-                  <li className="hover:text-green duration-500">
-                    <a className="justify-between">
-                      Profile
-                      <span className="badge">New</span>
-                    </a>
-                  </li>
-                  <Link to="/create-product">
+                  <Link to="/my-profile">
                     <li className="hover:text-green duration-500 pl-3">
-                      Create Product
+                      My Profile
+                    </li>
+                  </Link>
+                  <Link to="/my-orders">
+                    <li className="hover:text-green duration-500 pl-3">
+                      My Orders
+                    </li>
+                  </Link>
+                  <Link to="/my-review">
+                    <li className="hover:text-green duration-500 pl-3">
+                      My Review
+                    </li>
+                  </Link>
+                  <Link to="/wish-products">
+                    <li className="hover:text-green duration-500 pl-3">
+                      My Wishlist
                     </li>
                   </Link>
                   <Link onClick={() => dispatch(removeUser())}>
