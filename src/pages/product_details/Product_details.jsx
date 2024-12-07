@@ -294,6 +294,7 @@ const RatingStar = ({ id }) => {
     const reviewData = {
       product_id: id,
       name,
+      email: user?.email || "randomuser",
       review,
       rating: starValue,
       image:

@@ -173,9 +173,9 @@ const Navbar = () => {
                       </li>
                     </Link>
                   )}
-                  <Link to="/my-profile">
+                  <Link to="/my-account">
                     <li className="hover:text-green duration-500 pl-3">
-                      My Profile
+                      My Account
                     </li>
                   </Link>
                   <Link to="/my-orders">
