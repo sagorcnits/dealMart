@@ -3,8 +3,8 @@ import { NavLink, Outlet } from "react-router-dom";
 const Account = () => {
   return (
     <main className="max-w-7xl mx-auto px-4">
-      <section className="text-center py-8">
-        <h1 className="text-2xl font-bold">My Account</h1>
+      <section className="text-center py-4">
+        <h1 className="text-2xl font-bold">Your Account</h1>
         <p>Welcome, John Doe!</p>
       </section>
       <section className="flex gap-6 mt-4 bg-dashBgColor h-screen rounded-lg">

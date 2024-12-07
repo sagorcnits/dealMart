@@ -20,9 +20,9 @@ const Register = () => {
   const submit = (data) => {
     const name = data.name;
     const email = data.email;
-    const photoUrl = data.photo_url;
+    const image = data.photo_url;
     const password = data.password;
-    const userData = { name, email, photoUrl, password, role: "user" };
+    const userData = { name, email, image, password, role: "user" };
 
     createUserWithEmailAndPassword(auth, data.email, data.password)
       .then((res) => {
@@ -32,7 +32,7 @@ const Register = () => {
         })
           .then(() => {
             axiosFetch
-              .post("/users", userData)
+              .post("/customers", userData)
               .then((res) => {
                 console.log(res.data);
                 if (res.data.insertedId) {
