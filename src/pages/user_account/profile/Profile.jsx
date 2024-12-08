@@ -86,7 +86,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center md:p-4">
       <div className="bg-white rounded-lg shadow-md w-full max-w-2xl p-8">
         <h1 className="text-2xl font-bold text-center mb-6">your Profile</h1>
         <form onSubmit={handleSubmit} className="space-y-6">

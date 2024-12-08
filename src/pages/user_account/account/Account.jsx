@@ -7,31 +7,31 @@ const Account = () => {
         <h1 className="text-2xl font-bold">Your Account</h1>
         <p>Welcome, John Doe!</p>
       </section>
-      <section className="flex gap-6 mt-4 bg-dashBgColor h-screen rounded-lg">
-        <div className="w-[20%] border-r-2 border-black">
-          <ul>
+      <section className="flex flex-col md:flex-row gap-6 mt-4 bg-dashBgColor h-full rounded-lg">
+        <div className="md:w-[20%] md:border-r-2 border-black">
+          <ul className="flex justify-center gap-4 md:flex-col">
             <NavLink className={({ isActive, isPending }) =>
                   isPending ? "pending" : isActive ? "active" : ""
                 }
                 to="/my-account/profile">
-              <li className="mt-4 py-3 px-2 text-center">Profile</li>
+              <li className="md:mt-4 py-3 px-2 text-center">Profile</li>
             </NavLink>
             <NavLink className={({ isActive, isPending }) =>
                   isPending ? "pending" : isActive ? "active" : ""
                 }
                 to="/my-account/orders">
-              <li className="mt-4 py-3 px-2 text-center">Orders</li>
+              <li className="md:mt-4 py-3 px-2 text-center">Orders</li>
             </NavLink>
             <NavLink className={({ isActive, isPending }) =>
                   isPending ? "pending" : isActive ? "active" : ""
                 }
                 to="/my-account/reviews">
-              <li className="mt-4 py-3 px-2 text-center">Reviews</li>
+              <li className="md:mt-4 py-3 px-2 text-center">Reviews</li>
             </NavLink>
            
           </ul>
         </div>
-        <div className="w-[80%] p-4">
+        <div className="md:w-[80%] p-4">
           <Outlet></Outlet>
         </div>
       </section>

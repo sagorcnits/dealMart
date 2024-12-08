@@ -22,6 +22,7 @@ import Product_details from "../pages/product_details/Product_details";
 import Product from "../pages/products/Product";
 import Register from "../pages/register/Register";
 import Account from "../pages/user_account/account/Account";
+import Order_details from "../pages/user_account/order_details/Order_details";
 import Order from "../pages/user_account/orders/Order";
 import Profile from "../pages/user_account/profile/Profile";
 import Review from "../pages/user_account/review/Review";
@@ -78,6 +79,10 @@ const router = createBrowserRouter([
           {
             path: "/my-account/reviews",
             element: <Review></Review>,
+          },
+          {
+            path: "/my-account/order-details/:id",
+            element: <Order_details></Order_details>,
           },
         ],
       },

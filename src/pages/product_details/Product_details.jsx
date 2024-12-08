@@ -3,6 +3,7 @@ import { FaRegStar } from "react-icons/fa";
 import { GiSelfLove } from "react-icons/gi";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 import ProductCard from "../../components/ProductCard";
 import { addToCart } from "../../features/cartItem/cartSlice";
 import useAxios from "../../hooks/useAxios";
@@ -48,7 +49,7 @@ const Product_details = () => {
         </h1>
         <div className="grid grid-cols-1  lg:grid-cols-2 gap-6 border-b pb-10">
           {/* Product Image */}
-          <div className="flex justify-center xl:h-[500px] lg:h-[400px]">
+          <div className="flex justify-center">
             <Detail_slider productImage={productData?.images}></Detail_slider>
           </div>
 
@@ -124,36 +125,6 @@ const Product_details = () => {
 
 export default Product_details;
 
-// Individual Review Component
-const Review = ({ name, rating, review, image }) => {
-  return (
-    <div className="p-4 rounded-lg mb-4">
-      <div className="flex items-center mb-2">
-        <img src={image} alt={name} className="w-10 h-10 rounded-full mr-3" />
-        <div>
-          <h4 className="font-semibold">{name}</h4>
-          <div className="flex">
-            {[...Array(rating)].map((_, index) => (
-              <span key={index} className="text-yellow-400">
-                ★
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-      <p className="text-gray-600 mb-2">{review}</p>
-      <div className="flex items-center text-gray-500">
-        <button className="mr-2 flex items-center">
-          ❤️ <span className="ml-1">10</span>
-        </button>
-        <button className="flex items-center">
-          👎 <span className="ml-1">1</span>
-        </button>
-      </div>
-    </div>
-  );
-};
-
 // Main Customer Reviews Component
 const CustomerReviews = ({ id }) => {
   const [reviewForm, setReviewForm] = useState(false);
@@ -213,8 +184,6 @@ const CustomerReviews = ({ id }) => {
 
   // filtering by reviews rating
 
-
-
   const ratingArray = [
     {
       id: 5,
@@ -267,11 +236,39 @@ const CustomerReviews = ({ id }) => {
         {reviewForm && <RatingStar id={id}></RatingStar>}
       </div>
 
-
       <div className="md:w-2/3 grid grid-cols-2 gap-2 *:box-shadow">
         {productReview?.map((review, index) => (
-          <Review key={index} {...review} />
+          <ReviewCard key={index} {...review} />
         ))}
+      </div>
+    </div>
+  );
+};
+// Individual Review Component
+const ReviewCard = ({ name, rating, review, image }) => {
+  return (
+    <div className="p-4 rounded-lg mb-4 h-[200px]">
+      <div className="flex items-center mb-2">
+        <img src={image} alt={name} className="w-10 h-10 rounded-full mr-3" />
+        <div>
+          <h4 className="font-semibold">{name}</h4>
+          <div className="flex">
+            {[...Array(rating)].map((_, index) => (
+              <span key={index} className="text-yellow-400">
+                ★
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+      <p className="text-gray-600 mb-2">{review}</p>
+      <div className="flex items-center text-gray-500">
+        <button className="mr-2 flex items-center">
+          ❤️ <span className="ml-1">10</span>
+        </button>
+        <button className="flex items-center">
+          👎 <span className="ml-1">1</span>
+        </button>
       </div>
     </div>
   );
@@ -310,7 +307,14 @@ const RatingStar = ({ id }) => {
     axiosFetch
       .post("/reviews", reviewData)
       .then((res) => {
-        console.log(res.data);
+        if (res.data.message === "ok") {
+          Swal.fire({
+            icon: "success",
+            title: "Thanks your good review!😀",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -377,7 +381,8 @@ const Related_products = ({ category }) => {
       .get(`/products?category=${category}`)
       .then((res) => {
         // console.log(res.data);
-        setRelatedProducts(res.data.data);
+        setRelatedProducts(res.data);
+        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
