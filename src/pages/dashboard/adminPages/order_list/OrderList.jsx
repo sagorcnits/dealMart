@@ -91,7 +91,6 @@ const OrderList = () => {
             <option>Yesterday</option>
             <option>This Week</option>
             <option>This Month</option>
-            
           </select>
         </div>
 
@@ -304,41 +303,45 @@ const Table = ({
                       >
                         {payment_status}
                       </p>
-                      <div>
-                        {payment_status != "refund" && (
-                          <div className="dropdown dropdown-bottom dropdown-end">
-                            <div tabIndex={0} role="button" className="m-1">
-                              <BsThreeDotsVertical
-                                onClick={() => setActiveStatus(!activeStatus)}
-                                size={20}
-                                className="mx-auto cursor-pointer"
-                              ></BsThreeDotsVertical>
-                            </div>
-                            <ul
-                              tabIndex={0}
-                              className="dropdown-content menu bg-white rounded-box z-50 w-52 p-2 box-shadow"
-                            >
-                              {payment_status == "paid" ? (
-                                <>
-                                  <li
-                                    onClick={() => updateOrder("refund", _id)}
-                                  >
-                                    <a>refund</a>
+                      {order_status?.status != "canceled" && (
+                        <div>
+                          {payment_status != "refund" && (
+                            <div className="dropdown dropdown-bottom dropdown-end">
+                              <div tabIndex={0} role="button" className="m-1">
+                                <BsThreeDotsVertical
+                                  onClick={() => setActiveStatus(!activeStatus)}
+                                  size={20}
+                                  className="mx-auto cursor-pointer"
+                                ></BsThreeDotsVertical>
+                              </div>
+                              <ul
+                                tabIndex={0}
+                                className="dropdown-content menu bg-white rounded-box z-50 w-52 p-2 box-shadow"
+                              >
+                                {payment_status == "paid" ? (
+                                  <>
+                                    <li
+                                      onClick={() => updateOrder("refund", _id)}
+                                    >
+                                      <a>refund</a>
+                                    </li>
+                                  </>
+                                ) : payment_status == "unpaid" ? (
+                                  <li onClick={() => updateOrder("paid", _id)}>
+                                    <a>paid</a>
                                   </li>
-                                </>
-                              ) : payment_status == "unpaid" ? (
-                                <li onClick={() => updateOrder("paid", _id)}>
-                                  <a>paid</a>
-                                </li>
-                              ) : (
-                                <li onClick={() => updateOrder("unpaid", _id)}>
-                                  <a>unpaid</a>
-                                </li>
-                              )}
-                            </ul>
-                          </div>
-                        )}
-                      </div>
+                                ) : (
+                                  <li
+                                    onClick={() => updateOrder("unpaid", _id)}
+                                  >
+                                    <a>unpaid</a>
+                                  </li>
+                                )}
+                              </ul>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </td>
                   <td>
@@ -356,81 +359,97 @@ const Table = ({
                             ? "text-customRed"
                             : payment_status == "refund"
                             ? "text-customRed"
+                            : payment_status == "canceled"
+                            ? "text-customRed"
                             : ""
                         } font-semibold`}
                       >
-                        {payment_status == "refund"
-                          ? "canceled"
-                          : order_status?.status}
+                        {order_status?.status}
                       </p>
-                      <div>
-                        {order_status?.status == "complated" ? (
-                          " "
-                        ) : order_status?.status == "canceled" ? (
-                          " "
-                        ) : (
-                          <div className="dropdown dropdown-bottom dropdown-end">
-                            <div tabIndex={0} role="button" className="m-1">
-                              <BsThreeDotsVertical
-                                onClick={() => setActiveStatus(!activeStatus)}
-                                size={20}
-                                className="mx-auto cursor-pointer"
-                              ></BsThreeDotsVertical>
-                            </div>
-                            <ul
-                              tabIndex={0}
-                              className="dropdown-content menu bg-white rounded-box z-50 w-52 p-2 box-shadow"
-                            >
-                              {order_status?.status == "pending" ? (
-                                <>
-                                  <li
-                                    onClick={() => updateOrder("canceled", _id)}
-                                  >
-                                    <a>canceled</a>
-                                  </li>
-                                  <li
-                                    onClick={() => updateOrder("progress", _id)}
-                                  >
-                                    <a>progress</a>
-                                  </li>
-                                </>
-                              ) : order_status?.status == "progress" ? (
-                                <>
-                                  <li
-                                    onClick={() => updateOrder("canceled", _id)}
-                                  >
-                                    <a>canceled</a>
-                                  </li>
-                                  <li
-                                    onClick={() => updateOrder("courier", _id)}
-                                  >
-                                    <a>courier</a>
-                                  </li>
-                                </>
-                              ) : order_status?.status == "courier" ? (
-                                <>
-                                  <li
-                                    onClick={() => updateOrder("canceled", _id)}
-                                  >
-                                    <a>canceled</a>
-                                  </li>
-                                  {payment_status == "paid" && (
-                                    <li
-                                      onClick={() =>
-                                        updateOrder("complated", _id)
-                                      }
-                                    >
-                                      <a>complated</a>
-                                    </li>
+                      {
+                        (payment_status != "refund" && (
+                          <div>
+                            {order_status?.status == "complated" ? (
+                              ""
+                            ) : order_status?.status == "canceled" ? (
+                              " "
+                            ) : (
+                              <div className="dropdown dropdown-bottom dropdown-end">
+                                <div tabIndex={0} role="button" className="m-1">
+                                  <BsThreeDotsVertical
+                                    onClick={() =>
+                                      setActiveStatus(!activeStatus)
+                                    }
+                                    size={20}
+                                    className="mx-auto cursor-pointer"
+                                  ></BsThreeDotsVertical>
+                                </div>
+                                <ul
+                                  tabIndex={0}
+                                  className="dropdown-content menu bg-white rounded-box z-50 w-52 p-2 box-shadow"
+                                >
+                                  {order_status?.status == "pending" ? (
+                                    <>
+                                      <li
+                                        onClick={() =>
+                                          updateOrder("canceled", _id)
+                                        }
+                                      >
+                                        <a>canceled</a>
+                                      </li>
+                                      <li
+                                        onClick={() =>
+                                          updateOrder("progress", _id)
+                                        }
+                                      >
+                                        <a>progress</a>
+                                      </li>
+                                    </>
+                                  ) : order_status?.status == "progress" ? (
+                                    <>
+                                      <li
+                                        onClick={() =>
+                                          updateOrder("canceled", _id)
+                                        }
+                                      >
+                                        <a>canceled</a>
+                                      </li>
+                                      <li
+                                        onClick={() =>
+                                          updateOrder("courier", _id)
+                                        }
+                                      >
+                                        <a>courier</a>
+                                      </li>
+                                    </>
+                                  ) : order_status?.status == "courier" ? (
+                                    <>
+                                      <li
+                                        onClick={() =>
+                                          updateOrder("canceled", _id)
+                                        }
+                                      >
+                                        <a>canceled</a>
+                                      </li>
+                                      {payment_status == "paid" && (
+                                        <li
+                                          onClick={() =>
+                                            updateOrder("complated", _id)
+                                          }
+                                        >
+                                          <a>complated</a>
+                                        </li>
+                                      )}
+                                    </>
+                                  ) : (
+                                    ""
                                   )}
-                                </>
-                              ) : (
-                                ""
-                              )}
-                            </ul>
+                                </ul>
+                              </div>
+                            )}
                           </div>
-                        )}
-                      </div>
+                        ))
+                      }
                     </div>
                   </td>
                   <td>

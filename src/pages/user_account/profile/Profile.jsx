@@ -41,7 +41,7 @@ const Profile = () => {
       email: form.email.value,
       country: form.country.value,
       phone: form.phone.value,
-      phone: form.address.value,
+      address: form.address.value,
     };
 
     // update data

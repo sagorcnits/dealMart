@@ -10,6 +10,7 @@ const ProductDetails = () => {
   const axiosFetch = useAxios();
   const { id } = useParams();
   const navigate = useNavigate();
+  
   useEffect(() => {
     axiosFetch
       .get(`/products/${id}`)

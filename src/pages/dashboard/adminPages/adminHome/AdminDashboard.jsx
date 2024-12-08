@@ -542,7 +542,7 @@ const OrderTable = ({ changeStatus, setChangeStatus }) => {
                       >
                         {payment_status}
                       </p>
-                      <div>
+                     {order_status?.status != "canceled" && <div>
                         {payment_status != "refund" && (
                           <div className="dropdown dropdown-bottom dropdown-end">
                             <div tabIndex={0} role="button" className="m-1">
@@ -576,7 +576,7 @@ const OrderTable = ({ changeStatus, setChangeStatus }) => {
                             </ul>
                           </div>
                         )}
-                      </div>
+                      </div>}
                     </div>
                   </td>
                   <td>
