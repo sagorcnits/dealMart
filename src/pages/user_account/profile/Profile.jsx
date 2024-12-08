@@ -1,31 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
 import useAxios from "../../../hooks/useAxios";
 
 const Profile = () => {
   const [profile, setProfile] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-
+   const [loading,setLoading] = useState(true);
   const axiosFetch = useAxios();
   const user = useSelector((state) => state.user.user);
   // data fetch user er
   useEffect(() => {
-    axiosFetch
-      .get(`/customers/${user?.email}`)
-      .then((res) => {
-        setProfile(res.data);
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
-  }, []);
+    console.log("ok")
+
+    if(user?.email){
+      axiosFetch
+        .get(`/customers/${user?.email}`)
+        .then((res) => {
+          setProfile(res.data);
+          // console.log(res.data);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    }
+  }, [user]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setProfile((prev) => ({ ...prev, [name]: value }));
   };
-
+// handle submit 
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -39,23 +45,45 @@ const Profile = () => {
     };
 
     // update data
+   if(user?.email){
     axiosFetch
-      .put("/customers", updateUser)
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err.message);
+    .put(`/customers/${user?.email}`, updateUser)
+    .then((res) => {
+      if(res.data.message == "ok"){
+        Swal.fire({
+          icon: "success",
+          title: "Your Profile Updated",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      };
+    })
+    .catch((err) => {
+      console.log(err.message);
+      Swal.fire({
+        icon: "warning",
+        title: "Your Profile Not Updated",
+        showConfirmButton: false,
+        timer: 1500,
       });
+    });
+   }
 
     setIsEditing(false);
   };
-
+// handle edit
   const handleEdit = (e) => {
     e.preventDefault();
     setIsEditing(true);
     console.log("Updated profile:", profile);
   };
+
+  // loading profile
+  if(loading){
+    return (
+      <div className="text-center">Loading...</div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
