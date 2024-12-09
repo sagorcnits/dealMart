@@ -4,8 +4,8 @@ import Swal from "sweetalert2";
 import useAxios from "../../../hooks/useAxios";
 
 const Profile = () => {
-  const [profile, setProfile] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [profile, setProfile] = useState(null);
    const [loading,setLoading] = useState(true);
   const axiosFetch = useAxios();
   const user = useSelector((state) => state.user.user);

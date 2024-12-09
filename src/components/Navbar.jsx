@@ -51,16 +51,6 @@ const Navbar = () => {
               Deal<span className="text-green">Mart</span>
             </h1>
           </div>
-          {/* <div className="hidden sm:flex items-center border rounded-md overflow-hidden">
-            <input
-              type="text"
-              placeholder="search"
-              className="px-3 focus:outline-none"
-            />
-            <button className="bg-green px-3 py-3 border-none text-white hover:bg-black duration-500">
-              <CiSearch></CiSearch>
-            </button>
-          </div> */}
         </div>
 
         <div className="flex-none justify-end lg:justify-between">
@@ -178,12 +168,12 @@ const Navbar = () => {
                       My Account
                     </li>
                   </Link>
-                  <Link to="/my-orders">
+                  <Link to="/my-account/orders">
                     <li className="hover:text-green duration-500 pl-3">
                       My Orders
                     </li>
                   </Link>
-                  <Link to="/my-review">
+                  <Link to="/my-account/reviews">
                     <li className="hover:text-green duration-500 pl-3">
                       My Review
                     </li>
