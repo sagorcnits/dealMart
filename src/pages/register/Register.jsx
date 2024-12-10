@@ -20,9 +20,12 @@ const Register = () => {
   const submit = (data) => {
     const name = data.name;
     const email = data.email;
+    const phone = data.phone;
     const image = data.photo_url;
+    const country = data.country;
+    const address = data.address;
     const password = data.password;
-    const userData = { name, email, image, password, role: "user" };
+    const userData = { name, email, image, phone, country, address, password,};
 
     createUserWithEmailAndPassword(auth, data.email, data.password)
       .then((res) => {
@@ -35,7 +38,7 @@ const Register = () => {
               .post("/customers", userData)
               .then((res) => {
                 console.log(res.data);
-                if (res.data.insertedId) {
+                if (res.data.message == "ok") {
                   Swal.fire({
                     icon: "success",
                     title: "Your Register has been Success",
@@ -76,54 +79,113 @@ const Register = () => {
         </div>
         <form className="space-y-6" onSubmit={handleSubmit(submit)}>
           <div className="space-y-2">
+            {/* frist input row */}
+            <div className="flex *:flex-1 gap-2">
+              <div>
+                <label className="block mb-2 text-sm">Name</label>
+                <input
+                  {...register("name", { required: true })}
+                  type="text"
+                  name="name"
+                  placeholder="name"
+                  className="w-full px-3 py-2 border rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800"
+                />
+                {errors.name && (
+                  <p className="text-red-500">Invalid Your Name</p>
+                )}
+              </div>
+              <div>
+                <label className="block mb-2 text-sm">Email</label>
+                <input
+                  {...register("email", { required: true })}
+                  type="email"
+                  name="email"
+                  placeholder="email"
+                  className="w-full px-3 py-2 border rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800"
+                />
+                {errors.email && (
+                  <p className="text-red-500">Invalid Your Email</p>
+                )}
+              </div>
+            </div>
+            {/* second input row */}
+            <div className="flex *:flex-1 gap-2">
+              <div>
+                <label className="block mb-2 text-sm">Phone</label>
+                <input
+                  {...register("phone", { required: true })}
+                  type="number"
+                  name="phone"
+                  placeholder="phone"
+                  className="w-full px-3 py-2 border rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800"
+                />
+                {errors.phone && (
+                  <p className="text-red-500">Invalid Your Phone number</p>
+                )}
+              </div>
+              <div>
+                <label className="block mb-2 text-sm">Image</label>
+                <input
+                  {...register("photo_url", { required: true })}
+                  type="text"
+                  name="photo_url"
+                  placeholder="photo_url"
+                  className="w-full px-3 py-2 border rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800"
+                />
+                {errors.number && (
+                  <p className="text-red-500">Invalid Your Number</p>
+                )}
+              </div>
+            </div>
+            {/* third input row */}
+            <div className="flex *:flex-1 gap-2">
+              <div>
+                <label className="block mb-2 text-sm">Password</label>
+                <input
+                  {...register("password", { required: true })}
+                  type="password"
+                  name="password"
+                  placeholder="*****"
+                  className="w-full px-3 py-2 border rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800"
+                />
+                {errors.password && (
+                  <p className="text-red-500">Invalid Your password</p>
+                )}
+              </div>
+              <div>
+                <label className="block mb-2 text-sm">Country</label>
+                <select
+                  className="w-full px-3 py-2 border rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800"
+                  name="country"
+                  {...register("country", { required: true })}
+                >
+                  <option value="bangladesh">bangladesh</option>
+                  <option value="pakistan">pakistan</option>
+                  <option value="nepal">nepal</option>
+                  <option value="srilanka">srilanka</option>
+                  <option value="china">china</option>
+                  <option value="USA">USA</option>
+                  <option value="india">india</option>
+                  <option value="UK">UK</option>
+                </select>
+
+                {errors.country && (
+                  <p className="text-red-500">Invalid Your Country name</p>
+                )}
+              </div>
+            </div>
+            {/* four input row */}
             <div>
-              <label className="block mb-2 text-sm">Name</label>
-              <input
-                {...register("name", { required: true })}
+              <label className="block mb-2 text-sm">Address</label>
+              <textarea
+                {...register("address", { required: true })}
                 type="text"
-                name="name"
-                placeholder="name"
-                className="w-full px-3 py-2 border rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800"
+                name="address"
+                placeholder="address"
+                className="w-full px-3 py-2 border rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800 resize-none"
               />
-              {errors.name && <p className="text-red-500">Invalid Your Name</p>}
-            </div>
-            <div>
-              <label className="block mb-2 text-sm">Email</label>
-              <input
-                {...register("email", { required: true })}
-                type="email"
-                name="email"
-                placeholder="email"
-                className="w-full px-3 py-2 border rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800"
-              />
-              {errors.email && (
-                <p className="text-red-500">Invalid Your Email</p>
-              )}
-            </div>
-            <div>
-              <label className="block mb-2 text-sm">photo url</label>
-              <input
-                {...register("photo_url", { required: true })}
-                type="text"
-                name="photo_url"
-                placeholder="photo_url"
-                className="w-full px-3 py-2 border rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800"
-              />
-              {errors.number && (
-                <p className="text-red-500">Invalid Your Number</p>
-              )}
-            </div>
-            <div>
-              <label className="block mb-2 text-sm">Password</label>
-              <input
-                {...register("password", { required: true })}
-                type="password"
-                name="password"
-                placeholder="*****"
-                className="w-full px-3 py-2 border rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800"
-              />
-              {errors.password && (
-                <p className="text-red-500">Invalid Your password</p>
+              {errors.address && (
+                <p className="text-red-500">Invalid Your address</p>
               )}
             </div>
           </div>

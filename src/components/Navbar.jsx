@@ -183,7 +183,7 @@ const Navbar = () => {
                       My Wishlist
                     </li>
                   </Link>
-                  <Link onClick={() => dispatch(removeUser())}>
+                  <Link to="/login" onClick={() => dispatch(removeUser())}>
                     {" "}
                     <li className="hover:text-green duration-500 pl-3">
                       Logout

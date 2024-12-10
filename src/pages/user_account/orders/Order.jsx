@@ -35,8 +35,8 @@ const Order = () => {
   return (
     <div>
       <h1 className="p-2 font-semibold text-2xl">Your Orders</h1>
-      <div className="w-full overflow-auto">
-        <table>
+      <div className="w-full overflow-auto ">
+        <table className="w-full">
           <thead>
             <tr className="text-sm md:text-[15px] text-left *:p-3 border-b *:uppercase">
               <th>#Order Id</th>
