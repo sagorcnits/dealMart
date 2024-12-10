@@ -1,4 +1,6 @@
+import axios from "axios";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -14,6 +16,8 @@ const Register = () => {
     formState: { errors },
   } = useForm();
 
+  const [image, setImage] = useState("");
+
   const navigate = useNavigate();
   const axiosFetch = useAxios();
   // register submit
@@ -21,11 +25,10 @@ const Register = () => {
     const name = data.name;
     const email = data.email;
     const phone = data.phone;
-    const image = data.photo_url;
     const country = data.country;
     const address = data.address;
     const password = data.password;
-    const userData = { name, email, image, phone, country, address, password,};
+    const userData = { name, email, image, phone, country, address, password };
 
     createUserWithEmailAndPassword(auth, data.email, data.password)
       .then((res) => {
@@ -67,6 +70,26 @@ const Register = () => {
       })
       .catch((error) => {
         console.log(error);
+      });
+  };
+  // handle image
+  const handleFileChange = (event) => {
+    console.log("ok");
+
+    const formData = new FormData();
+    formData.append("file", event.target.files[0]);
+    formData.append("upload_preset", "dealMart");
+    formData.append("api_key", "941311292871449");
+
+    axios
+      .post("https://api.cloudinary.com/v1_1/dqsqzp3an/image/upload", formData)
+      .then((response) => {
+        if (response.data.asset_id) {
+          setImage(response.data.secure_url);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
       });
   };
 
@@ -126,8 +149,8 @@ const Register = () => {
               <div>
                 <label className="block mb-2 text-sm">Image</label>
                 <input
-                  {...register("photo_url", { required: true })}
-                  type="text"
+                  onChange={handleFileChange}
+                  type="file"
                   name="photo_url"
                   placeholder="photo_url"
                   className="w-full px-3 py-2 border rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800"
