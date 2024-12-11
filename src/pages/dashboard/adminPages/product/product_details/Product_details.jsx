@@ -15,7 +15,8 @@ const ProductDetails = () => {
     axiosFetch
       .get(`/products/${id}`)
       .then((res) => {
-        setProductData(res.data);
+        setProductData(res.data.data);
+        // console.log(res.data)
       })
       .catch((err) => {
         console.log(err);

@@ -33,7 +33,7 @@ const Dashboard = () => {
           handleSideBar={handleSideBar}
           handleMobileSideBar={handleMobileSideBar}
         ></Navbar>
-        <div className="p-6">
+        <div className="p-4">
           <Outlet></Outlet>
         </div>
       </section>

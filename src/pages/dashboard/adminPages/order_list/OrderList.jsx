@@ -77,6 +77,7 @@ const OrderList = () => {
   return (
     <>
       <main>
+        {/* fil */}
         <div className="pt-16 flex justify-between items-center">
           <h1 className="text-3xl font-bold">Order List</h1>
           <select
@@ -97,6 +98,7 @@ const OrderList = () => {
         <section className="mt-6">
           <Card changeStatus={changeStatus} filterDate={filterDate}></Card>
         </section>
+
         <section className="mt-6 bg-white rounded-md">
           <div className="flex justify-between items-center p-3">
             <p className="font-semibold">All Order List</p>
@@ -132,6 +134,7 @@ const OrderList = () => {
               </select>
             </div>
           </div>
+          {/* table */}
           <div className="overflow-auto">
             <Table
               orders={ordersData}
@@ -141,6 +144,7 @@ const OrderList = () => {
               setChangeStatus={setChangeStatus}
             ></Table>
           </div>
+          {/* pagination */}
         </section>
         {orders?.length >= 5 && (
           <section className="mt-6 flex gap-3 items-center *:size-10 *:box-shadow *:flex *:justify-center *:items-center *:rounded-full *:duration-500">

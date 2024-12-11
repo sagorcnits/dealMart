@@ -8,7 +8,7 @@ const Review = () => {
   const [reviewsData, setReviewsdata] = useState([]);
   const [loading, setLoading] = useState(true);
   const axiosFetch = useAxios();
-  // fetch reviews data from server 
+  // fetch reviews data from server
   useEffect(() => {
     if (user?.email) {
       axiosFetch
@@ -16,8 +16,8 @@ const Review = () => {
         .then((res) => {
           if (res.data.message == "ok") {
             setReviewsdata(res.data.data);
-            setLoading(false);
           }
+          setLoading(false);
         })
         .catch((err) => console.error(err.message));
     }
@@ -52,11 +52,15 @@ const Review = () => {
   return (
     <div>
       <h1 className="text-xl font-semibold">Your all reviews</h1>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 *:box-shadow pt-2">
-        {reviewsData?.map((item, id) => (
-          <ReviewCard key={id} item={item}></ReviewCard>
-        ))}
-      </div>
+      {reviewsData?.length > 0 ? (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 *:box-shadow pt-2">
+          {reviewsData?.map((item, id) => (
+            <ReviewCard key={id} item={item}></ReviewCard>
+          ))}
+        </div>
+      ) : (
+        <h1 className="text-center font-semibold text-xl py-10">No Data</h1>
+      )}
     </div>
   );
 };

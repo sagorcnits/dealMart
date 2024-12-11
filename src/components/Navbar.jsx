@@ -21,8 +21,6 @@ const Navbar = () => {
   const [active, setActive] = useState(false);
   const [wishlists] = useWishlists();
 
-  // console.log(wishlists.role == "admin" ? dashboard : )
-  const admin = true;
   // scroll effect of navabr
   window.addEventListener("scroll", () => {
     if (window.scrollY > 200) {

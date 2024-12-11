@@ -27,8 +27,9 @@ const Product_update = () => {
     axiosFetch
       .get(`/products/${id}`)
       .then((res) => {
-        setProduct(res.data);
-        setImages(res.data.images);
+        setProduct(res.data.data);
+        setImages(res.data.data.images);
+        // console.log(res.data)
       })
       .catch((error) => {
         console.log(error);
