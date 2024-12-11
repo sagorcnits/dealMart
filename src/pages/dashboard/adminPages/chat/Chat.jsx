@@ -3,11 +3,8 @@ import { IoIosSend } from "react-icons/io";
 const Chat = () => {
   return (
     <main className="pt-[60px]">
-      <section className="flex gap-3 banner  *:bg-white  *:rounded-lg pt-4">
-        <div className="w-[25%]">
-          <Chat_user></Chat_user>
-        </div>
-
+      <section className="flex flex-col md:flex-row gap-3 md:banner  *:bg-white  *:rounded-lg pt-4">
+        <Chat_user ></Chat_user>
         <Message_user></Message_user>
       </section>
     </main>
@@ -19,7 +16,7 @@ export default Chat;
 // chat user components
 const Chat_user = () => {
   return (
-    <div className="p-2">
+    <div className="p-2 relative md:w-[25%] h-[120px] md:h-auto">
       <div>
         <input
           className="py-[7px] rounded-lg w-full border focus:outline-none px-2"
@@ -28,7 +25,7 @@ const Chat_user = () => {
         />
       </div>
       {/* user profile card */}
-      <div className="overflow-auto h-[430px]  mt-4">
+      <div className="overflow-auto flex md:flex-col scrollbar-none md:scrollbar-vissible absolute top-10 bottom-0 left-0 right-0  mt-4">
         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, id) => {
           return (
             <div
@@ -42,7 +39,7 @@ const Chat_user = () => {
                   className="w-full h-full"
                 />
               </div>
-              <div>
+              <div className="hidden md:block">
                 <h1 className="font-semibold">Sagor Hossain</h1>
                 <p className="text-xs">ay product re dam koto</p>
               </div>
@@ -58,7 +55,7 @@ const Chat_user = () => {
 
 const Message_user = () => {
   return (
-    <div className="w-[75%] relative">
+    <div className="md:w-[75%] relative w-full h-[500px]">
       <div className="border-b flex">
         <div className="flex items-center gap-2 p-2">
           <div className="size-[40px] rounded-full overflow-hidden border">
@@ -76,7 +73,7 @@ const Message_user = () => {
       </div>
 
       {/* message */}
-      <div className="overflow-auto banner">
+      <div className="overflow-auto scrollbar-vissible absolute top-20 bottom-10 left-0 right-0">
         <div className="flex justify-start">
           <div className="flex items-center gap-2 p-4">
             <div className="size-[40px] rounded-full overflow-hidden border">

@@ -48,14 +48,6 @@
     z-index: -999;
   }
 
-  .scrollbar-none::-webkit-scrollbar {
-    display: none;
-  }
-  .scrollbar-none {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-
   .rating {
     clip-path: polygon(
       50% 0%,
@@ -133,5 +125,38 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+  }
+
+  /* dashbosrd chat page css and scroll-bar design  */
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  /* vissible scroll-bar */
+  .scrollbar-vissible::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .scrollbar-vissible::-webkit-scrollbar-track {
+    background: #f4f4f4;
+    border-radius: 10px;
+  }
+
+  .scrollbar-vissible::-webkit-scrollbar-thumb {
+    @apply bg-blue;
+  }
+
+  .scrollbar-vissible::-webkit-scrollbar-thumb:hover {
+    @apply bg-blue;
+  }
+
+  .scrollbar-vissible {
+    -ms-overflow-style: auto; /* IE scrollbar */
+    scrollbar-width: thin; /* Firefox scrollbar width */
+    scrollbar-color: #035ecf #f4f4f4; /* Firefox thumb and track colors */
   }
 }
