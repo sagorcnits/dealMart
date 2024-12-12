@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { FaRegMessage } from "react-icons/fa6";
-import { IoMdMenu } from "react-icons/io";
+import { IoIosClose, IoMdMenu } from "react-icons/io";
 import { IoNotificationsOutline, IoSunnyOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { removeUser } from "../../../features/user/userSlice";
-
 const Navbar = ({ handleSideBar, handleMobileSideBar, sidebar }) => {
   const [notification, setNotication] = useState(false);
+  const [MessageNotification, setMessageNotification] = useState(false);
 
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
@@ -35,28 +35,98 @@ const Navbar = ({ handleSideBar, handleMobileSideBar, sidebar }) => {
         <div className="size-8 rounded-full bg-slate-200 flex justify-center items-center cursor-pointer">
           <IoSunnyOutline></IoSunnyOutline>
         </div>
-        <div className="size-8 rounded-full bg-slate-200 flex justify-center items-center cursor-pointer">
-          <FaRegMessage></FaRegMessage>
-        </div>
-        <div
-          onClick={() => setNotication(!notification)}
-          className="size-8 rounded-full bg-slate-200 flex justify-center items-center cursor-pointer relative"
-        >
-          <IoNotificationsOutline size={25}></IoNotificationsOutline>
+        <div className="size-8 rounded-full bg-slate-200 flex justify-center items-center cursor-pointer relative">
+          <FaRegMessage
+            onClick={() => setMessageNotification(!MessageNotification)}
+          ></FaRegMessage>
           <div
             className={`bg-customRed absolute top-1 right-2 size-2 rounded-full `}
           ></div>
-          <Link to="/dashboard/order-list">
-            <div
-              className={`w-[200px] bg-white shadow-xl h-[70px] absolute -bottom-[90px] right-0 border flex justify-center items-center rounded-lg ${
-                notification ? "block" : "hidden"
-              }`}
-            >
-              <h1 className="font-semibold text-xl">Pending order : 5</h1>
-            </div>
-          </Link>
-        </div>
 
+          <div
+            className={`w-[350px] bg-white shadow-xl h-[320px] absolute -bottom-[340px] -right-16 md:right-0 border  rounded-lg p-2 ${
+              MessageNotification ? "block" : "hidden"
+            }`}
+          >
+            <div className="flex justify-between items-center">
+              <p className="font-semibold">recent order</p>
+              <IoIosClose
+                size={25}
+                className="cursor-pointer"
+                onClick={() => setMessageNotification(!MessageNotification)}
+              ></IoIosClose>
+            </div>
+            {[1, 2, 4].map((item, id) => {
+              return (
+                <div
+                  key={id}
+                  className="flex justify-between px-2 py-4 mt-4 border rounded-lg hover:bg-paragraph duration-500"
+                >
+                  <p>Ridoy</p>
+                  <p>2024-04-27</p>
+                  <p>$567</p>
+                  <p>4</p>
+                </div>
+              );
+            })}
+            <Link
+              onClick={() => setMessageNotification(!MessageNotification)}
+              to="/dashboard/chat"
+            >
+              <button className="py-[10px] w-full text-center bg-blue hover:bg-customRed duration-500 text-white mt-3 rounded-lg">
+                View All
+              </button>
+            </Link>
+          </div>
+        </div>
+        {/* notification */}
+        <div className="size-8 rounded-full bg-slate-200 flex justify-center items-center  relative">
+          <IoNotificationsOutline
+            onClick={() => setNotication(!notification)}
+            className="cursor-pointer"
+            size={25}
+          ></IoNotificationsOutline>
+          <div
+            className={`bg-customRed absolute top-1 right-2 size-2 rounded-full `}
+          ></div>
+
+          <div
+            className={`w-[350px] bg-white shadow-xl h-[320px] absolute -bottom-[340px] -right-16 md:right-0 border  rounded-lg p-2 ${
+              notification ? "block" : "hidden"
+            }`}
+          >
+            <div className="flex justify-between items-center">
+              <p className="font-semibold">recent order</p>
+              <IoIosClose
+                size={25}
+                className="cursor-pointer"
+                onClick={() => setNotication(!notification)}
+              ></IoIosClose>
+            </div>
+            {[1, 2, 4].map((item, id) => {
+              return (
+                <div
+                  key={id}
+                  className="flex justify-between px-2 py-4 mt-4 border rounded-lg hover:bg-paragraph duration-500"
+                >
+                  <p>Ridoy</p>
+                  <p>2024-04-27</p>
+                  <p>$567</p>
+                  <p>4</p>
+                </div>
+              );
+            })}
+            <Link
+              onClick={() => setNotication(!notification)}
+              to="/dashboard/order-list"
+            >
+              <button className="py-[10px] w-full text-center bg-blue hover:bg-customRed duration-500 text-white mt-3 rounded-lg">
+                View All
+              </button>
+            </Link>
+          </div>
+        </div>
+        {/* image user */}
         <div>
           <div className="dropdown dropdown-end">
             <div
