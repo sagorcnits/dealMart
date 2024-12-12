@@ -507,9 +507,9 @@ const Card = ({ changeStatus, filterDate }) => {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 *:box-shadow *:bg-white *:px-3 *:py-6 *:items-center *:flex *:gap-4 *:rounded-md">
-      <div>
-        <div className="size-[50px] rounded-full bg-[#059669] flex justify-center items-center  text-white ">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 *:box-shadow *:px-3 *:py-6 *:items-center *:flex *:gap-4 *:rounded-md">
+      <div className="bg-[#059669]">
+        <div className="size-[50px] rounded-full bg-[#33302b] flex justify-center items-center  text-white ">
           <FaHandHoldingUsd size={30}></FaHandHoldingUsd>
         </div>
         <div className="leading-8">
@@ -517,8 +517,8 @@ const Card = ({ changeStatus, filterDate }) => {
           <p>{orderDetails?.refund}</p>
         </div>
       </div>
-      <div>
-        <div className="size-[50px] rounded-full bg-customRed flex justify-center items-center text-white">
+      <div className="bg-customRed">
+        <div className="size-[50px] rounded-full bg-[#33302b] flex justify-center items-center text-white">
           <MdOutlineCancel size={25}></MdOutlineCancel>
         </div>
         <div className="leading-8">
@@ -526,8 +526,8 @@ const Card = ({ changeStatus, filterDate }) => {
           <p>{orderDetails?.canceled}</p>
         </div>
       </div>
-      <div>
-        <div className="size-[50px] rounded-full bg-[#059669] flex justify-center items-center text-white">
+      <div className="bg-[#059669]">
+        <div className="size-[50px] rounded-full bg-[#33302b] flex justify-center items-center text-white">
           <MdDone size={25}></MdDone>
         </div>
         <div className="leading-8">
@@ -535,8 +535,8 @@ const Card = ({ changeStatus, filterDate }) => {
           <p>{orderDetails?.complated}</p>
         </div>
       </div>
-      <div>
-        <div className="size-[50px] rounded-full bg-[#DBEAFE] flex justify-center items-center  text-white ">
+      <div className="bg-[#DBEAFE]">
+        <div className="size-[50px] rounded-full bg-[#33302b] flex justify-center items-center  text-white ">
           <FcProcess size={25}></FcProcess>
         </div>
         <div className="leading-8">
@@ -544,8 +544,8 @@ const Card = ({ changeStatus, filterDate }) => {
           <p>{orderDetails?.progress}</p>
         </div>
       </div>
-      <div>
-        <div className="size-[50px] rounded-full bg-[#58677a] flex justify-center items-center  text-white ">
+      <div className="bg-[#58677a]">
+        <div className="size-[50px] rounded-full bg-[#33302b] flex justify-center items-center  text-white ">
           <TbProgressAlert size={25}></TbProgressAlert>
         </div>
         <div className="leading-8">
@@ -553,8 +553,8 @@ const Card = ({ changeStatus, filterDate }) => {
           <p>{orderDetails?.pending}</p>
         </div>
       </div>
-      <div>
-        <div className="size-[50px] rounded-full bg-[#cc7728] flex justify-center items-center  text-white ">
+      <div className="bg-[#cc7728]">
+        <div className="size-[50px] rounded-full bg-[#33302b] flex justify-center items-center  text-white ">
           <IoLogoUsd size={25}></IoLogoUsd>
         </div>
         <div className="leading-8">
@@ -562,8 +562,8 @@ const Card = ({ changeStatus, filterDate }) => {
           <p>{orderDetails?.unpaid}</p>
         </div>
       </div>
-      <div>
-        <div className="size-[50px] rounded-full bg-[#05fa73] flex justify-center items-center   ">
+      <div className="bg-[#05fa73]">
+        <div className="size-[50px] rounded-full bg-[#33302b] flex justify-center items-center   ">
           <IoLogoUsd size={25}></IoLogoUsd>
         </div>
         <div className="leading-8">
@@ -571,8 +571,8 @@ const Card = ({ changeStatus, filterDate }) => {
           <p>{orderDetails?.paid}</p>
         </div>
       </div>
-      <div>
-        <div className="size-[50px] rounded-full bg-[#BB923A] flex justify-center items-center text-white">
+      <div className="bg-[#BB923A]">
+        <div className="size-[50px] rounded-full bg-[#33302b] flex justify-center items-center text-white">
           <FaShoppingCart size={25}></FaShoppingCart>
         </div>
         <div className="leading-8">

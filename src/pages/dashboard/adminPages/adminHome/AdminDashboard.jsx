@@ -119,9 +119,9 @@ const SalesCard = ({ changeStatus, filterDate }) => {
   // console.log(salseInformation)
 
   return (
-    <div className="grid grid-cols-4 gap-4 mt-6 *:box-shadow *:bg-white *:px-3 *:py-6 *:items-center *:flex *:gap-4 *:rounded-md">
-      <div>
-        <div className="size-[40px] xl:size-[50px] rounded-full bg-green flex justify-center items-center  text-white ">
+    <div className="grid grid-cols-4 gap-4 mt-6 *:box-shadow  *:px-3 *:py-6 *:items-center *:flex *:gap-4 *:rounded-md">
+      <div className="bg-green">
+        <div className="size-[40px] xl:size-[50px] rounded-full bg-[#33302b] flex justify-center items-center  text-white ">
           <FcSalesPerformance size={25}></FcSalesPerformance>
         </div>
         <div className="leading-8">
@@ -129,8 +129,8 @@ const SalesCard = ({ changeStatus, filterDate }) => {
           <h1 className="text-xs xl:text-xl">{salseInformation?.complated}</h1>
         </div>
       </div>
-      <div>
-        <div className="size-[40px] xl:size-[50px] rounded-full bg-[#2471a3] flex justify-center items-center  text-white ">
+      <div className="bg-[#2471a3] ">
+        <div className="size-[40px] xl:size-[50px] rounded-full bg-[#33302b] flex justify-center items-center  text-white ">
           <FaHandHoldingUsd size={25}></FaHandHoldingUsd>
         </div>
         <div className="leading-8">
@@ -140,8 +140,8 @@ const SalesCard = ({ changeStatus, filterDate }) => {
           </h1>
         </div>
       </div>
-      <div>
-        <div className="size-[40px] xl:size-[50px] rounded-full bg-[#FB923C] flex justify-center items-center  text-white ">
+      <div className="bg-[#FB923C]">
+        <div className="size-[40px] xl:size-[50px] rounded-full bg-[#33302b] flex justify-center items-center  text-white ">
           <FaUsersRectangle size={25}></FaUsersRectangle>
         </div>
         <div className="leading-8">
@@ -149,8 +149,8 @@ const SalesCard = ({ changeStatus, filterDate }) => {
           <h1 className="text-xs xl:text-xl">5000</h1>
         </div>
       </div>
-      <div>
-        <div className="size-[40px] xl:size-[50px] rounded-full bg-[#3B82F6] flex justify-center items-center  text-white ">
+      <div className="bg-[#3B82F6]">
+        <div className="size-[40px] xl:size-[50px] rounded-full bg-[#33302b] flex justify-center items-center  text-white ">
           <FaUsersLine size={25}></FaUsersLine>
         </div>
         <div className="leading-8">
@@ -158,8 +158,8 @@ const SalesCard = ({ changeStatus, filterDate }) => {
           <h1 className="text-xs xl:text-xl">{customers?.length}</h1>
         </div>
       </div>
-      <div>
-        <div className="size-[40px] xl:size-[50px] rounded-full bg-[#bb923a] flex justify-center items-center text-white ">
+      <div className="bg-[#bb923a]">
+        <div className="size-[40px] xl:size-[50px] rounded-full bg-[#33302b] flex justify-center items-center text-white ">
           <FiShoppingCart size={25}></FiShoppingCart>
         </div>
         <div className="leading-8">
@@ -169,8 +169,8 @@ const SalesCard = ({ changeStatus, filterDate }) => {
           </h1>
         </div>
       </div>
-      <div>
-        <div className="size-[50px] rounded-full bg-[#DBEAFE] flex justify-center items-center  text-size-[40px] xl:white ">
+      <div className="bg-[#DBEAFE]">
+        <div className="size-[50px] rounded-full bg-[#33302b] flex justify-center items-center  text-size-[40px] xl:white ">
           <FcProcess size={25}></FcProcess>
         </div>
         <div className="leading-8">
@@ -178,8 +178,8 @@ const SalesCard = ({ changeStatus, filterDate }) => {
           <h1 className="text-xs xl:text-xl">{salseInformation?.pending}</h1>
         </div>
       </div>
-      <div>
-        <div className="size-[40px] xl:size-[50px] rounded-full bg-customRed flex justify-center items-center text-white">
+      <div className="bg-customRed">
+        <div className="size-[40px] xl:size-[50px] rounded-full bg-[#33302b] flex justify-center items-center text-white">
           <MdOutlineCancel size={25}></MdOutlineCancel>
         </div>
         <div className="leading-8">
@@ -187,8 +187,8 @@ const SalesCard = ({ changeStatus, filterDate }) => {
           <h1 className="text-xs xl:text-xl">{salseInformation?.canceled}</h1>
         </div>
       </div>
-      <div>
-        <div className="size-[40px] xl:size-[50px] rounded-full bg-[#059669] flex justify-center items-center text-white">
+      <div className="bg-[#059669]">
+        <div className="size-[40px] xl:size-[50px] rounded-full bg-[#33302b] flex justify-center items-center text-white">
           <MdDone size={25}></MdDone>
         </div>
         <div className="leading-8">
@@ -203,7 +203,7 @@ const SalesCard = ({ changeStatus, filterDate }) => {
 // total sale and revenue chart
 const OrderSaleChart = () => {
   const [data, setData] = useState([]);
-
+// console.log(data)
   const axiosFetch = useAxios();
 
   useEffect(() => {
@@ -251,7 +251,7 @@ const OrderSaleChart = () => {
 // bar chart for order details
 const OrderChart = () => {
   const [data, setData] = useState([]);
-
+// console.log(data)
   const axiosFetch = useAxios();
   // get order_status_chart data from server
   useEffect(() => {
@@ -380,7 +380,7 @@ const SalesByCountry = () => {
       });
   }, []);
 
-  console.log(data);
+  // console.log(data);
 
   return (
     <ResponsiveContainer width="100%" height="100%">
@@ -419,7 +419,7 @@ const OrderTable = ({ changeStatus, setChangeStatus }) => {
     queryKey: ["recent_order"],
     queryFn: async () => {
       const res = await axiosFetch.get(`/orders?recent_order=sort`);
-      console.log("ok");
+      // console.log("ok");
       return res.data;
     },
   });

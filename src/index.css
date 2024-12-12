@@ -142,21 +142,17 @@
   }
 
   .scrollbar-vissible::-webkit-scrollbar-track {
-    background: #f4f4f4;
+    background: #ffffff;
     border-radius: 10px;
-  }
-
-  .scrollbar-vissible::-webkit-scrollbar-thumb {
-    @apply bg-blue;
-  }
-
-  .scrollbar-vissible::-webkit-scrollbar-thumb:hover {
-    @apply bg-blue;
   }
 
   .scrollbar-vissible {
     -ms-overflow-style: auto; /* IE scrollbar */
     scrollbar-width: thin; /* Firefox scrollbar width */
-    scrollbar-color: #035ecf #f4f4f4; /* Firefox thumb and track colors */
+    scrollbar-color: #a0a0a0 #ffffff; /* Firefox thumb and track colors */
+  }
+
+  .active_chat_user {
+    @apply bg-paragraph;
   }
 }

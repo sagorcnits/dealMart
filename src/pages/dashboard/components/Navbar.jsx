@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { FaRegMessage } from "react-icons/fa6";
 import { IoMdMenu } from "react-icons/io";
 import { IoNotificationsOutline, IoSunnyOutline } from "react-icons/io5";
@@ -6,10 +7,10 @@ import { Link } from "react-router-dom";
 import { removeUser } from "../../../features/user/userSlice";
 
 const Navbar = ({ handleSideBar, handleMobileSideBar, sidebar }) => {
+  const [notification, setNotication] = useState(false);
+
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
-
-  
 
   return (
     <div
@@ -28,14 +29,6 @@ const Navbar = ({ handleSideBar, handleMobileSideBar, sidebar }) => {
           size={30}
           onClick={handleMobileSideBar}
         ></IoMdMenu>
-        {/* <div className="md:flex justify-between items-center w-[400px] border px-3 rounded-md  hidden">
-          <input
-            className="focus:outline-none py-2"
-            type="text"
-            placeholder="serach here"
-          />
-          <CiSearch className="cursor-pointer" size={20}></CiSearch>
-        </div> */}
       </div>
 
       <div className="flex items-center gap-4">
@@ -45,8 +38,23 @@ const Navbar = ({ handleSideBar, handleMobileSideBar, sidebar }) => {
         <div className="size-8 rounded-full bg-slate-200 flex justify-center items-center cursor-pointer">
           <FaRegMessage></FaRegMessage>
         </div>
-        <div className="size-8 rounded-full bg-slate-200 flex justify-center items-center cursor-pointer">
+        <div
+          onClick={() => setNotication(!notification)}
+          className="size-8 rounded-full bg-slate-200 flex justify-center items-center cursor-pointer relative"
+        >
           <IoNotificationsOutline size={25}></IoNotificationsOutline>
+          <div
+            className={`bg-customRed absolute top-1 right-2 size-2 rounded-full `}
+          ></div>
+          <Link to="/dashboard/order-list">
+            <div
+              className={`w-[200px] bg-white shadow-xl h-[70px] absolute -bottom-[90px] right-0 border flex justify-center items-center rounded-lg ${
+                notification ? "block" : "hidden"
+              }`}
+            >
+              <h1 className="font-semibold text-xl">Pending order : 5</h1>
+            </div>
+          </Link>
         </div>
 
         <div>

@@ -4,6 +4,7 @@ import About from "../pages/about/About";
 import Contact from "../pages/contact/Contact";
 import AdminDashboard from "../pages/dashboard/adminPages/adminHome/AdminDashboard";
 import Chat from "../pages/dashboard/adminPages/chat/Chat";
+import Message_user from "../pages/dashboard/adminPages/chat/Message_user";
 import Customer_details from "../pages/dashboard/adminPages/customers/Customer_details";
 import Customers from "../pages/dashboard/adminPages/customers/Customers";
 import OrderDetails from "../pages/dashboard/adminPages/order_list/OrderDetails";
@@ -157,6 +158,16 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/chat",
         element: <Chat></Chat>,
+        children: [
+          {
+            path: "/dashboard/chat",
+            element: <Message_user></Message_user>,
+          },
+          {
+            path: "/dashboard/chat/message-user/:id",
+            element: <Message_user></Message_user>,
+          },
+        ]
       },
       {
         path: "/dashboard/settings",
