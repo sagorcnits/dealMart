@@ -8,6 +8,8 @@ import Banner from "./Banner";
 import Discount from "./Discount";
 import ProductContainer from "./ProductContainer";
 const Home = () => {
+
+  // console.log("Testing console");
   return (
     <main>
       <section className="mt-4 max-w-7xl mx-auto px-2">

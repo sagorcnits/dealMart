@@ -7,12 +7,16 @@ import {
   IoSettingsOutline,
 } from "react-icons/io5";
 import { LuLayoutDashboard, LuShoppingBag } from "react-icons/lu";
+import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 const Sidebar = ({ sidebar, mobileSideBar, handleMobileSideBar }) => {
+
+  const theme = useSelector((state) => state.darkMode);
+
   return (
     <div>
       <div
-        className={`h-screen duration-700 bg-white box-shadow border-r z-20 w-[250px] hidden lg:block ${
+        className={`h-screen duration-700 ${theme == "light" ? "bg-[#F3F5F9]" : "bg-black"} box-shadow border-r z-20 w-[250px] hidden lg:block ${
           sidebar ? "left-0" : "-left-[250px]"
         } fixed`}
       >
@@ -50,9 +54,9 @@ export default Sidebar;
 
 const SidebarItem = ({ handleMobileSideBar }) => {
   const [dropdownActive, setDropdownActive] = useState(true);
-
+  const theme = useSelector((state) => state.darkMode);
   return (
-    <ul>
+    <ul className={`${theme == "light" ? "" : "text-white"}`}>
       <li onClick={handleMobileSideBar}>
         <NavLink
           to="/dashboard/admin_dashboard"

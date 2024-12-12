@@ -17,7 +17,7 @@ const Register = () => {
   } = useForm();
 
   const [image, setImage] = useState("");
-
+console.log(image)
   const navigate = useNavigate();
   const axiosFetch = useAxios();
   // register submit
@@ -34,7 +34,7 @@ const Register = () => {
       .then((res) => {
         updateProfile(auth.currentUser, {
           displayName: data.name,
-          photoURL: data.photo_url,
+          photoURL: image,
         })
           .then(() => {
             axiosFetch

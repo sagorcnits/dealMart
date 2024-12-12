@@ -14,6 +14,7 @@ const userSlice = createSlice({
     //  nabar use remove user
     removeUser: (state, action) => {
       state.user = null;
+    
     },
   },
 });

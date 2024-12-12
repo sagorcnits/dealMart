@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
@@ -15,7 +16,7 @@ const Dashboard = () => {
   const handleMobileSideBar = () => {
     setMobileSideBar(!mobileSideBar);
   };
-
+  const theme = useSelector((state) => state.darkMode);
   return (
     <main className="flex">
       <Sidebar
@@ -26,14 +27,14 @@ const Dashboard = () => {
       <section
         className={`relative w-full duration-700  h-full ${
           sidebar ? "lg:ml-[250px]" : ""
-        }  bg-[#F3F5F9]`}
+        } ${theme == "light" ? "bg-[#F3F5F9]" : "bg-black"} `}
       >
         <Navbar
           sidebar={sidebar}
           handleSideBar={handleSideBar}
           handleMobileSideBar={handleMobileSideBar}
         ></Navbar>
-        <div className="p-4">
+        <div className={`p-4`}>
           <Outlet></Outlet>
         </div>
       </section>

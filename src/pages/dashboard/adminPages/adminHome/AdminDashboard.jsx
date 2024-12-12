@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 
 import { useQuery } from "@tanstack/react-query";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { useSelector } from "react-redux";
 import {
   Bar,
   BarChart,
@@ -40,16 +41,25 @@ const AdminDashboard = () => {
     setFilterDate(e.target.value);
   };
 
+  const theme = useSelector((state) => state.darkMode);
+  useEffect(() => {
+    document.querySelector("html").setAttribute("data-theme", theme);
+  }, [theme]);
   // console.log(filterDate)
 
+  // console.log("ok")
+
   return (
-    <div className="bg-dashBgColor  mt-16">
+    <div
+      className={`${theme == "light" ? "bg-dashBgColor" : "bg-black"} mt-16`}
+    >
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Dashboard</h1>
+        <h1 className={`text-3xl font-bold ${theme == "light" ? "text-black" : "text-white"}`}>Dashboard</h1>
         <select
           onChange={filter_by_date}
           name="report_by_day"
-          className="p-2 rounded-md  max-w-xs focus:outline-none border"
+          className={`p-2 rounded-md  max-w-xs focus:outline-none border ${theme == "light" ? "bg-[#F3F5F9]" : "bg-black text-white"
+            }`}
         >
           <option disabled selected>
             filter by
@@ -62,26 +72,28 @@ const AdminDashboard = () => {
       </div>
       <section>
         <SalesCard
+          theme={theme}
           changeStatus={changeStatus}
           filterDate={filterDate}
         ></SalesCard>
       </section>
 
-      <div className="mt-4 h-[300px] md:h-[400px]  box-shadow bg-white rounded-md w-full">
-        <OrderSaleChart></OrderSaleChart>
+      <div className={`mt-4 h-[300px] md:h-[400px]  box-shadow ${theme == "light" ? "bg-dashBgColor" : "bg-black"} rounded-md w-full`}>
+        <OrderSaleChart  ></OrderSaleChart>
       </div>
 
       <div className="grid xl:grid-cols-4 gap-4 mt-4">
-        <div className="h-[300px] md:h-[400px] flex justify-center items-center  lg:col-span-3 box-shadow bg-white rounded-md w-full">
+        <div className={`h-[300px] md:h-[400px] flex justify-center items-center  lg:col-span-3 box-shadow ${theme == "light" ? "bg-dashBgColor" : "bg-black"} rounded-md w-full`}>
           <OrderChart></OrderChart>
         </div>
-        <div className="w-full flex justify-center items-center xl:col-span-1 box-shadow bg-white rounded-md">
+        <div className={`w-full flex justify-center items-center xl:col-span-1 box-shadow ${theme == "light" ? "bg-dashBgColor" : "bg-black"} rounded-md`}>
           <SalesByCountry></SalesByCountry>
         </div>
       </div>
-      <h1 className="font-semibold mt-10">Recent Order</h1>
-      <div className="mt-4 items-center col-span-4 box-shadow bg-white rounded-md w-full">
+      <h1 className={`font-semibold mt-10 ${theme == "light" ? "text-black" : "text-white"}`}>Recent Order</h1>
+      <div className={`mt-4 items-center col-span-4 box-shadow ${theme == "light" ? "bg-dashBgColor" : "bg-black"} rounded-md w-full`}>
         <OrderTable
+          theme={theme}
           setChangeStatus={setChangeStatus}
           changeStatus={changeStatus}
         ></OrderTable>
@@ -92,7 +104,7 @@ const AdminDashboard = () => {
 
 export default AdminDashboard;
 // sales card
-const SalesCard = ({ changeStatus, filterDate }) => {
+const SalesCard = ({ theme, changeStatus, filterDate }) => {
   const axiosFetch = useAxios();
   const [salseInformation, setSalseInformation] = useState(null);
   const [customers, refetch, isPending] = useCustomers();
@@ -124,7 +136,7 @@ const SalesCard = ({ changeStatus, filterDate }) => {
         <div className="size-[40px] xl:size-[50px] rounded-full bg-[#33302b] flex justify-center items-center  text-white ">
           <FcSalesPerformance size={25}></FcSalesPerformance>
         </div>
-        <div className="leading-8">
+        <div className={`leading-8 ${theme == "light" ? "text-[#F3F5F9]" : "text-black"}`}>
           <p className="text-sm xl:text-xl font-semibold">Total Sales</p>
           <h1 className="text-xs xl:text-xl">{salseInformation?.complated}</h1>
         </div>
@@ -133,7 +145,7 @@ const SalesCard = ({ changeStatus, filterDate }) => {
         <div className="size-[40px] xl:size-[50px] rounded-full bg-[#33302b] flex justify-center items-center  text-white ">
           <FaHandHoldingUsd size={25}></FaHandHoldingUsd>
         </div>
-        <div className="leading-8">
+        <div className={`leading-8 ${theme == "light" ? "text-[#F3F5F9]" : "text-black"}`}>
           <p className="text-sm xl:text-xl font-semibold">Total Revenue</p>
           <h1 className="text-xs xl:text-xl">
             ${salseInformation?.total_revenue}
@@ -144,7 +156,7 @@ const SalesCard = ({ changeStatus, filterDate }) => {
         <div className="size-[40px] xl:size-[50px] rounded-full bg-[#33302b] flex justify-center items-center  text-white ">
           <FaUsersRectangle size={25}></FaUsersRectangle>
         </div>
-        <div className="leading-8">
+        <div className={`leading-8 ${theme == "light" ? "text-[#F3F5F9]" : "text-black"}`}>
           <p className="text-sm xl:text-xl font-semibold">Total Visitor</p>
           <h1 className="text-xs xl:text-xl">5000</h1>
         </div>
@@ -153,7 +165,7 @@ const SalesCard = ({ changeStatus, filterDate }) => {
         <div className="size-[40px] xl:size-[50px] rounded-full bg-[#33302b] flex justify-center items-center  text-white ">
           <FaUsersLine size={25}></FaUsersLine>
         </div>
-        <div className="leading-8">
+        <div className={`leading-8 ${theme == "light" ? "text-[#F3F5F9]" : "text-black"}`}>
           <p className="text-sm xl:text-xl font-semibold">Total Customer</p>
           <h1 className="text-xs xl:text-xl">{customers?.length}</h1>
         </div>
@@ -162,18 +174,18 @@ const SalesCard = ({ changeStatus, filterDate }) => {
         <div className="size-[40px] xl:size-[50px] rounded-full bg-[#33302b] flex justify-center items-center text-white ">
           <FiShoppingCart size={25}></FiShoppingCart>
         </div>
-        <div className="leading-8">
+        <div className={`leading-8 ${theme == "light" ? "text-[#F3F5F9]" : "text-black"}`}>
           <p className="text-sm xl:text-xl font-semibold">Total order</p>
           <h1 className="text-xs xl:text-xl">
             {salseInformation?.total_order}
           </h1>
         </div>
       </div>
-      <div className="bg-[#DBEAFE]">
-        <div className="size-[50px] rounded-full bg-[#33302b] flex justify-center items-center  text-size-[40px] xl:white ">
+      <div className="bg-[#849bb9]">
+        <div className="size-[50px] rounded-full bg-[#33302b] flex justify-center items-center  text-size-[40px] xl:white">
           <FcProcess size={25}></FcProcess>
         </div>
-        <div className="leading-8">
+        <div className={`leading-8 ${theme == "light" ? "text-[#F3F5F9]" : "text-black"}`}>
           <p className="text-sm xl:text-xl font-semibold">order pending</p>
           <h1 className="text-xs xl:text-xl">{salseInformation?.pending}</h1>
         </div>
@@ -182,7 +194,7 @@ const SalesCard = ({ changeStatus, filterDate }) => {
         <div className="size-[40px] xl:size-[50px] rounded-full bg-[#33302b] flex justify-center items-center text-white">
           <MdOutlineCancel size={25}></MdOutlineCancel>
         </div>
-        <div className="leading-8">
+        <div className={`leading-8 ${theme == "light" ? "text-[#F3F5F9]" : "text-black"}`}>
           <p className="text-sm xl:text-xl font-semibold">order canceled</p>
           <h1 className="text-xs xl:text-xl">{salseInformation?.canceled}</h1>
         </div>
@@ -191,7 +203,7 @@ const SalesCard = ({ changeStatus, filterDate }) => {
         <div className="size-[40px] xl:size-[50px] rounded-full bg-[#33302b] flex justify-center items-center text-white">
           <MdDone size={25}></MdDone>
         </div>
-        <div className="leading-8">
+        <div className={`leading-8 ${theme == "light" ? "text-[#F3F5F9]" : "text-black"}`}>
           <p className="text-sm xl:text-xl font-semibold">order complated</p>
           <h1 className="text-xs xl:text-xl">{salseInformation?.complated}</h1>
         </div>
@@ -203,7 +215,7 @@ const SalesCard = ({ changeStatus, filterDate }) => {
 // total sale and revenue chart
 const OrderSaleChart = () => {
   const [data, setData] = useState([]);
-// console.log(data)
+  // console.log(data)
   const axiosFetch = useAxios();
 
   useEffect(() => {
@@ -251,7 +263,7 @@ const OrderSaleChart = () => {
 // bar chart for order details
 const OrderChart = () => {
   const [data, setData] = useState([]);
-// console.log(data)
+  // console.log(data)
   const axiosFetch = useAxios();
   // get order_status_chart data from server
   useEffect(() => {
@@ -293,7 +305,7 @@ const OrderChart = () => {
         <YAxis domain={[0, "dataMax + 1"]} />
         <Tooltip />
         <Legend layout="horizontal" verticalAlign="top" align="center" />
-        
+
         <Line
           type="monotone"
           dataKey="Total Orders"
@@ -408,7 +420,7 @@ const SalesByCountry = () => {
   );
 };
 // recent Order Table
-const OrderTable = ({ changeStatus, setChangeStatus }) => {
+const OrderTable = ({ theme, changeStatus, setChangeStatus }) => {
   const axiosFetch = useAxios();
 
   const {
@@ -496,7 +508,7 @@ const OrderTable = ({ changeStatus, setChangeStatus }) => {
       {orders?.length > 0 && (
         <table className="w-full">
           <thead>
-            <tr className="text-left *:p-3 border-b *:uppercase">
+            <tr className={`text-left *:p-3 border-b *:uppercase ${theme == "light" ? "text-black" : "text-white"}`}>
               <th>#Order Id</th>
               <th>Customer</th>
               <th>Date</th>
@@ -522,7 +534,7 @@ const OrderTable = ({ changeStatus, setChangeStatus }) => {
               return (
                 <tr
                   key={id}
-                  className="*:p-3 border-b items-center hover:bg-[#f1efef] duration-500 *:text-gray-700"
+                  className={`*:p-3 border-b items-center ${theme == "light" ? "*:text-gray-700 hover:bg-[#f1efef]" : "*:text-white hover:bg-[#3a3838]"}  duration-500`}
                 >
                   <td>{orderId}</td>
                   <td>{customer}</td>
@@ -532,70 +544,72 @@ const OrderTable = ({ changeStatus, setChangeStatus }) => {
                   <td>
                     <div className="flex items-center gap-2">
                       <p
-                        className={`${
-                          payment_status == "paid"
-                            ? "text-green"
-                            : payment_status == "refund"
+                        className={`${payment_status == "paid"
+                          ? "text-green"
+                          : payment_status == "refund"
                             ? "text-customRed"
                             : ""
-                        } font-semibold`}
+                          } font-semibold`}
                       >
                         {payment_status}
                       </p>
-                     {order_status?.status != "canceled" && <div>
-                        {payment_status != "refund" && (
-                          <div className="dropdown dropdown-bottom dropdown-end">
-                            <div tabIndex={0} role="button" className="m-1">
-                              <BsThreeDotsVertical
-                                onClick={() => setActiveStatus(!activeStatus)}
-                                size={20}
-                                className="mx-auto cursor-pointer"
-                              ></BsThreeDotsVertical>
-                            </div>
-                            <ul
-                              tabIndex={0}
-                              className="dropdown-content menu bg-white rounded-box z-50 w-52 p-2 box-shadow"
-                            >
-                              {payment_status == "paid" ? (
-                                <>
-                                  <li
-                                    onClick={() => updateOrder("refund", _id)}
-                                  >
-                                    <a>refund</a>
+                      {order_status?.status != "canceled" && (
+                        <div>
+                          {payment_status != "refund" && (
+                            <div className="dropdown dropdown-bottom dropdown-end">
+                              <div tabIndex={0} role="button" className="m-1">
+                                <BsThreeDotsVertical
+                                  onClick={() => setActiveStatus(!activeStatus)}
+                                  size={20}
+                                  className="mx-auto cursor-pointer"
+                                ></BsThreeDotsVertical>
+                              </div>
+                              <ul
+                                tabIndex={0}
+                                className="dropdown-content menu bg-white rounded-box z-50 w-52 p-2 box-shadow"
+                              >
+                                {payment_status == "paid" ? (
+                                  <>
+                                    <li
+                                      onClick={() => updateOrder("refund", _id)}
+                                    >
+                                      <a>refund</a>
+                                    </li>
+                                  </>
+                                ) : payment_status == "unpaid" ? (
+                                  <li onClick={() => updateOrder("paid", _id)}>
+                                    <a>paid</a>
                                   </li>
-                                </>
-                              ) : payment_status == "unpaid" ? (
-                                <li onClick={() => updateOrder("paid", _id)}>
-                                  <a>paid</a>
-                                </li>
-                              ) : (
-                                <li onClick={() => updateOrder("unpaid", _id)}>
-                                  <a>unpaid</a>
-                                </li>
-                              )}
-                            </ul>
-                          </div>
-                        )}
-                      </div>}
+                                ) : (
+                                  <li
+                                    onClick={() => updateOrder("unpaid", _id)}
+                                  >
+                                    <a>unpaid</a>
+                                  </li>
+                                )}
+                              </ul>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </td>
                   <td>
                     <div className="flex items-center gap-2">
                       <p
-                        className={`${
-                          order_status?.status === "complated" &&
+                        className={`${order_status?.status === "complated" &&
                           payment_status == "paid"
-                            ? "text-green"
-                            : order_status?.status === "courier"
+                          ? "text-green"
+                          : order_status?.status === "courier"
                             ? "text-lime-700"
                             : order_status?.status === "progress"
-                            ? "text-darkBlue"
-                            : order_status?.status === "canceled"
-                            ? "text-customRed"
-                            : payment_status == "refund"
-                            ? "text-customRed"
-                            : ""
-                        } font-semibold`}
+                              ? "text-darkBlue"
+                              : order_status?.status === "canceled"
+                                ? "text-customRed"
+                                : payment_status == "refund"
+                                  ? "text-customRed"
+                                  : ""
+                          } font-semibold`}
                       >
                         {payment_status == "refund"
                           ? "canceled"
