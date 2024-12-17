@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -10,7 +11,7 @@ const ProductDetails = () => {
   const axiosFetch = useAxios();
   const { id } = useParams();
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     axiosFetch
       .get(`/products/${id}`)
@@ -54,11 +55,13 @@ const ProductDetails = () => {
     });
   };
 
+  const theme = useSelector((state) => state.darkMode);
+
   return (
-    <div className="min-h-screen bg-gray-100 p-4 mt-16">
+    <div className={`min-h-screen  p-4 mt-16 ${theme == "light" ? "bg-dashBgColor" : "bg-black"}`}>
       <ToastContainer></ToastContainer>
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">Product Details</h1>
-      <div className="container mx-auto bg-white p-8 rounded-lg shadow-md">
+      <h1 className={`text-3xl font-bold mb-6 ${theme == "light" ? "text-gray-800" : "text-gray-200"} `}>Product Details</h1>
+      <div className={`container mx-auto ${theme == "light" ? "bg-white" : "bg-black"} p-8 rounded-lg shadow-md`}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Product Image */}
           <div className="flex justify-center h-[400px] overflow-hidden">
@@ -67,45 +70,45 @@ const ProductDetails = () => {
 
           {/* Product Information */}
           <div>
-            <h2 className="text-2xl font-semibold mb-4 text-gray-800">
+            <h2 className={`text-2xl font-semibold mb-4  ${theme == "light" ? "text-gray-800" : "text-gray-200"}`}>
               Product Name : {productData?.product_name}
             </h2>
-            <p className="text-lg mb-4 text-gray-600">
+            <p className="text-lg mb-4 text-paragraph">
               {productData?.description}
             </p>
 
             <div className="mb-4">
-              <span className="font-bold text-gray-800">Category: </span>
-              <span className="text-gray-600">
+              <span className={`font-bold  ${theme == "light" ? "text-gray-800" : "text-gray-200"}`}>Category: </span>
+              <span className="text-paragraph">
                 {productData?.category_name}
               </span>
             </div>
 
             <div className="mb-4">
-              <span className="font-bold text-gray-800">Reguler Price: </span>
-              <span className="text-gray-600">
+              <span className={`font-bold  ${theme == "light" ? "text-gray-800" : "text-gray-200"}`}>Reguler Price: </span>
+              <span className="text-paragraph">
                 ${productData?.reguler_price}
               </span>
             </div>
             <div className="mb-4">
-              <span className="font-bold text-gray-800">Sale Price: </span>
-              <span className="text-gray-600">${productData?.sale_price}</span>
+              <span className={`font-bold  ${theme == "light" ? "text-gray-800" : "text-gray-200"}`}>Sale Price: </span>
+              <span className="text-paragraph">${productData?.sale_price}</span>
             </div>
             <div className="mb-4">
-              <span className="font-bold text-gray-800">Quantity: </span>
-              <span className="text-gray-600">
+              <span className={`font-bold  ${theme == "light" ? "text-gray-800" : "text-gray-200"}`}>Quantity: </span>
+              <span className="text-paragraph">
                 {productData?.quantity_in_stock}
               </span>
             </div>
 
             <div className="mb-4">
-              <span className="font-bold text-gray-800">Stock: </span>
-              <span className="text-gray-600">{productData?.stock_status}</span>
+              <span className={`font-bold  ${theme == "light" ? "text-gray-800" : "text-gray-200"}`}>Stock: </span>
+              <span className="text-paragraph">{productData?.stock_status}</span>
             </div>
 
             <div className="mb-4">
-              <span className="font-bold text-gray-800">Brand: </span>
-              <span className="text-gray-600">{productData?.brand_name}</span>
+              <span className={`font-bold  ${theme == "light" ? "text-gray-800" : "text-gray-200"}`}>Brand: </span>
+              <span className="text-paragraph">{productData?.brand_name}</span>
             </div>
 
             {/* Actions */}

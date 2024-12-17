@@ -11,17 +11,6 @@ const Navbar = ({ handleSideBar, handleMobileSideBar, sidebar }) => {
   const [notification, setNotication] = useState(false);
   const [MessageNotification, setMessageNotification] = useState(false);
 
-  // const [theme, setTheme] = useState(() => {
-  //   const initialTheme = localStorage.getItem("theme");
-  //   return initialTheme ? initialTheme : "light";
-  // });
-
-  // useEffect(() => {
-  //   localStorage.setItem("theme", theme);
-  //   document.querySelector("html").setAttribute("data-theme", theme);
-  // }, [theme]);
-  // // console.log(user)
-
   const theme = useSelector((state) => state.darkMode);
 
   const user = useSelector((state) => state.user?.user);
@@ -35,7 +24,7 @@ const Navbar = ({ handleSideBar, handleMobileSideBar, sidebar }) => {
         } box-shadow left-0 fixed ${sidebar ? "lg:left-[250px]" : "left-0"
         } right-0 duration-700`}
     >
-      <div className="flex justify-center items-center gap-6">
+      <div className={`flex justify-center items-center gap-6 ${theme == "light" ? "" : "text-white"}`}>
         <IoMdMenu
           className="cursor-pointer hidden lg:block"
           size={30}
@@ -51,7 +40,7 @@ const Navbar = ({ handleSideBar, handleMobileSideBar, sidebar }) => {
       <div className="flex items-center gap-4">
         <div
           onClick={() => dispatch(toggleTheme())}
-          className="size-8 rounded-full bg-slate-200 flex justify-center items-center cursor-pointer"
+          className={`size-8 rounded-full ${theme == "light" ? "bg-gray-300" : "bg-black text-white"} flex justify-center items-center cursor-pointer border`}
         >
           {theme == "dark" ? (
             <MdDarkMode></MdDarkMode>
@@ -59,7 +48,7 @@ const Navbar = ({ handleSideBar, handleMobileSideBar, sidebar }) => {
             <IoSunnyOutline></IoSunnyOutline>
           )}
         </div>
-        <div className="size-8 rounded-full bg-slate-200 flex justify-center items-center cursor-pointer relative">
+        <div className={`size-8 rounded-full ${theme == "light" ? "bg-gray-300" : "bg-black text-white"} flex justify-center items-center cursor-pointer relative border`}>
           <FaRegMessage
             onClick={() => setMessageNotification(!MessageNotification)}
           ></FaRegMessage>
@@ -110,7 +99,7 @@ const Navbar = ({ handleSideBar, handleMobileSideBar, sidebar }) => {
           </div>
         </div>
         {/* notification */}
-        <div className="size-8 rounded-full bg-slate-200 flex justify-center items-center  relative">
+        <div className={`size-8 rounded-full ${theme == "light" ? "bg-gray-300" : "bg-black text-white"} flex justify-center items-center  relative border`}>
           <IoNotificationsOutline
             onClick={() => setNotication(!notification)}
             className="cursor-pointer"

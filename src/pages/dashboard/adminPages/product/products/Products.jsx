@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { IoEyeOutline } from "react-icons/io5";
 import { MdDoubleArrow } from "react-icons/md";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import useAxios from "../../../../../hooks/useAxios";
@@ -63,11 +64,14 @@ const Products = () => {
     }
   };
 
+
+  const theme = useSelector((state) => state.darkMode);
+
   return (
     <>
       <main className="mt-16">
         <section className="py-3">
-          <h1 className="text-3xl font-bold">All products</h1>
+          <h1 className={`text-3xl font-bold ${theme == "light" ? "" : "text-white"}`}>All products</h1>
         </section>
         <section className="flex flex-col-reverse md:flex-row justify-between items-center *:flex-1 mt-4">
           <div>
@@ -122,7 +126,7 @@ const Products = () => {
               <Card refetch={refetch} key={id} item={item}></Card>
             ))}
           </section>
-        ) }
+        )}
         {products.length > 8 && (
           <section className="mt-6 flex gap-3 items-center *:size-10 *:box-shadow *:flex *:justify-center *:items-center *:rounded-full *:duration-500">
             <button
@@ -135,9 +139,8 @@ const Products = () => {
               return (
                 <button
                   onClick={() => setCurrentPage(id + 1)}
-                  className={`hover:bg-blue hover:text-white ${
-                    currentPage == item + 1 && "bg-blue text-white"
-                  }`}
+                  className={`hover:bg-blue hover:text-white ${currentPage == item + 1 && "bg-blue text-white"
+                    }`}
                   key={id}
                 >
                   {item + 1}
@@ -161,6 +164,12 @@ export default Products;
 
 const Card = ({ item, refetch }) => {
   const axiosFetch = useAxios();
+
+
+  const theme = useSelector((state) => state.darkMode);
+
+
+
   // remove product
   const removeProduct = (id) => {
     Swal.fire({
@@ -206,7 +215,7 @@ const Card = ({ item, refetch }) => {
     description,
   } = item;
   return (
-    <div className="dashboard_card relative p-2 card-compact  bg-white border poppins  h-[400px] cursor-pointer hover:border-green duration-500 rounded-md overflow-hidden">
+    <div className={`dashboard_card relative p-2 card-compact  ${theme == "light" ? "bg-white" : "bg-black border-gray-700"} border poppins  h-[400px] cursor-pointer hover:border-green duration-500 rounded-md overflow-hidden`}>
       <figure className="h-[170px] lg:h-[130px] relative overflow-hidden rounded-md">
         <img className="w-full" src={images[0]} alt={category_name} />
         <div className="flex z-10  justify-center items-center gap-6 absolute dashboard_card_effect right-0 top-0 bottom-0 left-0  bg-black opacity-80 px-4">

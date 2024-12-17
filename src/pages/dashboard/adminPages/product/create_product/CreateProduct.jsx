@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { BiImage } from "react-icons/bi";
 import { IoCloseSharp } from "react-icons/io5";
+import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import useAxios from "../../../../../hooks/useAxios";
 const CreateProduct = () => {
@@ -95,18 +96,22 @@ const CreateProduct = () => {
     setImages(removeImages);
   };
 
+
+  // dark mode
+  const theme = useSelector((state) => state.darkMode);
+
   return (
     <main className="mt-16">
       <div className="py-3">
-        <h1 className="text-3xl font-bold poppins">Create Product</h1>
+        <h1 className={`text-3xl font-bold poppins  ${theme == "light" ? "" : "text-gray-200"}`}>Create Product</h1>
       </div>
       <form
         onSubmit={handleSubmit(submit)}
-        className="bg-white box-shadow p-4 "
+        className={` box-shadow p-4 ${theme == "light" ? "bg-white" : "bg-black"}`}
       >
-        <div className="*:mt-4">
+        <div className="*:mt-4 ">
           <div>
-            <label className="block mb-1 text-xs poppins font-bold text-paragraph">
+            <label className={`block mb-1 text-xs poppins font-bold text-paragraph`}>
               Product Name
             </label>
             <input
@@ -114,7 +119,7 @@ const CreateProduct = () => {
               type="text"
               name="product_name"
               placeholder="Enter product name"
-              className="w-full px-3 py-2 border   focus:outline-none"
+              className={`w-full px-3 py-2 border   focus:outline-none ${theme == "light" ? "bg-white" : "bg-black"}`}
             />
             {errors.product_name && (
               <p className="text-red-500">Invalid Your Product Name</p>
@@ -131,7 +136,7 @@ const CreateProduct = () => {
                 type="number"
                 name="reguler_price"
                 placeholder="reguler price"
-                className="w-full px-3 py-2 border  focus:outline-none"
+                className={`w-full px-3 py-2 border   focus:outline-none ${theme == "light" ? "bg-white" : "bg-black"}`}
               />
               {errors.reguler_price && (
                 <p className="text-red-500">Invalid Your reguler price</p>
@@ -146,7 +151,7 @@ const CreateProduct = () => {
                 type="number"
                 name="sale_price"
                 placeholder="sale price"
-                className="w-full px-3 py-2 border  focus:outline-none"
+                className={`w-full px-3 py-2 border   focus:outline-none ${theme == "light" ? "bg-white" : "bg-black"}`}
               />
               {errors.sale_price && (
                 <p className="text-red-500">Invalid Your sale price</p>
@@ -161,7 +166,7 @@ const CreateProduct = () => {
               </label>
               <select
                 {...register("category_name", { required: true })}
-                className="py-2 border px-2  w-full  focus:outline-none"
+                className={`w-full px-3 py-2 border   focus:outline-none ${theme == "light" ? "bg-white" : "bg-black"}`}
               >
                 <option>watch</option>
                 <option>phone</option>
@@ -180,7 +185,7 @@ const CreateProduct = () => {
                 type="text"
                 name="brand"
                 placeholder="brand name"
-                className="w-full px-3 py-2 border  focus:outline-none"
+                className={`w-full px-3 py-2 border   focus:outline-none ${theme == "light" ? "bg-white" : "bg-black"}`}
               />
               {errors.brand && (
                 <p className="text-red-500">Invalid Your brand</p>
@@ -195,7 +200,7 @@ const CreateProduct = () => {
               </label>
               <select
                 {...register("stock_status", { required: true })}
-                className="py-2 border px-2  w-full  focus:outline-none"
+                className={`w-full px-3 py-2 border   focus:outline-none ${theme == "light" ? "bg-white" : "bg-black"}`}
               >
                 <option>In Stock</option>
                 <option>Out Of Stock</option>
@@ -213,7 +218,7 @@ const CreateProduct = () => {
                 type="number"
                 name="quantity_in_stock"
                 placeholder="quantity stock"
-                className="w-full px-3 py-2 border  focus:outline-none"
+                className={`w-full px-3 py-2 border   focus:outline-none ${theme == "light" ? "bg-white" : "bg-black"}`}
               />
               {errors.quantity_in_stock && (
                 <p className="text-red-500">Invalid Your quantity in stock</p>
@@ -232,7 +237,7 @@ const CreateProduct = () => {
               type="text"
               name="description"
               placeholder="product description"
-              className="w-full h-[150px] resize-none px-3 py-2 border focus:outline-none"
+              className={`w-full h-[150px] resize-none px-3 py-2 border focus:outline-none ${theme == "light" ? "bg-white" : "bg-black"}`}
             />
             {errors.description && (
               <p className="text-red-500">Invalid Your Description</p>
@@ -240,7 +245,7 @@ const CreateProduct = () => {
           </div>
           {/* images */}
           <div>
-            <label className="block mb-1 text-xs poppins font-bold text-paragraph">
+            <label className={`block mb-1 text-xs poppins font-bold text-paragraph ${theme == "light" ? "bg-white" : "bg-black"}`}>
               Product Image
             </label>
             <div className="grid grid-cols-4 gap-2 *:border *:border-blue *:border-dashed *:p-2 *:text-center *:flex *:justify-center *:items-center  *:h-[200px] *:overflow-hidden *:relative">
