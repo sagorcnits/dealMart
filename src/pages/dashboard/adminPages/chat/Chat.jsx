@@ -1,13 +1,18 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { NavLink, Outlet } from "react-router-dom";
 const Chat = () => {
+
+
+  // darl mode 
+  const theme = useSelector((state) => state.darkMode)
   return (
     <main className="pt-[60px]">
-      <section className="flex flex-col md:flex-row gap-3 md:banner  *:bg-white  *:rounded-lg pt-4">
+      <section className={`flex flex-col md:flex-row gap-3 md:banner    *:rounded-lg pt-4 ${theme == "light" ? "*:bg-white" : "*:bg-black"}`}>
         <Chat_user></Chat_user>
-        <section className="md:w-[75%]">
+        <div className="md:w-[75%] h-[500px] md:h-auto">
           <Outlet></Outlet>
-        </section>
+        </div>
       </section>
     </main>
   );

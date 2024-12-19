@@ -112,7 +112,7 @@ const {id} = useParams()
       </div>
       {/* input feild */}
       <div className="flex items-center gap-2 absolute left-2 bottom-2 right-2">
-        <div className="w-[94%] border rounded-lg overflow-hidden">
+        <div className="w-[90%] md:w-[94%] border rounded-lg overflow-hidden">
           <input
             className="py-[9px] w-full px-3 focus:outline-none"
             type="text"

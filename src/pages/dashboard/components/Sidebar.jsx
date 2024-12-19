@@ -10,7 +10,7 @@ import { LuLayoutDashboard, LuShoppingBag } from "react-icons/lu";
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 const Sidebar = ({ sidebar, mobileSideBar, handleMobileSideBar }) => {
-
+// dark mode
   const theme = useSelector((state) => state.darkMode);
 
   return (
@@ -28,8 +28,9 @@ const Sidebar = ({ sidebar, mobileSideBar, handleMobileSideBar }) => {
         </div>
         <SidebarItem></SidebarItem>
       </div>
+      {/* mobile sidebar  */}
       <div
-        className={`h-screen duration-700 bg-white box-shadow w-[250px] lg:hidden ${
+        className={`h-screen duration-700  ${theme == "light" ? "bg-white" : "bg-black"} box-shadow w-[250px] lg:hidden ${
           mobileSideBar ? "left-0" : "-left-[250px]"
         } fixed z-50`}
       >

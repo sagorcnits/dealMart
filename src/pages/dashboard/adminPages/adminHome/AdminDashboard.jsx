@@ -42,18 +42,16 @@ const AdminDashboard = () => {
   };
 
   const theme = useSelector((state) => state.darkMode);
-  useEffect(() => {
-    document.querySelector("html").setAttribute("data-theme", theme);
-  }, [theme]);
+
   // console.log(filterDate)
 
   // console.log("ok")
 
   return (
-    <div
+    <main
       className={`${theme == "light" ? "bg-dashBgColor" : "bg-black"} mt-16`}
     >
-      <div className="flex items-center justify-between">
+      <section className="flex items-center justify-between">
         <h1 className={`text-3xl font-bold ${theme == "light" ? "text-black" : "text-white"}`}>Dashboard</h1>
         <select
           onChange={filter_by_date}
@@ -69,7 +67,7 @@ const AdminDashboard = () => {
           <option>This Week</option>
           <option>This Month</option>
         </select>
-      </div>
+      </section>
       <section>
         <SalesCard
           theme={theme}
@@ -78,27 +76,27 @@ const AdminDashboard = () => {
         ></SalesCard>
       </section>
 
-      <div className={`mt-4 h-[300px] md:h-[400px]  box-shadow ${theme == "light" ? "bg-dashBgColor" : "bg-black"} rounded-md w-full`}>
+      <section className={`mt-4 h-[300px] md:h-[400px]  box-shadow ${theme == "light" ? "bg-dashBgColor" : "bg-black"} rounded-md w-full`}>
         <OrderSaleChart  ></OrderSaleChart>
-      </div>
+      </section>
 
-      <div className="grid xl:grid-cols-4 gap-4 mt-4">
-        <div className={`h-[300px] md:h-[400px] flex justify-center items-center  lg:col-span-3 box-shadow ${theme == "light" ? "bg-dashBgColor" : "bg-black"} rounded-md w-full`}>
+      <section className="grid  xl:grid-cols-4 gap-4 mt-4">
+        <div className={`h-[300px] md:h-[400px] flex justify-center items-center xl:col-span-3 box-shadow ${theme == "light" ? "bg-dashBgColor" : "bg-black"} rounded-md w-full`}>
           <OrderChart></OrderChart>
         </div>
-        <div className={`w-full flex justify-center items-center xl:col-span-1 box-shadow ${theme == "light" ? "bg-dashBgColor" : "bg-black"} rounded-md`}>
+        <div className={`h-[300px] md:h-[400px] w-full flex justify-center items-center  xl:col-span-1 box-shadow ${theme == "light" ? "bg-dashBgColor" : "bg-black"} rounded-md`}>
           <SalesByCountry></SalesByCountry>
         </div>
-      </div>
+      </section>
       <h1 className={`font-semibold mt-10 ${theme == "light" ? "text-black" : "text-white"}`}>Recent Order</h1>
-      <div className={`mt-4 items-center col-span-4 box-shadow ${theme == "light" ? "bg-dashBgColor" : "bg-black"} rounded-md w-full`}>
+      <section className={`mt-4 items-center col-span-4 box-shadow ${theme == "light" ? "bg-dashBgColor" : "bg-black"} rounded-md w-full overflow-auto`}>
         <OrderTable
           theme={theme}
           setChangeStatus={setChangeStatus}
           changeStatus={changeStatus}
         ></OrderTable>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };
 
@@ -131,7 +129,7 @@ const SalesCard = ({ theme, changeStatus, filterDate }) => {
   // console.log(salseInformation)
 
   return (
-    <div className="grid grid-cols-4 gap-4 mt-6 *:box-shadow  *:px-3 *:py-6 *:items-center *:flex *:gap-4 *:rounded-md">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6 *:box-shadow  *:px-3 *:py-6 *:items-center *:flex *:gap-4 *:rounded-md">
       <div className="bg-green">
         <div className="size-[40px] xl:size-[50px] rounded-full bg-[#33302b] flex justify-center items-center  text-white ">
           <FcSalesPerformance size={25}></FcSalesPerformance>

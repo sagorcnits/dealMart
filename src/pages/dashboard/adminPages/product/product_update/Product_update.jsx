@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BiImage } from "react-icons/bi";
 import { IoCloseSharp } from "react-icons/io5";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import useAxios from "../../../../../hooks/useAxios";
@@ -126,12 +127,14 @@ const Product_update = () => {
     setImages(removeImages);
   };
 
+  const theme = useSelector((state) => state.darkMode);
+  
   return (
     <main className="mt-16">
       <div className="py-3">
         <h1 className="text-3xl font-bold poppins">Update Product</h1>
       </div>
-      <form onSubmit={submit} className="bg-white box-shadow p-4 ">
+      <form onSubmit={submit} className={`${theme == "light" ? "bg-dashBgColor" : "bg-black"} box-shadow p-4 `}>
         <div className="*:mt-4">
           <div>
             <label className="block mb-1 text-xs poppins font-bold text-paragraph">

@@ -2,6 +2,7 @@ import { useState } from "react";
 import headphone from "../../../public/images/headphone.png";
 import SectionIntro from "../../components/SectionIntro";
 
+import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import useAxios from "../../hooks/useAxios";
 import Banner from "./Banner";
@@ -9,7 +10,7 @@ import Discount from "./Discount";
 import ProductContainer from "./ProductContainer";
 const Home = () => {
 
-  // console.log("Testing console");
+  const theme = useSelector((state) => state.darkMode);
   return (
     <main>
       <section className="mt-4 max-w-7xl mx-auto px-2">
@@ -21,7 +22,7 @@ const Home = () => {
           <Category></Category>
         </div>
       </section> */}
-      <section className="py-12 bg-[#e9f6f6] mt-10">
+      <section className={`py-12  mt-10 ${theme == "light" ? "bg-[#e9f6f6]" : "bg-black"}`}>
         <div className="max-w-7xl mx-auto px-2">
           <SectionIntro title="Trending"></SectionIntro>
           <ProductContainer></ProductContainer>
@@ -30,7 +31,7 @@ const Home = () => {
       <section className="py-12 px-2 max-w-7xl mx-auto">
         <Discount></Discount>
       </section>
-      <section className="py-12 bg-[#e9f6f6]">
+      <section className={`py-12 ${theme == "light" ? "bg-[#e9f6f6]" : "bg-black"}`}>
         <div className="max-w-7xl mx-auto px-2">
           <SectionIntro title="Popular Shoes Collection"></SectionIntro>
           <ProductContainer></ProductContainer>
@@ -65,8 +66,8 @@ const Home = () => {
           <ProductContainer></ProductContainer>
         </div>
       </section>
-      <section className="py-12 bg-[#e9f6f6] poppins px-2">
-        <Subscribe></Subscribe>
+      <section className={`py-12 ${theme == "light" ? "bg-[#e9f6f6]" : "bg-black"} poppins px-2`}>
+        <Subscribe theme={theme}></Subscribe>
       </section>
     </main>
   );
@@ -74,7 +75,7 @@ const Home = () => {
 
 export default Home;
 
-const Subscribe = () => {
+const Subscribe = ({theme}) => {
   const [subscribe, setSubscribe] = useState("");
   const axiosFetch = useAxios();
   const handleSubscribe = (e) => {
@@ -129,7 +130,7 @@ const Subscribe = () => {
             type="email"
             placeholder="write your email"
             name="subscribe"
-            className="px-3 focus:outline-none w-full bg-[#e9f6f6]"
+            className={`px-3 focus:outline-none w-full ${theme == "light" ? "bg-[#e9f6f6]" : "bg-black"}`}
             value={subscribe}
             onChange={(e) => setSubscribe(e.target.value)}
             required

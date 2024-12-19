@@ -64,9 +64,8 @@ const Products = () => {
     }
   };
 
-
   const theme = useSelector((state) => state.darkMode);
-
+ 
   return (
     <>
       <main className="mt-16">

@@ -12,6 +12,7 @@ import {
   MdOutlineDeleteForever,
 } from "react-icons/md";
 import { TbProgressAlert } from "react-icons/tb";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import useAxios from "../../../../hooks/useAxios";
@@ -73,6 +74,8 @@ const OrderList = () => {
   const filter_by_date = (e) => {
     setFilterDate(e.target.value);
   };
+  // dark mode 
+  const theme = useSelector((state) => state.darkMode);
 
   return (
     <>
@@ -96,10 +99,10 @@ const OrderList = () => {
         </div>
 
         <section className="mt-6">
-          <Card changeStatus={changeStatus} filterDate={filterDate}></Card>
+          <Card theme={theme} changeStatus={changeStatus} filterDate={filterDate}></Card>
         </section>
 
-        <section className="mt-6 bg-white rounded-md">
+        <section className={`mt-6  rounded-md ${theme == "light" ? "bg-white" : "bg-black"}`}>
           <div className="flex justify-between items-center p-3">
             <p className="font-semibold">All Order List</p>
             <div className="flex gap-2 items-center">
@@ -137,6 +140,7 @@ const OrderList = () => {
           {/* table */}
           <div className="overflow-auto">
             <Table
+              theme={theme}
               orders={ordersData}
               refetch={refetch}
               isPending={isPending}
@@ -158,9 +162,8 @@ const OrderList = () => {
               return (
                 <button
                   onClick={() => setCurrentPage(id + 1)}
-                  className={`hover:bg-blue hover:text-white ${
-                    currentPage == id + 1 && "bg-blue text-white"
-                  }`}
+                  className={`hover:bg-blue hover:text-white ${currentPage == id + 1 && "bg-blue text-white"
+                    }`}
                   key={id}
                 >
                   {id + 1}
@@ -184,6 +187,7 @@ export default OrderList;
 
 // table
 const Table = ({
+  theme,
   orders,
   refetch,
   isPending,
@@ -287,7 +291,7 @@ const Table = ({
               return (
                 <tr
                   key={id}
-                  className="*:p-3 border-b items-center hover:bg-[#f1efef] duration-500 *:text-gray-700"
+                  className={`*:p-3 border-b items-center hover:bg-[#f1efef] duration-500  ${theme == "light" ? "*:text-gray-700" : "*:text-paragraph *:hover:text-black"}`}
                 >
                   <td>{orderId}</td>
                   <td>{customer}</td>
@@ -297,13 +301,12 @@ const Table = ({
                   <td>
                     <div className="flex items-center gap-2">
                       <p
-                        className={`${
-                          payment_status == "paid"
-                            ? "text-green"
-                            : payment_status == "refund"
+                        className={`${payment_status == "paid"
+                          ? "text-green"
+                          : payment_status == "refund"
                             ? "text-customRed"
                             : ""
-                        } font-semibold`}
+                          } font-semibold`}
                       >
                         {payment_status}
                       </p>
@@ -351,22 +354,21 @@ const Table = ({
                   <td>
                     <div className="flex items-center gap-2">
                       <p
-                        className={`${
-                          order_status?.status === "complated" &&
+                        className={`${order_status?.status === "complated" &&
                           payment_status == "paid"
-                            ? "text-green"
-                            : order_status?.status === "courier"
+                          ? "text-green"
+                          : order_status?.status === "courier"
                             ? "text-lime-700"
                             : order_status?.status === "progress"
-                            ? "text-darkBlue"
-                            : order_status?.status === "canceled"
-                            ? "text-customRed"
-                            : payment_status == "refund"
-                            ? "text-customRed"
-                            : payment_status == "canceled"
-                            ? "text-customRed"
-                            : ""
-                        } font-semibold`}
+                              ? "text-darkBlue"
+                              : order_status?.status === "canceled"
+                                ? "text-customRed"
+                                : payment_status == "refund"
+                                  ? "text-customRed"
+                                  : payment_status == "canceled"
+                                    ? "text-customRed"
+                                    : ""
+                          } font-semibold`}
                       >
                         {order_status?.status}
                       </p>
@@ -483,7 +485,9 @@ const Table = ({
   );
 };
 
-const Card = ({ changeStatus, filterDate }) => {
+// order card
+
+const Card = ({ theme, changeStatus, filterDate }) => {
   const axiosFetch = useAxios();
   const [orderDetails, setOrderDetails] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -506,14 +510,17 @@ const Card = ({ changeStatus, filterDate }) => {
     );
   }
 
+  // dark mode 
+
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 *:box-shadow *:px-3 *:py-6 *:items-center *:flex *:gap-4 *:rounded-md">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 *:box-shadow *:px-3 *:py-6  *:items-center *:flex *:gap-4 *:rounded-md">
       <div className="bg-[#059669]">
         <div className="size-[50px] rounded-full bg-[#33302b] flex justify-center items-center  text-white ">
           <FaHandHoldingUsd size={30}></FaHandHoldingUsd>
         </div>
-        <div className="leading-8">
-          <h1 className="text-xl font-semibold">refund</h1>
+        <div className={`leading-8 ${theme == "light" ? "text-[#F3F5F9]" : "text-black"}`}>
+          <h1 className="text-sm md:text-xl font-semibold">refund</h1>
           <p>{orderDetails?.refund}</p>
         </div>
       </div>
@@ -521,8 +528,8 @@ const Card = ({ changeStatus, filterDate }) => {
         <div className="size-[50px] rounded-full bg-[#33302b] flex justify-center items-center text-white">
           <MdOutlineCancel size={25}></MdOutlineCancel>
         </div>
-        <div className="leading-8">
-          <p className="text-xl font-semibold">Order canceled</p>
+        <div className={`leading-8 ${theme == "light" ? "text-[#F3F5F9]" : "text-black"}`}>
+          <p className="text-sm md:text-xl font-semibold">Order canceled</p>
           <p>{orderDetails?.canceled}</p>
         </div>
       </div>
@@ -530,8 +537,8 @@ const Card = ({ changeStatus, filterDate }) => {
         <div className="size-[50px] rounded-full bg-[#33302b] flex justify-center items-center text-white">
           <MdDone size={25}></MdDone>
         </div>
-        <div className="leading-8">
-          <p className="text-xl font-semibold">order complated</p>
+        <div className={`leading-8 ${theme == "light" ? "text-[#F3F5F9]" : "text-black"}`}>
+          <p className="text-sm md:text-xl font-semibold">order complated</p>
           <p>{orderDetails?.complated}</p>
         </div>
       </div>
@@ -539,8 +546,8 @@ const Card = ({ changeStatus, filterDate }) => {
         <div className="size-[50px] rounded-full bg-[#33302b] flex justify-center items-center  text-white ">
           <FcProcess size={25}></FcProcess>
         </div>
-        <div className="leading-8">
-          <p className="text-xl font-semibold">order process</p>
+        <div className={`leading-8 ${theme == "light" ? "" : "text-black"}`}>
+          <p className="text-sm md:text-xl font-semibold">order process</p>
           <p>{orderDetails?.progress}</p>
         </div>
       </div>
@@ -548,8 +555,8 @@ const Card = ({ changeStatus, filterDate }) => {
         <div className="size-[50px] rounded-full bg-[#33302b] flex justify-center items-center  text-white ">
           <TbProgressAlert size={25}></TbProgressAlert>
         </div>
-        <div className="leading-8">
-          <p className="text-xl font-semibold">order pending</p>
+        <div className={`leading-8 ${theme == "light" ? "text-[#F3F5F9]" : "text-black"}`}>
+          <p className="text-sm md:text-xl font-semibold">order pending</p>
           <p>{orderDetails?.pending}</p>
         </div>
       </div>
@@ -557,8 +564,8 @@ const Card = ({ changeStatus, filterDate }) => {
         <div className="size-[50px] rounded-full bg-[#33302b] flex justify-center items-center  text-white ">
           <IoLogoUsd size={25}></IoLogoUsd>
         </div>
-        <div className="leading-8">
-          <p className="text-xl font-semibold">order unpaid</p>
+        <div className={`leading-8 ${theme == "light" ? "text-[#F3F5F9]" : "text-black"}`}>
+          <p className="text-sm md:text-xl font-semibold">order unpaid</p>
           <p>{orderDetails?.unpaid}</p>
         </div>
       </div>
@@ -566,8 +573,8 @@ const Card = ({ changeStatus, filterDate }) => {
         <div className="size-[50px] rounded-full bg-[#33302b] flex justify-center items-center   ">
           <IoLogoUsd size={25}></IoLogoUsd>
         </div>
-        <div className="leading-8">
-          <p className="text-xl font-semibold">order paid</p>
+        <div className={`leading-8 ${theme == "light" ? "text-[#F3F5F9]" : "text-black"}`}>
+          <p className="text-sm md:text-xl font-semibold">order paid</p>
           <p>{orderDetails?.paid}</p>
         </div>
       </div>
@@ -575,8 +582,8 @@ const Card = ({ changeStatus, filterDate }) => {
         <div className="size-[50px] rounded-full bg-[#33302b] flex justify-center items-center text-white">
           <FaShoppingCart size={25}></FaShoppingCart>
         </div>
-        <div className="leading-8">
-          <p className="text-xl font-semibold">total order</p>
+        <div className={`leading-8 ${theme == "light" ? "text-[#F3F5F9]" : "text-black"}`}>
+          <p className="text-sm md:text-xl font-semibold">total order</p>
           <p>{orderDetails?.total_order}</p>
         </div>
       </div>

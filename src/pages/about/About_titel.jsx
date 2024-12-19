@@ -1,8 +1,11 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 const About_title = () => {
+
+  const theme = useSelector((state) => state.darkMode);
   return (
-    <div className="bg-gray-50 p-6 md:p-10 text-gray-800">
+    <div className={`${theme == "light" ? "bg-[#e9f6f6]  text-gray-800" : "bg-black text-white"} p-6 md:p-10`}>
       <h1 className="text-3xl font-bold text-center text-blue-600 mb-6">Welcome to dealMart</h1>
       
       <p className="text-lg text-center mb-8">

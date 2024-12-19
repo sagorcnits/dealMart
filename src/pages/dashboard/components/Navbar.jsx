@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaRegMessage } from "react-icons/fa6";
 import { IoIosClose, IoMdMenu } from "react-icons/io";
 import { IoNotificationsOutline, IoSunnyOutline } from "react-icons/io5";
@@ -13,6 +13,9 @@ const Navbar = ({ handleSideBar, handleMobileSideBar, sidebar }) => {
 
   const theme = useSelector((state) => state.darkMode);
 
+  useEffect(() => {
+    document.querySelector("html").setAttribute("data-theme", theme);
+  }, [theme]);
   const user = useSelector((state) => state.user?.user);
   const dispatch = useDispatch();
 

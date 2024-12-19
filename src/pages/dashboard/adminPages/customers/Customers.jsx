@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { IoEyeOutline } from "react-icons/io5";
 import { MdDoubleArrow, MdOutlineDeleteForever } from "react-icons/md";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import useAxios from "../../../../hooks/useAxios";
@@ -53,18 +54,24 @@ const Customers = () => {
     }
   };
 
+
+  // dark mode 
+  const theme = useSelector((state) => state.darkMode);
+
+
+
+
   return (
     <>
       <main
-        className={`mt-16 bg-dashBgColor ${
-          customersData.length > 8 && customers.length > 8
+        className={`mt-16 ${theme == "light" ? "bg-dashBgColor" : "bg-black"}  ${customersData.length > 8 && customers.length > 8
             ? "h-full"
             : "h-screen"
-        }`}
+          }`}
       >
         <div className="flex justify-between items-center ">
           <p className="font-semibold uppercase text-2xl">customer list</p>
-          <div className="md:flex justify-between items-center  border px-3 rounded-md  hidden bg-white">
+          <div className={`md:flex justify-between items-center  border px-3 rounded-md  hidden  ${theme == "light" ? "bg-white" : "bg-black"}`}>
             <input
               onChange={(e) => setFilter(e.target.value)}
               className="focus:outline-none py-2"
@@ -114,9 +121,8 @@ const Customers = () => {
               return (
                 <button
                   onClick={() => setCurrentPage(id + 1)}
-                  className={`hover:bg-blue hover:text-white ${
-                    currentPage == id + 1 && "bg-blue text-white"
-                  }`}
+                  className={`hover:bg-blue hover:text-white ${currentPage == id + 1 && "bg-blue text-white"
+                    }`}
                   key={id}
                 >
                   {id + 1}
@@ -173,8 +179,11 @@ const Table = ({ customersData, refetch }) => {
     });
   };
 
+  // darak mode 
+  const theme = useSelector((state) => state.darkMode);
+
   return (
-    <div className="overflow-x-auto w-full">
+    <div className={`${theme == "light" ? "bg-dashBgColor" : "bg-black"} overflow-x-auto w-full `}>
       <table className="min-w-full">
         <thead>
           <tr className="border-b *:py-3 *:px-6">
@@ -197,7 +206,7 @@ const Table = ({ customersData, refetch }) => {
         </thead>
         <tbody>
           {customersData?.map((customer, id) => (
-            <tr key={id} className="border-b hover:bg-gray-100 *:py-3 *:px-6">
+            <tr key={id} className={`border-b  *:py-3 *:px-6 ${theme == "light" ? "text-gray-700 hover:bg-gray-100" : "*:text-white hover:bg-gray-100 *:hover:text-black"}`}>
               <td className=" text-gray-700">
                 <div className="flex gap-2">
                   <figure className="size-[40px] rounded-md overflow-hidden">
@@ -206,10 +215,10 @@ const Table = ({ customersData, refetch }) => {
                   <p>{customer?.customer}</p>
                 </div>
               </td>
-              <td className="py-4 px-6 text-gray-700">{customer.email}</td>
-              <td className="py-4 px-6 text-gray-700">{customer.phone}</td>
-              <td className="py-4 px-6 text-gray-700">{customer.address}</td>
-              <td className="py-4 px-6 text-gray-700">
+              <td className="py-4 px-6 ">{customer.email}</td>
+              <td className="py-4 px-6 ">{customer.phone}</td>
+              <td className="py-4 px-6 ">{customer.address}</td>
+              <td className="py-4 px-6 ">
                 <div className="flex items-center gap-2">
                   <div className="flex items-center gap-2 *:cursor-pointer">
                     <Link to={`/dashboard/customer-details/${customer?.email}`}>

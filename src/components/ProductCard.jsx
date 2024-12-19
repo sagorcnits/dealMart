@@ -66,8 +66,12 @@ const ProductCard = ({ item , layout}) => {
       });
   };
 
+  // dark mode 
+
+     const theme = useSelector((state) => state.darkMode);
+
   return (
-    <div className="dashboard_card card-compact relative bg-white border poppins  md:h-[400px] cursor-pointer hover:border-green duration-500 rounded-md overflow-hidden z-0">
+    <div className={`dashboard_card card-compact relative  border poppins  md:h-[400px] cursor-pointer hover:border-green duration-500 rounded-md overflow-hidden z-0 ${theme == "light" ? "bg-white" : "bg-black"}`}>
       <ToastContainer className="mt-20"></ToastContainer>
       <figure className="h-[170px] overflow-hidden relative">
         <img className="w-full h-full" src={images[0]} alt={product_name} />

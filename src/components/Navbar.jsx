@@ -37,9 +37,11 @@ const Navbar = () => {
   );
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
+  // dark mode 
+  const theme = useSelector((state) => state.darkMode);
 
   return (
-    <div className={active ? "activeNav" : "duration-700 border-b"}>
+    <div className={active ? `activeNav ${theme == "light" ? "bg-white" : "bg-black"}` : "duration-700 border-b"}>
       <Order openCart={openCart} setOpenCart={setOpenCart}></Order>
       <div className="navbar flex justify-between max-w-7xl mx-auto *:flex-1 gap-10">
         <div className="flex gap-20 items-center">
