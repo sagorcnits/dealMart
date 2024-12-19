@@ -42,7 +42,7 @@ const Navbar = () => {
 
   return (
     <div className={active ? `activeNav ${theme == "light" ? "bg-white" : "bg-black"}` : "duration-700 border-b"}>
-      <Order openCart={openCart} setOpenCart={setOpenCart}></Order>
+      <Order theme={theme} openCart={openCart} setOpenCart={setOpenCart}></Order>
       <div className="navbar flex justify-between max-w-7xl mx-auto *:flex-1 gap-10">
         <div className="flex gap-20 items-center">
           <div className="flex gap-2 items-center">
@@ -207,7 +207,7 @@ const Navbar = () => {
 
 export default Navbar;
 // order process
-const Order = ({ openCart, setOpenCart }) => {
+const Order = ({ theme,openCart, setOpenCart }) => {
   const [isChecked, setIsChecked] = useState(false);
   const [shippingVat, setShippingVat] = useState(0);
   const [name, setName] = useState("");
@@ -299,7 +299,7 @@ const Order = ({ openCart, setOpenCart }) => {
     <div
       className={`fixed z-50 top-0 ${
         openCart ? "right-0" : "-right-[400px]"
-      } w-[380px] bg-white box-shadow bottom-0 overflow-auto duration-500`}
+      } w-[380px] ${theme == "light" ? "bg-white" : "bg-black text-white"}  box-shadow bottom-0 overflow-auto duration-500`}
     >
       <div className="flex gap-2 items-center poppins justify-between px-4 py-5">
         <h1>Shopping Cart</h1>

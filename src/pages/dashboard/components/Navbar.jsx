@@ -7,19 +7,29 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toggleTheme } from "../../../features/dark_mode/dark_mode";
 import { removeUser } from "../../../features/user/userSlice";
+import useAxios from "../../../hooks/useAxios";
 const Navbar = ({ handleSideBar, handleMobileSideBar, sidebar }) => {
   const [notification, setNotication] = useState(false);
   const [MessageNotification, setMessageNotification] = useState(false);
-
+  // dark mode 
   const theme = useSelector((state) => state.darkMode);
-
   useEffect(() => {
     document.querySelector("html").setAttribute("data-theme", theme);
   }, [theme]);
   const user = useSelector((state) => state.user?.user);
   const dispatch = useDispatch();
 
+  // notification work in navbar
+  const handleOrderNotification = () => {
+    setNotication(!notification);
+    setMessageNotification(false);
+  }
 
+  // message notification work in navbar
+  const handleMessageNotification = () => {
+    setMessageNotification(!MessageNotification);
+    setNotication(false);
+  }
 
   return (
     <div
@@ -51,16 +61,17 @@ const Navbar = ({ handleSideBar, handleMobileSideBar, sidebar }) => {
             <IoSunnyOutline></IoSunnyOutline>
           )}
         </div>
+        {/* message notification */}
         <div className={`size-8 rounded-full ${theme == "light" ? "bg-gray-300" : "bg-black text-white"} flex justify-center items-center cursor-pointer relative border`}>
           <FaRegMessage
-            onClick={() => setMessageNotification(!MessageNotification)}
+            onClick={handleMessageNotification}
           ></FaRegMessage>
           <div
             className={`bg-customRed absolute top-1 right-2 size-2 rounded-full `}
           ></div>
 
           <div
-            className={`w-[350px] bg-white shadow-xl h-[320px] absolute -bottom-[340px] -right-16 md:right-0 border  rounded-lg p-2 ${MessageNotification ? "block" : "hidden"
+            className={`w-[350px] ${theme == "light" ? "bg-gray-300" : "bg-black text-white"} shadow-xl h-[320px] absolute -bottom-[340px] -right-16 md:right-0 border  rounded-lg p-2 ${MessageNotification ? "block" : "hidden"
               }`}
           >
             <div className="flex justify-between items-center">
@@ -68,7 +79,7 @@ const Navbar = ({ handleSideBar, handleMobileSideBar, sidebar }) => {
               <IoIosClose
                 size={25}
                 className="cursor-pointer"
-                onClick={() => setMessageNotification(!MessageNotification)}
+                onClick={handleMessageNotification}
               ></IoIosClose>
             </div>
             {[1, 2, 4].map((item, id) => {
@@ -101,51 +112,18 @@ const Navbar = ({ handleSideBar, handleMobileSideBar, sidebar }) => {
             </Link>
           </div>
         </div>
-        {/* notification */}
+        {/* order notification */}
         <div className={`size-8 rounded-full ${theme == "light" ? "bg-gray-300" : "bg-black text-white"} flex justify-center items-center  relative border`}>
           <IoNotificationsOutline
-            onClick={() => setNotication(!notification)}
+            onClick={handleOrderNotification}
             className="cursor-pointer"
             size={25}
           ></IoNotificationsOutline>
           <div
             className={`bg-customRed absolute top-1 right-2 size-2 rounded-full `}
           ></div>
+          <OrderCard theme={theme} notification={notification} setNotication={setNotication}></OrderCard>
 
-          <div
-            className={`w-[350px] bg-white shadow-xl h-[320px] absolute -bottom-[340px] -right-16 md:right-0 border  rounded-lg p-2 ${notification ? "block" : "hidden"
-              }`}
-          >
-            <div className="flex justify-between items-center">
-              <p className="font-semibold">recent order</p>
-              <IoIosClose
-                size={25}
-                className="cursor-pointer"
-                onClick={() => setNotication(!notification)}
-              ></IoIosClose>
-            </div>
-            {[1, 2, 4].map((item, id) => {
-              return (
-                <div
-                  key={id}
-                  className="flex justify-between px-2 py-4 mt-4 border rounded-lg hover:bg-paragraph duration-500"
-                >
-                  <p>Ridoy</p>
-                  <p>2024-04-27</p>
-                  <p>$567</p>
-                  <p>4</p>
-                </div>
-              );
-            })}
-            <Link
-              onClick={() => setNotication(!notification)}
-              to="/dashboard/order-list"
-            >
-              <button className="py-[10px] w-full text-center bg-blue hover:bg-customRed duration-500 text-white mt-3 rounded-lg">
-                View All
-              </button>
-            </Link>
-          </div>
         </div>
         {/* image user */}
         <div>
@@ -185,3 +163,63 @@ const Navbar = ({ handleSideBar, handleMobileSideBar, sidebar }) => {
 };
 
 export default Navbar;
+
+
+// order notifications order card
+const OrderCard = ({ theme, notification, setNotication }) => {
+
+  const [recentOrder, setRecentOrder] = useState([])
+
+  const axiosFetch = useAxios()
+
+  useEffect(() => {
+    axiosFetch.get("/orders/recent-orders/order").then(res => {
+      setRecentOrder(res.data)
+    }).catch(err => {
+      console.log(err.message)
+    })
+  }, [])
+
+
+
+
+  return (
+    <>
+
+      {recentOrder?.length > 0 && <div
+        className={`w-[350px] ${theme == "light" ? "bg-gray-300" : "bg-black text-white"} shadow-xl h-[320px] absolute -bottom-[340px] -right-16 md:right-0 border  rounded-lg p-2 ${notification ? "block" : "hidden"
+          }`}
+      >
+        <div className="flex justify-between items-center">
+          <p className="font-semibold">recent order</p>
+          <IoIosClose
+            size={25}
+            className="cursor-pointer"
+            onClick={() => setNotication(!notification)}
+          ></IoIosClose>
+        </div>
+        {recentOrder?.map((item, id) => {
+          return (
+            <div
+              key={id}
+              className="flex justify-between px-2 py-4 mt-4 border rounded-lg hover:bg-paragraph duration-500"
+            >
+              <p>{item?.customer}</p>
+              <p>{item?.createdAt?.slice(0, 10)}</p>
+              <p>${item?.total_price}</p>
+              <p>{item?.products?.length}</p>
+            </div>
+          );
+        })}
+        <Link
+          onClick={() => setNotication(!notification)}
+          to="/dashboard/order-list"
+        >
+          <button className="py-[10px] w-full text-center bg-blue hover:bg-customRed duration-500 text-white mt-3 rounded-lg">
+            View All
+          </button>
+        </Link>
+      </div>}
+    </>
+  )
+}
