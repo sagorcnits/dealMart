@@ -40,11 +40,12 @@ const Product_details = () => {
   const disptach = useDispatch();
 
   const category = productData?.category_name;
+  const theme = useSelector((state) => state.darkMode)
 
   return (
     <div className="p-4">
-      <div className="container mx-auto bg-white lg:p-8 rounded-lg">
-        <h1 className="text-3xl font-bold mb-6 text-gray-800">
+      <div className={`container mx-auto  lg:p-8 rounded-lg ${theme == "light" ? "bg-white" : "bg-black"}`}>
+        <h1 className={`text-3xl font-bold mb-6  ${theme == "light" ? "text-gray-800" : "text-white"}`}>
           Product Details
         </h1>
         <div className="grid grid-cols-1  lg:grid-cols-2 gap-6 border-b pb-10">
@@ -55,43 +56,43 @@ const Product_details = () => {
 
           {/* Product Information */}
           <div>
-            <h2 className="text-2xl font-semibold mb-4 text-gray-800">
+            <h2 className={`text-2xl font-semibold mb-4  ${theme == "light" ? "text-gray-800" : "text-white"}`}>
               Product Name : {productData?.product_name}
             </h2>
-            <p className="text-lg mb-4 text-gray-600">
+            <p className="text-lg mb-4 text-paragraph">
               {productData?.description}
             </p>
 
             <div className="mb-4">
-              <span className="font-bold text-gray-800">Category: </span>
-              <span className="text-gray-600">
+              <span className={`font-bold ${theme == "light" ? "text-gray-800" : "text-white"}`}>Category: </span>
+              <span className="text-paragraph">
                 {productData?.category_name}
               </span>
             </div>
 
             <div className="mb-4">
-              <span className="font-bold text-gray-800">Reguler Price: </span>
-              <span className="text-gray-600">
+              <span className={`font-bold  ${theme == "light" ? "text-gray-800" : "text-white"}`}>Reguler Price: </span>
+              <span className="text-paragraph">
                 ${productData?.reguler_price}
               </span>
             </div>
             <div className="mb-4">
-              <span className="font-bold text-gray-800">Sale Price: </span>
-              <span className="text-gray-600">${productData?.sale_price}</span>
+              <span className={`font-bold ${theme == "light" ? "text-gray-800" : "text-white"}`}>Sale Price: </span>
+              <span className="text-paragraph">${productData?.sale_price}</span>
             </div>
             <div className="mb-4">
-              <span className="font-bold text-gray-800">Quantity: </span>
-              <span className="text-gray-600">
+              <span className={`font-bold ${theme == "light" ? "text-gray-800" : "text-white"}`}>Quantity: </span>
+              <span className="text-paragraph">
                 {productData?.quantity_in_stock}
               </span>
             </div>
             <div className="mb-4">
-              <span className="font-bold text-gray-800">Stock: </span>
-              <span className="text-gray-600">{productData?.stock_status}</span>
+              <span className={`font-bold ${theme == "light" ? "text-gray-800" : "text-white"}`}>Stock: </span>
+              <span className="text-paragraph">{productData?.stock_status}</span>
             </div>
             <div className="mb-4">
-              <span className="font-bold text-gray-800">Brand: </span>
-              <span className="text-gray-600">{productData?.brand_name}</span>
+              <span className={`font-bold ${theme == "light" ? "text-gray-800" : "text-white"}`}>Brand: </span>
+              <span className="text-paragraph">{productData?.brand_name}</span>
             </div>
             {/* details button */}
             <div className="flex gap-4 *:rounded-md mt-4  *:py-2">
