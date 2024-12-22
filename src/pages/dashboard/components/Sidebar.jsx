@@ -3,8 +3,7 @@ import { FaUsers } from "react-icons/fa6";
 import { FiShoppingCart } from "react-icons/fi";
 import { IoIosArrowForward, IoMdArrowRoundBack } from "react-icons/io";
 import {
-  IoChatbubbleEllipsesOutline,
-  IoSettingsOutline,
+  IoChatbubbleEllipsesOutline
 } from "react-icons/io5";
 import { LuLayoutDashboard, LuShoppingBag } from "react-icons/lu";
 import { useSelector } from "react-redux";
@@ -169,21 +168,7 @@ const SidebarItem = ({ handleMobileSideBar }) => {
           <p>Chat</p>
         </NavLink>
       </li>
-      <li onClick={handleMobileSideBar}>
-        <NavLink
-          to="/dashboard/settings"
-          className={({ isActive, isPending }) =>
-            isPending
-              ? "pending"
-              : isActive
-              ? "active_sidbar_item sidebar_nav"
-              : "sidebar_nav"
-          }
-        >
-          <IoSettingsOutline></IoSettingsOutline>
-          <p>Settings</p>
-        </NavLink>
-      </li>
+     
     </ul>
   );
 };

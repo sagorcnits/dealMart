@@ -71,7 +71,7 @@ const Navbar = ({ handleSideBar, handleMobileSideBar, sidebar }) => {
           ></div>
 
           <div
-            className={`w-[350px] ${theme == "light" ? "bg-gray-300" : "bg-black text-white"} shadow-xl h-[320px] absolute -bottom-[340px] -right-16 md:right-0 border  rounded-lg p-2 ${MessageNotification ? "block" : "hidden"
+            className={`w-[350px] ${theme == "light" ? "bg-white" : "bg-black text-white"} shadow-xl h-[320px] absolute -bottom-[340px] -right-16 md:right-0 border  rounded-lg p-2 ${MessageNotification ? "block" : "hidden"
               }`}
           >
             <div className="flex justify-between items-center">
@@ -178,7 +178,7 @@ const OrderCard = ({ theme, notification, setNotication }) => {
     }).catch(err => {
       console.log(err.message)
     })
-  }, [])
+  }, [notification])
 
 
 
@@ -187,7 +187,7 @@ const OrderCard = ({ theme, notification, setNotication }) => {
     <>
 
       {recentOrder?.length > 0 && <div
-        className={`w-[350px] ${theme == "light" ? "bg-gray-300" : "bg-black text-white"} shadow-xl h-[320px] absolute -bottom-[340px] -right-16 md:right-0 border  rounded-lg p-2 ${notification ? "block" : "hidden"
+        className={`w-[350px] ${theme == "light" ? "bg-white" : "bg-black text-white"} shadow-xl h-[320px] absolute -bottom-[340px] -right-16 md:right-0 border  rounded-lg p-2 ${notification ? "block" : "hidden"
           }`}
       >
         <div className="flex justify-between items-center">

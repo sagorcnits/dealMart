@@ -15,7 +15,6 @@ import Product_update from "../pages/dashboard/adminPages/product/product_update
 import Products from "../pages/dashboard/adminPages/product/products/Products";
 import Users from "../pages/dashboard/adminPages/users/Users";
 import Dashboard from "../pages/dashboard/Dashboard";
-import Settings from "../pages/dashboard/shared/settings/Settings";
 import Home from "../pages/home/Home";
 import Login from "../pages/login/Login";
 import NotFound from "../pages/notFound/NotFound";
@@ -169,10 +168,7 @@ const router = createBrowserRouter([
           },
         ]
       },
-      {
-        path: "/dashboard/settings",
-        element: <Settings></Settings>,
-      },
+     
     ],
   },
 ]);

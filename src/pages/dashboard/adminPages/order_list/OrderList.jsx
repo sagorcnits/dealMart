@@ -570,7 +570,7 @@ const Card = ({ theme, changeStatus, filterDate }) => {
         </div>
       </div>
       <div className="bg-[#05fa73]">
-        <div className="size-[50px] rounded-full bg-[#33302b] flex justify-center items-center   ">
+        <div className="size-[50px] rounded-full bg-[#33302b] flex justify-center items-center  text-white ">
           <IoLogoUsd size={25}></IoLogoUsd>
         </div>
         <div className={`leading-8 ${theme == "light" ? "text-[#F3F5F9]" : "text-black"}`}>

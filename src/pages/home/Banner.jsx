@@ -53,7 +53,7 @@ const Banner = () => {
 };
 
 export default Banner;
-
+// banner slider
 const BannerSlider = ({ item }) => {
   return (
     <div className="flex h-[220px]  flex-row items-center *:flex-1 bg-green md:banner rounded-lg overflow-hidden poppins gap-2 p-4">
