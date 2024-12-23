@@ -1,21 +1,33 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaRegUserCircle } from "react-icons/fa";
 import { FaRegMessage } from "react-icons/fa6";
 import { IoSend } from "react-icons/io5";
 import { MdClose } from "react-icons/md";
+
+import { io } from 'socket.io-client';
+
+
 const Chat_system = () => {
+    const [isShowChatIcon, setChatIcon] = useState(false)
+    const [socket, setNewSocket] = useState(null);
+    // socket connection
+    useEffect(() => {
+        const socket = io("http://localhost:5000/");
+        setNewSocket(socket);
+        socket.on("connect", () => {
+            console.log("Connected to the server");
+        });
+        return () => {
+            socket.close();
+          };
 
-const [isShowChatIcon, setChatIcon] = useState(false)
-
-
-
-
+    }, [])
 
 
     return (
         <div className="fixed z-50 bottom-4 right-4 flex flex-col gap-4">
 
-           {isShowChatIcon && <div className="w-[350px] box-shadow rounded-xl overflow-hidden">
+            {isShowChatIcon && <div className="w-[350px] box-shadow rounded-xl overflow-hidden">
                 {/* header */}
                 <div className="flex items-center space-x-2 bg-darkBlue p-4">
                     <div className="relative size-[40px] flex-shrink-0 text-white rounded-full flex justify-center items-center">
@@ -52,7 +64,7 @@ const [isShowChatIcon, setChatIcon] = useState(false)
             </div>}
             {/* icon */}
             <div onClick={() => setChatIcon(!isShowChatIcon)} className="ml-auto flex justify-center items-center bg-darkBlue text-white size-[50px] rounded-full text-2xl cursor-pointer hover:bg-black duration-500">
-              {isShowChatIcon ?  <MdClose></MdClose> :  <FaRegMessage></FaRegMessage>}
+                {isShowChatIcon ? <MdClose></MdClose> : <FaRegMessage></FaRegMessage>}
             </div>
         </div >
     );
