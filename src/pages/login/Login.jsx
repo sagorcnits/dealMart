@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../firebase_config";
+import useAxios from "../../hooks/useAxios";
 
 const Login = () => {
   const {
@@ -14,16 +15,38 @@ const Login = () => {
   } = useForm();
 
   const navigate = useNavigate();
-const [loading, setLoading] = useState("Sign In")
+  const [loading, setLoading] = useState("Sign In")
+  const axiosPublic = useAxios()
+
+  const socketId = localStorage.getItem("socketId") || "12121212"
+
   // handle login
   const submit = (data) => {
     setLoading("Loading...")
     signInWithEmailAndPassword(auth, data.email, data.password)
       .then((res) => {
         console.log(res);
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
+        if (!socketId) {
+          axiosPublic.post("/chat-user", {
+            socketId,
+            customer_name: res?.user?.displayName,
+            customer_email: res?.user?.email,
+            image: res?.user?.photoURL
+          }).then(res => {
+            if (res.data.message == "ok") {
+              localStorage.setItem("socketId", "1223323");
+              setTimeout(() => {
+                navigate("/");
+              }, 2000);
+            }
+          }).catch(err => {
+            console.log(err.message)
+          })
+        }else {
+          setTimeout(() => {
+            navigate("/");
+          }, 2000);
+        }
       })
       .catch((error) => {
         console.log(error.message);
@@ -75,7 +98,7 @@ const [loading, setLoading] = useState("Sign In")
                 type="submit"
                 className="w-full px-8 py-3 font-semibold rounded-md bg-darkBlue text-white poppins hover:bg-black duration-500"
               >
-               {loading}
+                {loading}
               </button>
             </div>
 
