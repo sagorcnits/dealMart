@@ -10,9 +10,9 @@ import useAxios from "../hooks/useAxios";
 const Chat_system = () => {
     const [isShowChatIcon, setChatIcon] = useState(false)
     const [socket, setNewSocket] = useState(null);
+    const [adminSocketId, setAdminSocketId] = useState("");
     const [message, setNewMessage] = useState("")
     const axiosPublic = useAxios()
-    const [customer, setCustomer] = useState(null)
 
     // user
     const socketId = localStorage.getItem("socketId") || "";
@@ -61,6 +61,12 @@ const Chat_system = () => {
 
     // send message
     const handleSendMessage = (e) => {
+        axiosPublic.get("/chat-user?admin=admin").then((res) => {
+            console.log(res.data)
+        }).catch(err => {
+            console.log(err.message)
+        })
+
         e.preventDefault();
         if (message) {
             socket.emit("private-message", { senderId: socket.id, message, receiverId: "Ta8jvCXrnsodqaZhAAhZ" });

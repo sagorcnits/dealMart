@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { io } from 'socket.io-client';
+import useAxios from "../../hooks/useAxios";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 const Dashboard = () => {
@@ -9,7 +10,8 @@ const Dashboard = () => {
   const [message, setNewMessage] = useState("")
   const [sidebar, setSidebar] = useState(true);
   const [mobileSideBar, setMobileSideBar] = useState(false);
-
+  const navigate = useNavigate()
+  const axiosPublic = useAxios()
   // desktop and laptop sidebar function
   const handleSideBar = () => {
     setSidebar(!sidebar);
@@ -19,30 +21,43 @@ const Dashboard = () => {
     setMobileSideBar(!mobileSideBar);
   };
 
+  const socketId = localStorage.getItem("socketId")
   // socket connection
   useEffect(() => {
     const socket = io("http://localhost:5000/");
     socket.on("connect", () => {
-        setNewSocket(socket);
-        console.log("Connected to the server");
+      setNewSocket(socket);
+      // update chat user data
+      if (socketId) {
+        // update chat user data
+        axiosPublic.put(`/chat-user/${socketId}`, { socketId: socket?.id, }).then(res => {
+          if (res.data.message === "ok") {
+            localStorage.setItem("socketId", socket?.id);
+          }
+        }).catch(err => {
+          console.log(err.message);
+        })
+      } else {
+        navigate("/login")
+      }
     });
     return () => {
-        socket.close();
+      socket.close();
     };
 
-}, [])
+  }, [])
 
 
-console.log(socket?.id)
+  console.log(socket?.id)
 
-// send message to server
-const handleSendMessage = (e) => {
+  // send message to server
+  const handleSendMessage = (e) => {
     e.preventDefault();
     if (message) {
-        socket.emit("private-message", { senderId : socket.id, message, receiverId: "Ta8jvCXrnsodqaZhAAhZ" });
-        setNewMessage("");
+      socket.emit("private-message", { senderId: socket.id, message, receiverId: "Ta8jvCXrnsodqaZhAAhZ" });
+      setNewMessage("");
     }
-}
+  }
 
 
   const theme = useSelector((state) => state.darkMode);
@@ -54,9 +69,8 @@ const handleSendMessage = (e) => {
         handleMobileSideBar={handleMobileSideBar}
       ></Sidebar>
       <section
-        className={`relative w-full duration-700  h-full ${
-          sidebar ? "lg:ml-[250px]" : ""
-        } ${theme == "light" ? "bg-[#F3F5F9]" : "bg-black"} `}
+        className={`relative w-full duration-700  h-full ${sidebar ? "lg:ml-[250px]" : ""
+          } ${theme == "light" ? "bg-[#F3F5F9]" : "bg-black"} `}
       >
         <Navbar
           sidebar={sidebar}
