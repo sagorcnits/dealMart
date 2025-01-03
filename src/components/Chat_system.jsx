@@ -67,19 +67,23 @@ const Chat_system = () => {
     // send message
     const handleSendMessage = (e) => {
         e.preventDefault();
-        let adminSocketId;
+        const senderId = localStorage.getItem("socketId") || "";
+        console.log(senderId)
         // get admin socket from server
         axiosPublic.get("/chat-user?admin=admin").then((res) => {
-            console.log(res.data)
-            adminSocketId = res.data.chatUser.socketId
+            let adminSocketId = res.data.adminData[0].socketId
+            // check message ase kina 
+            if (adminSocketId) {
+                socket.emit("private-message", { senderId, message, receiverId: adminSocketId });
+                setNewMessage("");
+            }
+
         }).catch(err => {
             console.log(err.message)
         })
-        // check message ase kina 
-        if (message) {
-            socket.emit("private-message", { senderId: socketId, message, receiverId: adminSocketId });
-            setNewMessage("");
-        }
+
+
+
     }
 
     // handel continue chat
@@ -93,13 +97,14 @@ const Chat_system = () => {
             socketId: socketId
         }
 
-      
         // update chat user data
         axiosPublic.put(`/chat-user/${socketId}`, userData).then(res => {
             console.log(res.data)
             if (res.data.message === "ok") {
                 localStorage.setItem("socketId", socket?.id);
                 localStorage.setItem("user", "active");
+                customer.customer_name = ""
+                customer.customer_email = ""
             }
         }).catch(err => {
             console.log(err.message);
@@ -159,32 +164,39 @@ export default Chat_system;
 
 
 const UserChatLand = ({ socket }) => {
+
     const [recevieMessage, setReceivedMessages] = useState([])
     useEffect(() => {
         socket.on(
             "receive-private-message",
-            ({ senderId, messages, receiverId }) => {
-                setReceivedMessages((prevMessage) => [...prevMessage, messages]);
-                console.log(messages);
+            ({ senderId, message, receiverId }) => {
+                setReceivedMessages((prevMessage) => [...prevMessage, message]);
             }
         );
     }, []);
 
     console.log(recevieMessage)
 
+
+
     return (
-        <div className="h-[300px] px-2 py-4 bg-[#E3DCD5]">
+        <div className="h-[300px] px-2 py-4 bg-[#E3DCD5] overflow-auto">
             <div className="flex items-center gap-2">
                 <div className="size-[20px] flex-shrink-0 rounded-full flex justify-center items-center">
                     <FaRegUserCircle size={30}></FaRegUserCircle>
                 </div>
                 <div className="text-sm font-medium p-4 bg-white inline-block rounded-xl">Hello, how can I help you today?</div>
+            </div>
+            {recevieMessage?.map((message, idx) => {
+                return (
+                    <div key={idx} className="flex items-center gap-2 mt-4">
+                        <div className="text-sm font-medium p-4 bg-white inline-block rounded-xl ml-auto">{message}</div>
+                        <p>You</p>
+                    </div>
+                )
+            })}
 
-            </div>
-            <div className="flex items-center gap-2 mt-4">
-                <div className="text-sm font-medium p-4 bg-white inline-block rounded-xl ml-auto">Hello, how can I help you today?</div>
-                <p>You</p>
-            </div>
+
         </div>
     )
 }

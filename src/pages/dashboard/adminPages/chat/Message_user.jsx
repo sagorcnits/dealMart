@@ -1,9 +1,24 @@
+import { useEffect, useState } from "react";
 import { IoIosSend } from "react-icons/io";
 import { useParams } from "react-router-dom";
-
+import { io } from 'socket.io-client';
 const Message_user = () => {
+  const { id } = useParams()
+  const [recevieMessage, setReceivedMessages] = useState([])
+  useEffect(() => {
+    const socket = io("http://localhost:5000/");
+    socket.on(
+      "receive-private-message",
+      ({ senderId, message, receiverId }) => {
+        setReceivedMessages((prevMessage) => [...prevMessage, message]);
+      }
+    );
+  }, [])
 
-const {id} = useParams()
+  console.log(recevieMessage)
+
+
+
 
 
   return (
