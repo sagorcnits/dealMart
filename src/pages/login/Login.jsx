@@ -31,7 +31,7 @@ const Login = () => {
             socketId,
             customer_name: res?.user?.displayName,
             customer_email: res?.user?.email,
-            image: res?.user?.photoURL
+            image: res?.user?.photoURL,
           }).then(res => {
             if (res.data.message == "ok") {
               localStorage.setItem("socketId", "1223323");
