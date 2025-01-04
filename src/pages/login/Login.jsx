@@ -25,7 +25,6 @@ const Login = () => {
     setLoading("Loading...")
     signInWithEmailAndPassword(auth, data.email, data.password)
       .then((res) => {
-        console.log(res);
         if (socketId) {
           axiosPublic.post("/chat-user", {
             socketId,
@@ -33,8 +32,9 @@ const Login = () => {
             customer_email: res?.user?.email,
             image: res?.user?.photoURL,
           }).then(res => {
+            console.log(res.data)
             if (res.data.message == "ok") {
-              localStorage.setItem("socketId", "1223323");
+              localStorage.setItem("socketId", socketId);
               setTimeout(() => {
                 navigate("/");
               }, 2000);

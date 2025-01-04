@@ -3,8 +3,9 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { FaRegMessage } from "react-icons/fa6";
 import { IoSend } from "react-icons/io5";
 import { MdClose } from "react-icons/md";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { io } from 'socket.io-client';
+import { chat_active } from "../features/chat_active/chat_slice";
 import useAxios from "../hooks/useAxios";
 
 const Chat_system = () => {
@@ -17,13 +18,10 @@ const Chat_system = () => {
         customer_email: "",
     })
 
-
+    const dispatch = useDispatch()
     const axiosPublic = useAxios()
-
-    // user
+    // user socketId
     const socketId = localStorage.getItem("socketId");
-    const userChatActive = localStorage.getItem("user");
-
     // socket connection
     useEffect(() => {
         const socket = io("http://localhost:5000/");
@@ -88,7 +86,6 @@ const Chat_system = () => {
     }
 
     // handel continue chat
-
     const handleContinueChat = (e) => {
         e.preventDefault()
         const socketId = localStorage.getItem("socketId") || "";
@@ -103,9 +100,11 @@ const Chat_system = () => {
             console.log(res.data)
             if (res.data.message === "ok") {
                 localStorage.setItem("socketId", socket?.id);
-                localStorage.setItem("user", "active");
-                customer.customer_name = ""
-                customer.customer_email = ""
+                dispatch(chat_active())
+                setCustomer({
+                    customer_name: "",
+                    customer_email: "",
+                })
             }
         }).catch(err => {
             console.log(err.message);
@@ -113,6 +112,9 @@ const Chat_system = () => {
     }
     // user 
     const user = useSelector((state) => state.user.user)
+    const userChatActive = useSelector((state) => state.chat_slice)
+  
+
 
     return (
         <div className="fixed z-50 bottom-4 right-4 flex flex-col gap-4">
@@ -133,7 +135,7 @@ const Chat_system = () => {
                     {/* customer message land */}
                     <UserChatLand socket={socket}></UserChatLand>
                     {/* customer message input */}
-                    {user.email || userChatActive ?
+                    {user?.email || userChatActive ?
                         <form onSubmit={handleSendMessage} className="flex items-center py-3 border justify-between px-4 bg-white">
                             <input value={message} onChange={(e) => setNewMessage(e.target.value)} type="text" placeholder="Type a message..." className="text-sm w-[90%]  focus:outline-none" />
                             <button type="submit" className="cursor-pointer size-[30px] text-white rounded-full flex justify-center items-center bg-green">
@@ -173,7 +175,7 @@ const UserChatLand = ({ socket }) => {
         );
         return () => {
             socket.off("receive-private-message");
-          };
+        };
     }, []);
 
     console.log(recevieMessage)
