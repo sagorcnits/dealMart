@@ -18,7 +18,7 @@ const Login = () => {
   const [loading, setLoading] = useState("Sign In")
   const axiosPublic = useAxios()
 
-  const socketId = localStorage.getItem("socketId") || "12121212"
+  const socketId = localStorage.getItem("socketId") || "1221212"
 
   // handle login
   const submit = (data) => {
@@ -26,7 +26,7 @@ const Login = () => {
     signInWithEmailAndPassword(auth, data.email, data.password)
       .then((res) => {
         console.log(res);
-        if (!socketId) {
+        if (socketId) {
           axiosPublic.post("/chat-user", {
             socketId,
             customer_name: res?.user?.displayName,

@@ -35,6 +35,11 @@ const Navbar = () => {
     (prev, curr) => prev + curr.quantity,
     0
   );
+
+// logout
+
+
+  // user
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
   // dark mode 

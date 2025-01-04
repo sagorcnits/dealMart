@@ -12,10 +12,12 @@ const Root = () => {
   const dispatch = useDispatch();
   const axiosFetch = useAxios();
 
-  useEffect(() => { }, [dispatch]);
+
 
   useEffect(() => {
     const stateChange = onAuthStateChanged(auth, (user) => {
+
+      console.log(user)
       axiosFetch
         .get(`/customers/${user?.email}`)
         .then((res) => {

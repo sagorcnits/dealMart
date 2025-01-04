@@ -1,4 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebase_config";
 
 const userSlice = createSlice({
   name: "user",
@@ -13,8 +15,12 @@ const userSlice = createSlice({
     },
     //  nabar use remove user
     removeUser: (state, action) => {
-      state.user = null;
-    
+      state.user = null;  
+      signOut(auth).then(() => {
+        // Sign-out successful.
+      }).catch((error) => {
+        // An error happened.
+      }); 
     },
   },
 });

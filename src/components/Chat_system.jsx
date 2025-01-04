@@ -21,8 +21,8 @@ const Chat_system = () => {
     const axiosPublic = useAxios()
 
     // user
-    const socketId = localStorage.getItem("socketId") || "";
-    const userChatActive = localStorage.getItem("user") || "";
+    const socketId = localStorage.getItem("socketId");
+    const userChatActive = localStorage.getItem("user");
 
     // socket connection
     useEffect(() => {
@@ -73,6 +73,7 @@ const Chat_system = () => {
         axiosPublic.get("/chat-user?admin=admin").then((res) => {
             let adminSocketId = res.data.adminData[0].socketId
             // check message ase kina 
+            console.log(adminSocketId)
             if (adminSocketId) {
                 socket.emit("private-message", { senderId, message, receiverId: adminSocketId });
                 setNewMessage("");
@@ -110,11 +111,8 @@ const Chat_system = () => {
             console.log(err.message);
         })
     }
-
     // user 
     const user = useSelector((state) => state.user.user)
-
-
 
     return (
         <div className="fixed z-50 bottom-4 right-4 flex flex-col gap-4">
@@ -164,8 +162,8 @@ export default Chat_system;
 
 
 const UserChatLand = ({ socket }) => {
-
     const [recevieMessage, setReceivedMessages] = useState([])
+
     useEffect(() => {
         socket.on(
             "receive-private-message",
@@ -173,6 +171,9 @@ const UserChatLand = ({ socket }) => {
                 setReceivedMessages((prevMessage) => [...prevMessage, message]);
             }
         );
+        return () => {
+            socket.off("receive-private-message");
+          };
     }, []);
 
     console.log(recevieMessage)
