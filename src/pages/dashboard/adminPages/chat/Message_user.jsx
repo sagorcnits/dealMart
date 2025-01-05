@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { IoIosSend } from "react-icons/io";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { io } from 'socket.io-client';
 const Message_user = () => {
+  const recevie_message_active = useSelector((state) => state.recevie_message_slice)
+  console.log(recevie_message_active)
   const { id } = useParams()
   const [recevieMessage, setReceivedMessages] = useState([])
   useEffect(() => {
@@ -13,7 +16,7 @@ const Message_user = () => {
         setReceivedMessages((prevMessage) => [...prevMessage, message]);
       }
     );
-  }, [])
+  }, [recevie_message_active])
 
   console.log(recevieMessage)
 

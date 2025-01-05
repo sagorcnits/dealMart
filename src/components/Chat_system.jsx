@@ -6,11 +6,12 @@ import { MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from 'react-redux';
 import { io } from 'socket.io-client';
 import { chat_active } from "../features/chat_active/chat_slice";
+import { recevie_message } from "../features/recevie_message/recevie_message";
 import useAxios from "../hooks/useAxios";
-
 const Chat_system = () => {
     const [isShowChatIcon, setChatIcon] = useState(false)
     const [socket, setNewSocket] = useState(null);
+    const [isSocket,setIsSocket] = useState(false)
     const [adminSocketId, setAdminSocketId] = useState("");
     const [message, setNewMessage] = useState("")
     const [customer, setCustomer] = useState({
@@ -65,7 +66,7 @@ const Chat_system = () => {
     // send message
     const handleSendMessage = (e) => {
         e.preventDefault();
-        const senderId = localStorage.getItem("socketId") || "";
+        const senderId = localStorage.getItem("socketId");
         console.log(senderId)
         // get admin socket from server
         axiosPublic.get("/chat-user?admin=admin").then((res) => {
@@ -74,15 +75,12 @@ const Chat_system = () => {
             console.log(adminSocketId)
             if (adminSocketId) {
                 socket.emit("private-message", { senderId, message, receiverId: adminSocketId });
+                dispatch(recevie_message(socket))
                 setNewMessage("");
             }
-
         }).catch(err => {
             console.log(err.message)
         })
-
-
-
     }
 
     // handel continue chat
@@ -94,7 +92,6 @@ const Chat_system = () => {
             customer_email: customer?.customer_email,
             socketId: socketId
         }
-
         // update chat user data
         axiosPublic.put(`/chat-user/${socketId}`, userData).then(res => {
             console.log(res.data)
@@ -113,9 +110,8 @@ const Chat_system = () => {
     // user 
     const user = useSelector((state) => state.user.user)
     const userChatActive = useSelector((state) => state.chat_slice)
-  
-
-
+    const recevie_message_active = useSelector((state) => state.recevie_message_slice)
+  console.log(recevie_message_active)
     return (
         <div className="fixed z-50 bottom-4 right-4 flex flex-col gap-4">
 
@@ -133,7 +129,7 @@ const Chat_system = () => {
                         </div>
                     </div>
                     {/* customer message land */}
-                    <UserChatLand socket={socket}></UserChatLand>
+                    <UserChatLand socket={socket} recevie_message_active={recevie_message_active}></UserChatLand>
                     {/* customer message input */}
                     {user?.email || userChatActive ?
                         <form onSubmit={handleSendMessage} className="flex items-center py-3 border justify-between px-4 bg-white">
@@ -163,7 +159,7 @@ export default Chat_system;
 
 
 
-const UserChatLand = ({ socket }) => {
+const UserChatLand = ({ socket, recevie_message_active }) => {
     const [recevieMessage, setReceivedMessages] = useState([])
 
     useEffect(() => {
@@ -171,15 +167,16 @@ const UserChatLand = ({ socket }) => {
             "receive-private-message",
             ({ senderId, message, receiverId }) => {
                 setReceivedMessages((prevMessage) => [...prevMessage, message]);
+                console.log(message)
             }
         );
+        console.log(socket)
         return () => {
             socket.off("receive-private-message");
         };
-    }, []);
+    }, [recevie_message_active]);
 
-    console.log(recevieMessage)
-
+    // console.log(recevieMessage)
 
 
     return (

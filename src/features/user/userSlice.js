@@ -17,7 +17,7 @@ const userSlice = createSlice({
     removeUser: (state, action) => {
       state.user = null;  
       signOut(auth).then(() => {
-        // Sign-out successful.
+        //  localStorage.removeItem("socketId")
       }).catch((error) => {
         // An error happened.
       }); 
