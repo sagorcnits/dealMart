@@ -75,7 +75,7 @@ const Chat_system = () => {
             console.log(adminSocketId)
             if (adminSocketId) {
                 socket.emit("private-message", { senderId, message, receiverId: adminSocketId });
-                dispatch(recevie_message(socket))
+                dispatch(recevie_message())
                 setNewMessage("");
             }
         }).catch(err => {
@@ -111,7 +111,7 @@ const Chat_system = () => {
     const user = useSelector((state) => state.user.user)
     const userChatActive = useSelector((state) => state.chat_slice)
     const recevie_message_active = useSelector((state) => state.recevie_message_slice)
-  console.log(recevie_message_active)
+
     return (
         <div className="fixed z-50 bottom-4 right-4 flex flex-col gap-4">
 
@@ -176,7 +176,7 @@ const UserChatLand = ({ socket, recevie_message_active }) => {
         };
     }, [recevie_message_active]);
 
-    // console.log(recevieMessage)
+    console.log(recevieMessage)
 
 
     return (
