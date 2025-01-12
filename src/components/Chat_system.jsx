@@ -6,12 +6,13 @@ import { MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from 'react-redux';
 import { io } from 'socket.io-client';
 import { chat_active } from "../features/chat_active/chat_slice";
+import { addMessage } from "../features/rececive/recevie";
 import { recevie_message } from "../features/recevie_message/recevie_message";
 import useAxios from "../hooks/useAxios";
 const Chat_system = () => {
     const [isShowChatIcon, setChatIcon] = useState(false)
     const [socket, setNewSocket] = useState(null);
-    const [isSocket,setIsSocket] = useState(false)
+    const [isSocket, setIsSocket] = useState(false)
     const [adminSocketId, setAdminSocketId] = useState("");
     const [message, setNewMessage] = useState("")
     const [customer, setCustomer] = useState({
@@ -23,12 +24,15 @@ const Chat_system = () => {
     const axiosPublic = useAxios()
     // user socketId
     const socketId = localStorage.getItem("socketId");
+
     // socket connection
+
     useEffect(() => {
         const socket = io("http://localhost:5000/");
         // connection user
         socket.on("connect", () => {
             setNewSocket(socket);
+
             // user data
             const userData = {
                 socketId: socket?.id,
@@ -63,6 +67,8 @@ const Chat_system = () => {
         };
 
     }, [])
+
+
     // send message
     const handleSendMessage = (e) => {
         e.preventDefault();
@@ -82,7 +88,8 @@ const Chat_system = () => {
             console.log(err.message)
         })
     }
-
+    const newSocket = useSelector((state) => state.socket)
+    console.log(newSocket)
     // handel continue chat
     const handleContinueChat = (e) => {
         e.preventDefault()
@@ -161,12 +168,13 @@ export default Chat_system;
 
 const UserChatLand = ({ socket, recevie_message_active }) => {
     const [recevieMessage, setReceivedMessages] = useState([])
-
+    const dispatch = useDispatch();
     useEffect(() => {
         socket.on(
             "receive-private-message",
             ({ senderId, message, receiverId }) => {
                 setReceivedMessages((prevMessage) => [...prevMessage, message]);
+                dispatch(addMessage(message))
                 console.log(message)
             }
         );
@@ -176,11 +184,12 @@ const UserChatLand = ({ socket, recevie_message_active }) => {
         };
     }, [recevie_message_active]);
 
-    console.log(recevieMessage)
+    const message = useSelector((state) => state.recevie_message);
+    console.log(message);
 
 
     return (
-        <div className="h-[300px] px-2 py-4 bg-[#E3DCD5] overflow-auto">
+        <div className="h-[300px] px-2 py-4 bg-[#E3DCD5] overflow-auto chater_scrollbar">
             <div className="flex items-center gap-2">
                 <div className="size-[20px] flex-shrink-0 rounded-full flex justify-center items-center">
                     <FaRegUserCircle size={30}></FaRegUserCircle>

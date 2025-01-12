@@ -18,8 +18,7 @@ const Login = () => {
   const [loading, setLoading] = useState("Sign In")
   const axiosPublic = useAxios()
 
-  const socketId = localStorage.getItem("socketId") 
-
+  const socketId = localStorage.getItem("socketId");
   // handle login
   const submit = (data) => {
     setLoading("Loading...")
