@@ -1,7 +1,8 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../components/Socket_provider";
 import { auth } from "../../firebase_config";
 import useAxios from "../../hooks/useAxios";
 
@@ -17,23 +18,27 @@ const Login = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState("Sign In")
   const axiosPublic = useAxios()
+  const { socket } = useContext(AuthContext)
 
-  const socketId = localStorage.getItem("socketId");
   // handle login
   const submit = (data) => {
+    const user_email = localStorage.getItem("user_email")
     setLoading("Loading...")
     signInWithEmailAndPassword(auth, data.email, data.password)
       .then((res) => {
-        if (!socketId) {
+        if (user_email) {
+          setTimeout(() => {
+            navigate("/");
+          }, 2000);
+        } else {
           axiosPublic.post("/chat-user", {
-            socketId : "222222",
+            socketId: socket.id,
             customer_name: res?.user?.displayName,
             customer_email: res?.user?.email,
             image: res?.user?.photoURL,
           }).then(res => {
-            console.log(res.data)
             if (res.data.message == "ok") {
-              localStorage.setItem("socketId", "222222");
+              localStorage.setItem("user_email", res.data.chatUser.customer_email);
               setTimeout(() => {
                 navigate("/");
               }, 2000);
@@ -41,12 +46,9 @@ const Login = () => {
           }).catch(err => {
             console.log(err.message)
           })
-        }else {
-          setTimeout(() => {
-            navigate("/");
-          }, 2000);
         }
-      })
+      }
+      )
       .catch((error) => {
         console.log(error.message);
         setLoading("error")

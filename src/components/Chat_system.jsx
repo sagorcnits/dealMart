@@ -1,17 +1,15 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FaRegUserCircle } from "react-icons/fa";
 import { FaRegMessage } from "react-icons/fa6";
 import { IoSend } from "react-icons/io5";
 import { MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from 'react-redux';
-import { io } from 'socket.io-client';
 import { chat_active } from "../features/chat_active/chat_slice";
-import { addMessage } from "../features/rececive/recevie";
 import { recevie_message } from "../features/recevie_message/recevie_message";
 import useAxios from "../hooks/useAxios";
+import { AuthContext } from "./Socket_provider";
 const Chat_system = () => {
     const [isShowChatIcon, setChatIcon] = useState(false)
-    const [socket, setNewSocket] = useState(null);
     const [isSocket, setIsSocket] = useState(false)
     const [adminSocketId, setAdminSocketId] = useState("");
     const [message, setNewMessage] = useState("")
@@ -19,53 +17,23 @@ const Chat_system = () => {
         customer_name: "",
         customer_email: "",
     })
-
     const dispatch = useDispatch()
     const axiosPublic = useAxios()
-    // user socketId
-    const socketId = localStorage.getItem("socketId");
-
+    const { socket } = useContext(AuthContext);
+    console.log(socket)
     // socket connection
-
     useEffect(() => {
-        const socket = io("http://localhost:5000/");
-        // connection user
-        socket.on("connect", () => {
-            setNewSocket(socket);
-
-            // user data
-            const userData = {
-                socketId: socket?.id,
-                customer_name: "random user",
-                customer_email: 'random email',
-                image: "https://i.stack.imgur.com/l60Hf.png",
+        socket.on(
+            "receive-private-message",
+            ({ senderId, messages, receiverId }) => {
+                setReceivedMessages((prevMessage) => [...prevMessage, messages]);
+                console.log(messages);
             }
-            // check if user is already have a socket id
-            if (socketId) {
-                // update chat user data
-                axiosPublic.put(`/chat-user/${socketId}`, { socketId: socket?.id, }).then(res => {
-                    if (res.data.message === "ok") {
-                        localStorage.setItem("socketId", socket?.id);
-                    }
-                }).catch(err => {
-                    console.log(err.message);
-                })
-            } else {
-                // post chat user data
-                axiosPublic.post("/chat-user", userData).then(res => {
-                    if (res.data.message == "ok") {
-                        localStorage.setItem("socketId", res.data.chatUser.socketId);
-                    }
-                }).catch(err => {
-                    console.log(err)
-                })
-            }
-        });
+        );
         // close socket id
         return () => {
-            socket.close();
+            socket.off("receive-private-message");
         };
-
     }, [])
 
 
@@ -88,31 +56,29 @@ const Chat_system = () => {
             console.log(err.message)
         })
     }
-    const newSocket = useSelector((state) => state.socket)
-    console.log(newSocket)
+
+    
     // handel continue chat
     const handleContinueChat = (e) => {
         e.preventDefault()
-        const socketId = localStorage.getItem("socketId") || "";
         const userData = {
             customer_name: customer?.customer_name,
             customer_email: customer?.customer_email,
-            socketId: socketId
+            socketId: socket.id,
+            image: "https://i.stack.imgur.com/l60Hf.png",
         }
-        // update chat user data
-        axiosPublic.put(`/chat-user/${socketId}`, userData).then(res => {
-            console.log(res.data)
-            if (res.data.message === "ok") {
-                localStorage.setItem("socketId", socket?.id);
+        // add user in database
+        axiosPublic.post("/chat-user", userData).then(res => {
+            if (res.data.message == "ok") {
+                console.log(res.data)
                 dispatch(chat_active())
-                setCustomer({
-                    customer_name: "",
-                    customer_email: "",
-                })
+                localStorage.setItem("user_email", customer?.customer_email);
             }
         }).catch(err => {
-            console.log(err.message);
+            console.log(err)
         })
+        // update chat user data
+       
     }
     // user 
     const user = useSelector((state) => state.user.user)
@@ -166,26 +132,7 @@ export default Chat_system;
 
 
 
-const UserChatLand = ({ socket, recevie_message_active }) => {
-    const [recevieMessage, setReceivedMessages] = useState([])
-    const dispatch = useDispatch();
-    useEffect(() => {
-        socket.on(
-            "receive-private-message",
-            ({ senderId, message, receiverId }) => {
-                setReceivedMessages((prevMessage) => [...prevMessage, message]);
-                dispatch(addMessage(message))
-                console.log(message)
-            }
-        );
-        console.log(socket)
-        return () => {
-            socket.off("receive-private-message");
-        };
-    }, [recevie_message_active]);
-
-    const message = useSelector((state) => state.recevie_message);
-    console.log(message);
+const UserChatLand = () => {
 
 
     return (
@@ -196,7 +143,7 @@ const UserChatLand = ({ socket, recevie_message_active }) => {
                 </div>
                 <div className="text-sm font-medium p-4 bg-white inline-block rounded-xl">Hello, how can I help you today?</div>
             </div>
-            {recevieMessage?.map((message, idx) => {
+            {[1, 2, 3]?.map((message, idx) => {
                 return (
                     <div key={idx} className="flex items-center gap-2 mt-4">
                         <div className="text-sm font-medium p-4 bg-white inline-block rounded-xl ml-auto">{message}</div>
