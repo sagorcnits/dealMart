@@ -10,45 +10,28 @@ import useAxios from "../hooks/useAxios";
 import { AuthContext } from "./Socket_provider";
 const Chat_system = () => {
     const [isShowChatIcon, setChatIcon] = useState(false)
-    const [isSocket, setIsSocket] = useState(false)
-    const [adminSocketId, setAdminSocketId] = useState("");
     const [message, setNewMessage] = useState("")
     const [customer, setCustomer] = useState({
         customer_name: "",
         customer_email: "",
     })
+ 
     const dispatch = useDispatch()
     const axiosPublic = useAxios()
     const { socket } = useContext(AuthContext);
     console.log(socket)
     // socket connection
-    useEffect(() => {
-        socket.on(
-            "receive-private-message",
-            ({ senderId, messages, receiverId }) => {
-                setReceivedMessages((prevMessage) => [...prevMessage, messages]);
-                console.log(messages);
-            }
-        );
-        // close socket id
-        return () => {
-            socket.off("receive-private-message");
-        };
-    }, [])
+
 
 
     // send message
     const handleSendMessage = (e) => {
         e.preventDefault();
-        const senderId = localStorage.getItem("socketId");
-        console.log(senderId)
         // get admin socket from server
         axiosPublic.get("/chat-user?admin=admin").then((res) => {
             let adminSocketId = res.data.adminData[0].socketId
-            // check message ase kina 
-            console.log(adminSocketId)
             if (adminSocketId) {
-                socket.emit("private-message", { senderId, message, receiverId: adminSocketId });
+                socket.emit("private-message", { senderId: socket.id, message, receiverId: adminSocketId });
                 dispatch(recevie_message())
                 setNewMessage("");
             }
@@ -56,8 +39,6 @@ const Chat_system = () => {
             console.log(err.message)
         })
     }
-
-    
     // handel continue chat
     const handleContinueChat = (e) => {
         e.preventDefault()
@@ -83,7 +64,9 @@ const Chat_system = () => {
     // user 
     const user = useSelector((state) => state.user.user)
     const userChatActive = useSelector((state) => state.chat_slice)
-    const recevie_message_active = useSelector((state) => state.recevie_message_slice)
+   
+
+  
 
     return (
         <div className="fixed z-50 bottom-4 right-4 flex flex-col gap-4">
@@ -102,7 +85,7 @@ const Chat_system = () => {
                         </div>
                     </div>
                     {/* customer message land */}
-                    <UserChatLand socket={socket} recevie_message_active={recevie_message_active}></UserChatLand>
+                    <UserChatLand></UserChatLand>
                     {/* customer message input */}
                     {user?.email || userChatActive ?
                         <form onSubmit={handleSendMessage} className="flex items-center py-3 border justify-between px-4 bg-white">
@@ -133,7 +116,26 @@ export default Chat_system;
 
 
 const UserChatLand = () => {
+    const recevie_message_active = useSelector((state) => state.recevie_message_slice)
+    const [receivedMessages, setReceivedMessages] = useState([])
+    const { socket } = useContext(AuthContext);
+    useEffect(() => {
+        console.log(socket)
+        console.log("ok received messages")
+        socket.on(
+            "receive-private-message",
+            (data) => {
+                setReceivedMessages((prevMessage) => [...prevMessage, data.message]);
+                
+            }
+        );
+        // close socket id
+        return () => {
+            socket.off("receive-private-message");
+        };
+    }, [recevie_message_active])
 
+    
 
     return (
         <div className="h-[300px] px-2 py-4 bg-[#E3DCD5] overflow-auto chater_scrollbar">
@@ -143,7 +145,7 @@ const UserChatLand = () => {
                 </div>
                 <div className="text-sm font-medium p-4 bg-white inline-block rounded-xl">Hello, how can I help you today?</div>
             </div>
-            {[1, 2, 3]?.map((message, idx) => {
+            {receivedMessages?.map((message, idx) => {
                 return (
                     <div key={idx} className="flex items-center gap-2 mt-4">
                         <div className="text-sm font-medium p-4 bg-white inline-block rounded-xl ml-auto">{message}</div>

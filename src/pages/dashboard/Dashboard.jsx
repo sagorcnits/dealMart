@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
-import { io } from 'socket.io-client';
 import useAxios from "../../hooks/useAxios";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
@@ -21,43 +20,8 @@ const Dashboard = () => {
     setMobileSideBar(!mobileSideBar);
   };
 
-  const socketId = localStorage.getItem("socketId")
-  // socket connection
-  useEffect(() => {
-    const socket = io("http://localhost:5000/");
-    socket.on("connect", () => {
-      setNewSocket(socket);
-      // update chat user data
-      if (socketId) {
-        // update chat user data
-        axiosPublic.put(`/chat-user/${socketId}`, { socketId: socket?.id, }).then(res => {
-          if (res.data.message === "ok") {
-            localStorage.setItem("socketId", socket?.id);
-          }
-        }).catch(err => {
-          console.log(err.message);
-        })
-      } else {
-        navigate("/login")
-      }
-    });
-    return () => {
-      socket.close();
-    };
 
-  }, [])
-
-
-  console.log(socket?.id)
-
-  // send message to server
-  const handleSendMessage = (e) => {
-    e.preventDefault();
-    if (message) {
-      socket.emit("private-message", { senderId: socket.id, message, receiverId: "Ta8jvCXrnsodqaZhAAhZ" });
-      setNewMessage("");
-    }
-  }
+ 
 
 
   const theme = useSelector((state) => state.darkMode);
