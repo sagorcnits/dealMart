@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { NavLink, Outlet } from "react-router-dom";
+import useAxios from "../../../../hooks/useAxios";
 const Chat = () => {
 
 
@@ -22,6 +23,18 @@ export default Chat;
 
 // chat user components
 const Chat_user = () => {
+  const [allUserData, setUsersData] = useState([])
+  const axiosPublic = useAxios()
+
+  useEffect(() => {
+    axiosPublic.get("/chat-user").then(res => {
+      console.log(res.data.data)
+      setUsersData(res.data.data)
+    }).catch(err => console.error(err))
+  }, [])
+
+  // console.log(allUserData)
+
   return (
     <div className="p-2 relative md:w-[25%] h-[120px] md:h-auto">
       <div>
@@ -33,21 +46,22 @@ const Chat_user = () => {
       </div>
       {/* user profile card */}
       <div className="overflow-auto flex md:flex-col scrollbar-none md:scrollbar-vissible absolute top-10 bottom-0 left-0 right-0  mt-4">
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, id) => {
+        {allUserData?.map((item, id) => {
+          const { customer_name, image, customer_email } = item;
           return (
-            <NavLink  className={({ isActive, isPending }) =>
+            <NavLink className={({ isActive, isPending }) =>
               isPending ? "pending" : isActive ? "active_chat_user" : ""
-            } key={id} to={`/dashboard/chat/message-user/${id}`}>
+            } key={id} to={`/dashboard/chat/message-user/${customer_email}`}>
               <div className="flex items-center gap-2 p-2 cursor-pointer hover:bg-[#a7a3a3] duration-500">
                 <div className="size-[50px] rounded-full overflow-hidden border">
                   <img
-                    src="https://lh3.googleusercontent.com/a/ACg8ocL-G38YycrNTgadRSctDVoHou9KPcM8OrqlQk9-I03rsqVALHA=s288-c-no"
+                    src={image}
                     alt="user profile"
                     className="w-full h-full"
                   />
                 </div>
                 <div className="hidden md:block">
-                  <h1 className="font-semibold">Sagor Hossain</h1>
+                  <h1 className="font-semibold">{customer_name}</h1>
                   <p className="text-xs">ay product re dam koto</p>
                 </div>
               </div>

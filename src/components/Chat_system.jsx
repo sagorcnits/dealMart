@@ -28,20 +28,28 @@ const Chat_system = () => {
     const handleSendMessage = (e) => {
         e.preventDefault();
         const user_email = localStorage.getItem("user_email")
+        console.log(user_email);
         // get admin socket from server
         axiosPublic.get("/chat-user?admin=admin").then((res) => {
             let adminSocketId = res.data.adminData[0].socketId
           let admin_email = res.data.adminData[0].customer_email
             console.log(adminSocketId)
             if (adminSocketId) {
-                socket.emit("private-message", { senderId: socket.id, message, receiverId: adminSocketId });
-                setNewMessage("");
+                socket.emit("private-message", { senderId: socket.id,  message: {
+                    text: message,
+                    timestamp: new Date(),
+                }, receiverId: adminSocketId});
+           
                 axiosPublic.post("/messages", {
-                    message,
+                    message: {
+                        text: message,
+                        timestamp: new Date(),
+                    },
                     sender: user_email,
                     receiver:  admin_email,
                 }).then(res => {
                     console.log(res.data)
+                    setNewMessage("");
                 }).catch(err => {
                     console.log(err.message)
                 })
@@ -135,7 +143,7 @@ const UserChatLand = () => {
         socket.on(
             "receive-private-message",
             (data) => {
-                setReceivedMessages((prevMessage) => [...prevMessage, data.message]);
+                setReceivedMessages((prevMessage) => [...prevMessage, data]);
 
             }
         );
@@ -158,7 +166,7 @@ const UserChatLand = () => {
             {receivedMessages?.map((message, idx) => {
                 return (
                     <div key={idx} className="flex items-center gap-2 mt-4">
-                        <div className="text-sm font-medium p-4 bg-white inline-block rounded-xl ml-auto">{message}</div>
+                        <div className="text-sm font-medium p-4 bg-white inline-block rounded-xl ml-auto">{message.message.text}</div>
                         <p>You</p>
                     </div>
                 )
