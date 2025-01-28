@@ -1,29 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import { IoIosSend } from "react-icons/io";
-import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "../../../../components/Socket_provider";
 import useAxios from "../../../../hooks/useAxios";
 const Message_user = () => {
-const [allMessage, setAllMessage] = useState([])
+  const [allMessage, setAllMessage] = useState([])
 
   const { id } = useParams()
-const axiosPublic = useAxios()
-
-
-
-
-useEffect(() => {
-  // get user data from server
-  axiosPublic.get(`/messages/${id}`).then((res) => {
-    console.log(res.data, "ok")
-    setAllMessage(res.data)
-  }).catch((err) => {
-    console.log(err.message)
-  })
-},[])
-
-console.log(allMessage,id)
+  const axiosPublic = useAxios()
 
 
 
@@ -35,32 +19,37 @@ console.log(allMessage,id)
 
 
 
- // send message
-//  const handleSendMessage = (e) => {
-//   e.preventDefault();
-//   const user_email = localStorage.getItem("user_email")
-//   // get admin socket from server
-//   axiosPublic.get("/chat-user?admin=admin").then((res) => {
-//       let adminSocketId = res.data.adminData[0].socketId
-//     let admin_email = res.data.adminData[0].customer_email
-//       console.log(adminSocketId)
-//       if (adminSocketId) {
-//           socket.emit("private-message", { senderId: socket.id, message, receiverId: adminSocketId });
-//           setNewMessage("");
-//           axiosPublic.post("/messages", {
-//               message,
-//               sender: user_email,
-//               receiver:  admin_email,
-//           }).then(res => {
-//               console.log(res.data)
-//           }).catch(err => {
-//               console.log(err.message)
-//           })
-//       }
-//   }).catch(err => {
-//       console.log(err.message)
-//   })
-// }
+
+
+
+
+
+  // send message
+  //  const handleSendMessage = (e) => {
+  //   e.preventDefault();
+  //   const user_email = localStorage.getItem("user_email")
+  //   // get admin socket from server
+  //   axiosPublic.get("/chat-user?admin=admin").then((res) => {
+  //       let adminSocketId = res.data.adminData[0].socketId
+  //     let admin_email = res.data.adminData[0].customer_email
+  //       console.log(adminSocketId)
+  //       if (adminSocketId) {
+  //           socket.emit("private-message", { senderId: socket.id, message, receiverId: adminSocketId });
+  //           setNewMessage("");
+  //           axiosPublic.post("/messages", {
+  //               message,
+  //               sender: user_email,
+  //               receiver:  admin_email,
+  //           }).then(res => {
+  //               console.log(res.data)
+  //           }).catch(err => {
+  //               console.log(err.message)
+  //           })
+  //       }
+  //   }).catch(err => {
+  //       console.log(err.message)
+  //   })
+  // }
 
 
 
@@ -73,7 +62,7 @@ console.log(allMessage,id)
   return (
     <div className="relative w-full h-full">
       <Message_admin chatUserData={allMessage}></Message_admin>
-      {/* input feild */}allMessage
+     
       <div className="flex items-center gap-2 absolute left-2 bottom-2 right-2">
         <div className="w-[90%] md:w-[94%] border rounded-lg overflow-hidden">
           <input
@@ -94,11 +83,25 @@ export default Message_user;
 
 // recive message admin 
 
-const Message_admin = ({allMessage}) => {
-  
-  const recevie_message_active = useSelector((state) => state.recevie_message_slice)
+const Message_admin = () => {
+
   const [receivedMessages, setReceivedMessages] = useState([])
   const { socket } = useContext(AuthContext);
+  const { id } = useParams()
+  const axiosPublic = useAxios()
+
+// get all user message form database
+  useEffect(() => {
+    axiosPublic.get(`/messages/${id}`).then((res) => {
+      setReceivedMessages(res.data)
+    }).catch((err) => {
+      console.log(err.message)
+    })
+  }, [id])
+
+  
+
+// socket io recive message
   useEffect(() => {
     console.log(socket)
     console.log("ok received messages")
@@ -112,11 +115,12 @@ const Message_admin = ({allMessage}) => {
     return () => {
       socket.off("receive-private-message");
     };
-  }, [recevie_message_active])
+  }, [])
 
 
 
-  console.log(allMessage)
+  // console.log(allMessage)
+  console.log(receivedMessages)
 
 
   return (
@@ -132,7 +136,7 @@ const Message_admin = ({allMessage}) => {
             />
           </div>
           <div>
-            <h1 className="font-semibold text-sm">Sagor Hossain : { 0}</h1>
+            <h1 className="font-semibold text-sm">Sagor Hossain : {0}</h1>
             <p className="text-xs">ay product re dam koto</p>
           </div>
         </div>

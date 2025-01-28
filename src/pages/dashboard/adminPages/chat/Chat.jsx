@@ -35,6 +35,7 @@ const Chat_user = () => {
 
   // console.log(allUserData)
 
+  const userEmail = localStorage.getItem('user_email')
   return (
     <div className="p-2 relative md:w-[25%] h-[120px] md:h-auto">
       <div>
