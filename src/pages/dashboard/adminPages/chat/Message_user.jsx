@@ -29,11 +29,11 @@ export default Message_user;
 // recive message admin 
 
 const Message_admin = () => {
-
   // const { id } = useParams()
   const recevie_message_active = useSelector((state) => state.recevie_message_slice)
   const [receivedMessages, setReceivedMessages] = useState([])
   const { socket } = useContext(AuthContext);
+  
   useEffect(() => {
     console.log(socket)
     console.log("ok received messages")

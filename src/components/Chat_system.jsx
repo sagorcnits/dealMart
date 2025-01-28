@@ -5,7 +5,6 @@ import { IoSend } from "react-icons/io5";
 import { MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from 'react-redux';
 import { chat_active } from "../features/chat_active/chat_slice";
-import { recevie_message } from "../features/recevie_message/recevie_message";
 import useAxios from "../hooks/useAxios";
 import { AuthContext } from "./Socket_provider";
 const Chat_system = () => {
@@ -15,30 +14,43 @@ const Chat_system = () => {
         customer_name: "",
         customer_email: "",
     })
- 
+
     const dispatch = useDispatch()
     const axiosPublic = useAxios()
     const { socket } = useContext(AuthContext);
     console.log(socket)
-    // socket connection
 
-
+    // user 
+    const user = useSelector((state) => state.user.user)
+    const userChatActive = useSelector((state) => state.chat_slice)
 
     // send message
     const handleSendMessage = (e) => {
         e.preventDefault();
+        const user_email = localStorage.getItem("user_email")
         // get admin socket from server
         axiosPublic.get("/chat-user?admin=admin").then((res) => {
             let adminSocketId = res.data.adminData[0].socketId
+          let admin_email = res.data.adminData[0].customer_email
+            console.log(adminSocketId)
             if (adminSocketId) {
                 socket.emit("private-message", { senderId: socket.id, message, receiverId: adminSocketId });
-                dispatch(recevie_message())
                 setNewMessage("");
+                axiosPublic.post("/messages", {
+                    message,
+                    sender: user_email,
+                    receiver:  admin_email,
+                }).then(res => {
+                    console.log(res.data)
+                }).catch(err => {
+                    console.log(err.message)
+                })
             }
         }).catch(err => {
             console.log(err.message)
         })
     }
+
     // handel continue chat
     const handleContinueChat = (e) => {
         e.preventDefault()
@@ -59,14 +71,12 @@ const Chat_system = () => {
             console.log(err)
         })
         // update chat user data
-       
-    }
-    // user 
-    const user = useSelector((state) => state.user.user)
-    const userChatActive = useSelector((state) => state.chat_slice)
-   
 
-  
+    }
+
+
+
+
 
     return (
         <div className="fixed z-50 bottom-4 right-4 flex flex-col gap-4">
@@ -126,7 +136,7 @@ const UserChatLand = () => {
             "receive-private-message",
             (data) => {
                 setReceivedMessages((prevMessage) => [...prevMessage, data.message]);
-                
+
             }
         );
         // close socket id
@@ -135,7 +145,7 @@ const UserChatLand = () => {
         };
     }, [recevie_message_active])
 
-    
+
 
     return (
         <div className="h-[300px] px-2 py-4 bg-[#E3DCD5] overflow-auto chater_scrollbar">
