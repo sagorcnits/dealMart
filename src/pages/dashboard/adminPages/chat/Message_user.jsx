@@ -14,6 +14,9 @@ const Message_user = () => {
   const handleSendMessage = (e) => {
     e.preventDefault();
     // get admin socket from server
+    if(message == ""){
+      return alert("Please Give me input")
+    } 
     axiosPublic.get(`/chat-user/${id}`).then((res) => {
       const { socketId, customer_email } = res.data;
       // message brodcast
@@ -44,14 +47,6 @@ const Message_user = () => {
       console.log(err.message)
     })
   }
-
-
-
-
-
-
-
-
 
   return (
     <div className="relative w-full h-full">
