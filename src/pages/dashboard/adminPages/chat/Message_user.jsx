@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { IoIosSend } from "react-icons/io";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "../../../../components/Socket_provider";
 import useAxios from "../../../../hooks/useAxios";
@@ -8,11 +9,10 @@ const Message_user = () => {
   const { socket } = useContext(AuthContext);
   const { id } = useParams()
   const axiosPublic = useAxios()
-
+  const user = useSelector((state) => state.user.user)
   // send message form admin
   const handleSendMessage = (e) => {
     e.preventDefault();
-    const admin_email = localStorage.getItem("user_email")
     // get admin socket from server
     axiosPublic.get(`/chat-user/${id}`).then((res) => {
       const { socketId, customer_email } = res.data;
@@ -21,6 +21,7 @@ const Message_user = () => {
         socket.emit("private-message", {
           senderId: socket.id, message: {
             text: message,
+            image: user?.photoUrl,
             timestamp: new Date(),
           }, receiverId: socketId
         });
@@ -29,8 +30,9 @@ const Message_user = () => {
           {
             message: {
               text: message,
+              image: user?.photoUrl
             },
-            sender: admin_email,
+            sender: user?.email,
             receiver: customer_email,
           }).then(res => {
             console.log(res.data)
@@ -105,8 +107,6 @@ const Message_admin = () => {
 
   // socket io recive message
   useEffect(() => {
-    console.log(socket)
-    console.log("ok received messages")
     socket.on(
       "receive-private-message",
       (data) => {
@@ -122,9 +122,9 @@ const Message_admin = () => {
 
 
   // console.log(allMessage)
-  console.log(receivedMessages)
 
-
+  const adminUser = useSelector((state) => state.user.user)
+console.log(adminUser)
   return (
     <>
 
@@ -147,8 +147,8 @@ const Message_admin = () => {
       <div className="overflow-auto scrollbar-vissible absolute top-14 bottom-10 left-0 right-0">
         {receivedMessages?.map((message, id) => {
           return (
-            <div key={id} className="flex justify-start">
-              <div className="flex items-center gap-2 p-4">
+            <div key={id} className={`flex w-full ${message?.sender == adminUser?.email ? "justify-end" : "justify-start"}`}>
+              <div className={`flex items-center gap-2 p-4 ${message?.sender == adminUser?.email ? "flex-row-reverse" : ""}`}>
                 <div className="size-[40px] rounded-full overflow-hidden border">
                   <img
                     src={user?.image}

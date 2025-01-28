@@ -38,6 +38,7 @@ const Chat_system = () => {
                 socket.emit("private-message", {
                     senderId: socket.id, message: {
                         text: message,
+                        image: user?.photoUrl || "/images/headphone.png",
                         timestamp: new Date(),
                     }, receiverId: adminSocketId
                 });
@@ -45,6 +46,7 @@ const Chat_system = () => {
                 axiosPublic.post("/messages", {
                     message: {
                         text: message,
+                        image: user?.photoUrl || "/images/headphone.png"
                     },
                     sender: user_email,
                     receiver: admin_email,
