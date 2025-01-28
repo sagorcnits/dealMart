@@ -32,21 +32,22 @@ const Chat_system = () => {
         // get admin socket from server
         axiosPublic.get("/chat-user?admin=admin").then((res) => {
             let adminSocketId = res.data.adminData[0].socketId
-          let admin_email = res.data.adminData[0].customer_email
+            let admin_email = res.data.adminData[0].customer_email
             console.log(adminSocketId)
             if (adminSocketId) {
-                socket.emit("private-message", { senderId: socket.id,  message: {
-                    text: message,
-                    timestamp: new Date(),
-                }, receiverId: adminSocketId});
-           
+                socket.emit("private-message", {
+                    senderId: socket.id, message: {
+                        text: message,
+                        timestamp: new Date(),
+                    }, receiverId: adminSocketId
+                });
+
                 axiosPublic.post("/messages", {
                     message: {
                         text: message,
-                        timestamp: new Date(),
                     },
                     sender: user_email,
-                    receiver:  admin_email,
+                    receiver: admin_email,
                 }).then(res => {
                     console.log(res.data)
                     setNewMessage("");

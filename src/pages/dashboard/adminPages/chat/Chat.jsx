@@ -35,7 +35,8 @@ const Chat_user = () => {
 
   // console.log(allUserData)
 
-  const userEmail = localStorage.getItem('user_email')
+  const user = useSelector((state) => state.user.user)
+
   return (
     <div className="p-2 relative md:w-[25%] h-[120px] md:h-auto">
       <div>
@@ -53,7 +54,7 @@ const Chat_user = () => {
             <NavLink className={({ isActive, isPending }) =>
               isPending ? "pending" : isActive ? "active_chat_user" : ""
             } key={id} to={`/dashboard/chat/message-user/${customer_email}`}>
-              <div className="flex items-center gap-2 p-2 cursor-pointer hover:bg-[#a7a3a3] duration-500">
+              <div className={`flex items-center gap-2 p-2 cursor-pointer hover:bg-[#a7a3a3] duration-500 ${user?.email == customer_email ? "hidden" : ""}`}>
                 <div className="size-[50px] rounded-full overflow-hidden border">
                   <img
                     src={image}
