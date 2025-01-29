@@ -1,4 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
+import PrivateRouter from "../components/Private_router";
 import Root from "../layout/Root";
 import About from "../pages/about/About";
 import Contact from "../pages/contact/Contact";
@@ -101,66 +102,66 @@ const router = createBrowserRouter([
   // dashboard routes
   {
     path: "dashboard",
-    element: <Dashboard></Dashboard>,
+    element: <PrivateRouter><Dashboard></Dashboard></PrivateRouter>,
     children: [
       {
         path: "/dashboard",
-        element: <AdminDashboard></AdminDashboard>,
+        element: <PrivateRouter><AdminDashboard></AdminDashboard></PrivateRouter> ,
       },
 
       {
         path: "/dashboard/admin_dashboard",
-        element: <AdminDashboard></AdminDashboard>,
+        element:<PrivateRouter><AdminDashboard></AdminDashboard></PrivateRouter> ,
       },
       // product Routes
       {
         path: "/dashboard/all-product",
-        element: <Products></Products>,
+        element:<PrivateRouter><Products></Products></PrivateRouter> ,
       },
       {
         path: "/dashboard/create-product",
-        element: <CreateProduct></CreateProduct>,
+        element: <PrivateRouter><CreateProduct></CreateProduct></PrivateRouter>,
       },
       {
         path: "/dashboard/product-details/:id",
-        element: <ProductDetails></ProductDetails>,
+        element:<PrivateRouter><ProductDetails></ProductDetails></PrivateRouter> ,
       },
       {
         path: "/dashboard/update-product/:id",
-        element: <Product_update></Product_update>,
+        element: <PrivateRouter><Product_update></Product_update></PrivateRouter> ,
       },
       // customer routes
       {
         path: "/dashboard/customers",
-        element: <Customers></Customers>,
+        element:<PrivateRouter><Customers></Customers></PrivateRouter> ,
       },
 
       {
         path: "/dashboard/customer-details/:email",
-        element: <Customer_details></Customer_details>,
+        element:<PrivateRouter><Customer_details></Customer_details></PrivateRouter> ,
       },
       // order routes
       {
         path: "/dashboard/order-list",
-        element: <OrderList></OrderList>,
+        element:<PrivateRouter><OrderList></OrderList></PrivateRouter> ,
       },
 
       {
         path: "/dashboard/order-details/:id",
-        element: <OrderDetails></OrderDetails>,
+        element:<PrivateRouter><OrderDetails></OrderDetails></PrivateRouter> ,
       },
       // user chat routes
       {
         path: "/dashboard/users",
-        element: <Users></Users>,
+        element:<PrivateRouter><Users></Users></PrivateRouter>,
       },
       {
         path: "/dashboard/chat",
-        element: <Chat></Chat>,
+        element:<PrivateRouter><Chat></Chat></PrivateRouter> ,
         children: [
           {
             path: "/dashboard/chat/message-user/:id",
-            element: <Message_user></Message_user>,
+            element: <PrivateRouter><Message_user></Message_user></PrivateRouter>,
           },
         ]
       },
