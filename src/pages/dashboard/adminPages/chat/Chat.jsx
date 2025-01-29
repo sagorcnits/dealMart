@@ -11,7 +11,7 @@ const Chat = () => {
     <main className="pt-[60px]">
       <section className={`flex flex-col md:flex-row gap-3 md:banner    *:rounded-lg pt-4 ${theme == "light" ? "*:bg-white" : "*:bg-black"}`}>
         <Chat_user></Chat_user>
-        <div className="md:w-[75%] h-[500px] md:h-auto">
+        <div className="md:w-[75%] h-[500px] md:h-auto border">
           <Outlet></Outlet>
         </div>
       </section>
@@ -38,7 +38,7 @@ const Chat_user = () => {
   const user = useSelector((state) => state.user.user)
 
   return (
-    <div className="p-2 relative md:w-[25%] h-[120px] md:h-auto">
+    <div className="p-2 relative md:w-[25%] h-[120px] md:h-auto border">
       <div>
         <input
           className="py-[7px] rounded-lg w-full border focus:outline-none px-2"

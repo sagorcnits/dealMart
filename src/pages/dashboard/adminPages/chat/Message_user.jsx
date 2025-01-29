@@ -80,7 +80,7 @@ const Message_admin = () => {
   const { socket } = useContext(AuthContext);
   const { id } = useParams()
   const axiosPublic = useAxios()
-
+console.log(socket)
   // get all user message form database
   useEffect(() => {
     axiosPublic.get(`/messages/${id}`).then((res) => {
@@ -116,7 +116,7 @@ const Message_admin = () => {
 
 
 
-  // console.log(allMessage)
+  console.log(receivedMessages)
 
   const adminUser = useSelector((state) => state.user.user)
 console.log(adminUser)
@@ -142,8 +142,8 @@ console.log(adminUser)
       <div className="overflow-auto scrollbar-vissible absolute top-14 bottom-10 left-0 right-0">
         {receivedMessages?.map((message, id) => {
           return (
-            <div key={id} className={`flex w-full ${message?.sender == adminUser?.email ? "justify-end" : "justify-start"}`}>
-              <div className={`flex items-center gap-2 p-4 ${message?.sender == adminUser?.email ? "flex-row-reverse" : ""}`}>
+            <div key={id} className={`flex w-full ${message?.sender == adminUser?.email || message.senderId == socket.id ? "justify-end" : "justify-start"}`}>
+              <div className={`flex items-center gap-2 p-4 ${message?.sender == adminUser?.email || message.senderId == socket.id ? "flex-row-reverse" : ""}`}>
                 <div className="size-[40px] rounded-full overflow-hidden border">
                   <img
                     src={user?.image}
