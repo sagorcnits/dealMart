@@ -149,7 +149,7 @@ const router = createBrowserRouter([
         path: "/dashboard/order-details/:id",
         element: <OrderDetails></OrderDetails>,
       },
-      // user routes
+      // user chat routes
       {
         path: "/dashboard/users",
         element: <Users></Users>,
@@ -158,10 +158,6 @@ const router = createBrowserRouter([
         path: "/dashboard/chat",
         element: <Chat></Chat>,
         children: [
-          {
-            path: "/dashboard/chat",
-            element: <Message_user></Message_user>,
-          },
           {
             path: "/dashboard/chat/message-user/:id",
             element: <Message_user></Message_user>,

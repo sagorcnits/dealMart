@@ -155,7 +155,7 @@ const SidebarItem = ({ handleMobileSideBar }) => {
      
       <li onClick={handleMobileSideBar}>
         <NavLink
-          to="/dashboard/chat"
+          to="/dashboard/chat/message-user/sagor@gmail.com"
           className={({ isActive, isPending }) =>
             isPending
               ? "pending"

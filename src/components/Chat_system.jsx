@@ -26,6 +26,13 @@ const Chat_system = () => {
 
     // send message
     const handleSendMessage = (e) => {
+
+
+        if (message == "") {
+            return alert("Please select a message");
+        }
+
+
         e.preventDefault();
         const user_email = localStorage.getItem("user_email")
         console.log(user_email);
@@ -84,9 +91,6 @@ const Chat_system = () => {
         // update chat user data
 
     }
-
-
-
 
 
     return (

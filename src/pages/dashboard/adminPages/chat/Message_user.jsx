@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { IoIosSend } from "react-icons/io";
+import { MdAddCall } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "../../../../components/Socket_provider";
@@ -14,9 +15,9 @@ const Message_user = () => {
   const handleSendMessage = (e) => {
     e.preventDefault();
     // get admin socket from server
-    if(message == ""){
+    if (message == "") {
       return alert("Please Give me input")
-    } 
+    }
     axiosPublic.get(`/chat-user/${id}`).then((res) => {
       const { socketId, customer_email } = res.data;
       // message brodcast
@@ -80,7 +81,7 @@ const Message_admin = () => {
   const { socket } = useContext(AuthContext);
   const { id } = useParams()
   const axiosPublic = useAxios()
-console.log(socket)
+  console.log(socket)
   // get all user message form database
   useEffect(() => {
     axiosPublic.get(`/messages/${id}`).then((res) => {
@@ -116,14 +117,14 @@ console.log(socket)
 
 
 
-  console.log(receivedMessages)
+
 
   const adminUser = useSelector((state) => state.user.user)
-console.log(adminUser)
+
   return (
     <>
 
-      <div className="border-b flex">
+      <div className="border-b flex justify-between items-center">
         <div className="flex items-center gap-2 p-2">
           <div className="size-[40px] rounded-full overflow-hidden border">
             <img
@@ -134,9 +135,12 @@ console.log(adminUser)
           </div>
           <div>
             <h1 className="font-semibold text-sm">{user?.customer_name}</h1>
-            <p className="text-xs">ay product re dam koto</p>
+            <p className="text-xs text-green">active now</p>
           </div>
         </div>
+        <button className="px-3">
+          <MdAddCall size={30} />
+        </button>
       </div>
       {/* message */}
       <div className="overflow-auto scrollbar-vissible absolute top-14 bottom-10 left-0 right-0">
@@ -144,20 +148,20 @@ console.log(adminUser)
           return (
             <div key={id} className={`flex w-full ${message?.sender == adminUser?.email || message.senderId == socket.id ? "justify-end" : "justify-start"}`}>
               <div className={`flex items-center gap-2 p-4 ${message?.sender == adminUser?.email || message.senderId == socket.id ? "flex-row-reverse" : ""}`}>
-                <div className="size-[40px] rounded-full overflow-hidden border">
+                <div className="size-[50px] rounded-full overflow-hidden border">
                   <img
-                    src={user?.image}
+                    src={`${message?.sender == adminUser?.email || message.senderId == socket.id ? adminUser?.photoUrl : user?.image}`}
                     alt="user profile"
                     className="w-full h-full"
                   />
                 </div>
                 <div>
-                  <div className="bg-blue text-white p-2 rounded-lg max-w-[400px]">
+                  <div className="bg-blue text-white py-2 px-3 rounded-lg max-w-[400px]">
                     <p className="text-sm">
                       {message.message.text}
                     </p>
                   </div>
-                  <p className="text-paragraph text-xs pt-1">{message.message.timestamp}</p>
+                  <p className={`text-paragraph text-xs pt-1 ${message?.sender == adminUser?.email || message.senderId == socket.id ? "text-end" : "text-start"}`}>{message.message.timestamp.slice(11, 16)}{" : "}{message.message.timestamp.slice(0, 10)}</p>
                 </div>
               </div>
             </div>

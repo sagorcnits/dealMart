@@ -47,14 +47,14 @@ const Chat_user = () => {
         />
       </div>
       {/* user profile card */}
-      <div className="overflow-auto flex md:flex-col scrollbar-none md:scrollbar-vissible absolute top-10 bottom-0 left-0 right-0  mt-4">
+      <div className="overflow-auto flex md:flex-col scrollbar-none md:scrollbar-vissible absolute top-10 bottom-0 left-0 right-0 *:rounded-md mt-4 px-2  *:mt-1">
         {allUserData?.map((item, id) => {
           const { customer_name, image, customer_email } = item;
           return (
             <NavLink className={({ isActive, isPending }) =>
               isPending ? "pending" : isActive ? "active_chat_user" : ""
             } key={id} to={`/dashboard/chat/message-user/${customer_email}`}>
-              <div className={`flex items-center gap-2 p-2 cursor-pointer hover:bg-[#a7a3a3] duration-500 ${user?.email == customer_email ? "hidden" : ""}`}>
+              <div className={`flex items-center gap-2 p-2 rounded-md cursor-pointer hover:bg-[#a7a3a3] duration-500 ${user?.email == customer_email ? "hidden" : ""}`}>
                 <div className="size-[50px] rounded-full overflow-hidden border">
                   <img
                     src={image}
@@ -64,7 +64,7 @@ const Chat_user = () => {
                 </div>
                 <div className="hidden md:block">
                   <h1 className="font-semibold">{customer_name}</h1>
-                  <p className="text-xs">ay product re dam koto</p>
+                  <p className="text-xs text-green">active now</p>
                 </div>
               </div>
             </NavLink>

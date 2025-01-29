@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { FaRegMessage } from "react-icons/fa6";
 import { IoIosClose, IoMdMenu } from "react-icons/io";
 import { IoNotificationsOutline, IoSunnyOutline } from "react-icons/io5";
 import { MdDarkMode } from "react-icons/md";
@@ -62,7 +61,7 @@ const Navbar = ({ handleSideBar, handleMobileSideBar, sidebar }) => {
           )}
         </div>
         {/* message notification */}
-        <div className={`size-8 rounded-full ${theme == "light" ? "bg-gray-300" : "bg-black text-white"} flex justify-center items-center cursor-pointer relative border`}>
+        {/* <div className={`size-8 rounded-full ${theme == "light" ? "bg-gray-300" : "bg-black text-white"} flex justify-center items-center cursor-pointer relative border`}>
           <FaRegMessage
             onClick={handleMessageNotification}
           ></FaRegMessage>
@@ -111,7 +110,7 @@ const Navbar = ({ handleSideBar, handleMobileSideBar, sidebar }) => {
               </button>
             </Link>
           </div>
-        </div>
+        </div> */}
         {/* order notification */}
         <div className={`size-8 rounded-full ${theme == "light" ? "bg-gray-300" : "bg-black text-white"} flex justify-center items-center  relative border`}>
           <IoNotificationsOutline
