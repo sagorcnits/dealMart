@@ -40,6 +40,11 @@ const Chat_user = () => {
       "receive-private-message",
       (data) => {
         setReceivedMessages((prevMessage) => [...prevMessage, data]);
+        const message = allUserData.filter(user => {
+          const msg = receivedMessages.filter(item => item.senderId == user.socketId)
+          return msg
+        })              
+        console.log(message)
       }
     );
     // close socket id
@@ -48,13 +53,7 @@ const Chat_user = () => {
     };
   }, [])
   // console.log(allUserData)
-  const message = allUserData.filter(user => {
-    const msg = receivedMessages.filter(item => item.senderId == user.socketId)
-    return msg
-  })
 
-  
-  console.log(receivedMessages, allUserData, message)
   const user = useSelector((state) => state.user.user)
 
   return (
