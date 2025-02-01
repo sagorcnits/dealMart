@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import headphone from "../../../public/images/headphone.png";
 import SectionIntro from "../../components/SectionIntro";
 
@@ -9,8 +9,21 @@ import Banner from "./Banner";
 import Discount from "./Discount";
 import ProductContainer from "./ProductContainer";
 const Home = () => {
-
   const theme = useSelector((state) => state.darkMode);
+  const axiosFetch = useAxios()
+  const counter = localStorage.getItem('counter');
+  // counter
+  if (!counter) {
+    useEffect(() => {
+      localStorage.setItem("counter", 1)
+      axiosFetch.post("/visitors", { visitor: 1, time: new Date() }).then((res) => {
+        console.log(res.data)
+      }).catch(err => {
+        console.log(err.message)
+      })
+    }, [])
+  }
+
   return (
     <main>
       <section className="mt-4 max-w-7xl mx-auto px-2">
@@ -75,7 +88,7 @@ const Home = () => {
 
 export default Home;
 
-const Subscribe = ({theme}) => {
+const Subscribe = ({ theme }) => {
   const [subscribe, setSubscribe] = useState("");
   const axiosFetch = useAxios();
   const handleSubscribe = (e) => {
