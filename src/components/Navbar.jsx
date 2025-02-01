@@ -257,7 +257,8 @@ const Order = ({ theme,openCart, setOpenCart }) => {
     if (!name || !phone || !address || shippingVat == 0) {
       return alert("please share your shipping address");
     }
-    if(!user){
+
+    if(!user?.email){
       return alert("please login first");
     }
 
