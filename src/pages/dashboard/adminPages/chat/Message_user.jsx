@@ -81,7 +81,7 @@ const Message_admin = () => {
   const { socket } = useContext(AuthContext);
   const { id } = useParams()
   const axiosPublic = useAxios()
-  console.log(socket)
+  // console.log(socket)
   // get all user message form database
   useEffect(() => {
     axiosPublic.get(`/messages/${id}`).then((res) => {
