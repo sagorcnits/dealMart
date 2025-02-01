@@ -5,11 +5,9 @@ const PrivateRouter = ({ children }) => {
     const user = useSelector((state) => state.user.user)
 
     if (!user) {
-
-        <div className='h-screen flex justify-center items-center'>
+      return  <div className='h-screen flex justify-center items-center'>
             <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin dark:border-violet-600"></div>
         </div>
-
     }
 
     if (user?.role == 'admin') {
