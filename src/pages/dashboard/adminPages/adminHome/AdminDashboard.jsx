@@ -107,7 +107,7 @@ const SalesCard = ({ theme, changeStatus, filterDate }) => {
   const [salseInformation, setSalseInformation] = useState(null);
   const [customers, refetch, isPending] = useCustomers();
   const [loading, setLoading] = useState(true);
-  const [visitor, setVisitors] = useState(0);
+  const [visitor, setVisitors] = useState([]);
   // get order
   useEffect(() => {
     axiosFetch
@@ -127,7 +127,7 @@ const SalesCard = ({ theme, changeStatus, filterDate }) => {
     axiosFetch
       .get(`/visitors`)
       .then((res) => {
-        console.log(res.data.visitors)
+        console.log(res.data)
         setVisitors(res.data);
       })
       .catch((err) => {
@@ -174,7 +174,7 @@ const SalesCard = ({ theme, changeStatus, filterDate }) => {
         </div>
         <div className={`leading-8 ${theme == "light" ? "text-[#F3F5F9]" : "text-black"}`}>
           <p className="text-sm xl:text-xl font-semibold">Total Visitor</p>
-          <h1 className="text-xs xl:text-xl">{visitor}</h1>
+          <h1 className="text-xs xl:text-xl">{visitor?.length}</h1>
         </div>
       </div>
       <div className="bg-[#3B82F6]">
