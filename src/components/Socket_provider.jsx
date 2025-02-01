@@ -31,7 +31,7 @@ const Socket_Provider = ({ children }) => {
             socket.close();
         };
     }, []);
-
+console.log(socket)
     if (!socket) {
         return <div className="text-center text-3xl font-bold">loading....</div>
     }

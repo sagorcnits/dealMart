@@ -4,7 +4,6 @@ import { Navigate } from 'react-router-dom';
 const PrivateRouter = ({ children }) => {
     const user = useSelector((state) => state.user.user)
 
-
     if (!user) {
 
         <div className='h-screen flex justify-center items-center'>

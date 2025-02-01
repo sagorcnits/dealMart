@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 import { addToCart } from "../features/cartItem/cartSlice";
 import useAxios from "../hooks/useAxios";
 import useWishlists from "../hooks/useWishlists";
-const ProductCard = ({ item , layout}) => {
+const ProductCard = ({ item, layout }) => {
   const user = useSelector((state) => state.user.user);
   const axiosFetch = useAxios();
   const [wishlists, refetch] = useWishlists();
@@ -44,7 +44,9 @@ const ProductCard = ({ item , layout}) => {
       email: user?.email,
       product_id: _id,
     };
-
+    if (!user?.email) {
+      return toast.warn("Please Before Login After try again..!");
+    }
     axiosFetch
       .post("/wishlists", productInfo)
       .then((res) => {
@@ -68,7 +70,7 @@ const ProductCard = ({ item , layout}) => {
 
   // dark mode 
 
-     const theme = useSelector((state) => state.darkMode);
+  const theme = useSelector((state) => state.darkMode);
 
   return (
     <div className={`dashboard_card card-compact relative  border poppins  md:h-[400px] cursor-pointer hover:border-green duration-500 rounded-md overflow-hidden z-0 ${theme == "light" ? "bg-white" : "bg-black"}`}>
@@ -90,7 +92,7 @@ const ProductCard = ({ item , layout}) => {
         <p className="text-paragraph">{description?.slice(0, 50)}</p>
         <div className="flex items-center justify-between ">
           <div>
-         
+
             <span className={`bg-[#e9f6f6] px-3 py-2 rounded-md text-darkBlue font-semibold `}>
               {quantity_in_stock} sold
             </span>

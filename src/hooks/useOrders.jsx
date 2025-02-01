@@ -11,8 +11,8 @@ const useOrders = () => {
     } = useQuery({
       queryKey: ["orders"],
       queryFn: async () => {
-        const res = await axiosFetch.get(`/orders`);
-        return res.data.orders || [];
+        const res = await axiosFetch.get(`/orders?type=all`);
+        return res.data || [];
       },
     });
   

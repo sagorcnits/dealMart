@@ -28,7 +28,7 @@ const OrderList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const numberPages = Math.ceil(orders?.length / itemPerPage);
   const totalbtn = [...Array(numberPages).keys()];
-
+console.log(orders)
   // order data fetch
   const {
     data: ordersData = [],
@@ -158,7 +158,7 @@ const OrderList = () => {
             >
               <MdDoubleArrow className="rotate-180"></MdDoubleArrow>
             </button>
-            {totalbtn?.slice(0, 7).map((item, id) => {
+            {totalbtn?.map((item, id) => {
               return (
                 <button
                   onClick={() => setCurrentPage(id + 1)}
