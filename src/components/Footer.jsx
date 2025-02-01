@@ -3,7 +3,7 @@ import React from "react";
 const Footer = () => {
   return (
     <>
-      <footer className="footer bg-[#0d181d]  p-10 mt-20 text-paragraph poppins border-b border-green border-dashed">
+      <footer className="footer bg-[#0d181d]  px-10 py-16 mt-20 text-paragraph poppins border-b border-green border-dashed">
         <aside className="pl-8 md:pl-0">
           <h1 className="text-white font-bold text-3xl">
             Deal<span className="text-green">Mart</span>

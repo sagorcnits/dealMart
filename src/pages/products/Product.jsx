@@ -44,6 +44,8 @@ const Product = () => {
     },
   });
 
+  console.log(productsData)
+
   // setitem par page
   const showProductPerPage = (e) => {
     setItemPerPage(e.target.value);
@@ -64,11 +66,15 @@ const Product = () => {
 
   // filter by category
   const filterProducts = (e) => {
+    setItemPerPage(8)
+    setCurrentPage(1)
     setCategory(e.target.value);
   };
 
   // filter by price
   const filterByPrice = (e) => {
+    setItemPerPage(8)
+    setCurrentPage(1)
     setSorted(e.target.value);
   };
 
