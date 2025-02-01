@@ -10,8 +10,10 @@ const Socket_Provider = ({ children }) => {
     const [socket, setNewSocket] = useState(null);
     const user_email = localStorage.getItem("user_email");
     const axiosPublic = useAxios()
-    useEffect( async () => {
-        const socket = await io("https://dealmart-server-wxsp.vercel.app/");
+    useEffect(  () => {
+        const socket =  io("https://dealmart-server-wxsp.vercel.app/", {
+            transports: ['websocket', 'polling']
+          });
         socket.on("connect", () => {
             setNewSocket(socket);
             console.log(socket)
