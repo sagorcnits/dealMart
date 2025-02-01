@@ -28,7 +28,7 @@ const OrderList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const numberPages = Math.ceil(orders?.length / itemPerPage);
   const totalbtn = [...Array(numberPages).keys()];
-console.log(orders)
+console.log(filter, itemPerPage, currentPage, )
   // order data fetch
   const {
     data: ordersData = [],
@@ -50,7 +50,7 @@ console.log(orders)
   const showProductPerPage = (e) => {
     setItemPerPage(e.target.value);
   };
-
+console.log(ordersData)
   // sorted product by price
   const filterOrders = (e) => {
     setFilter(e.target.value);
@@ -129,6 +129,7 @@ console.log(orders)
                 <option disabled selected>
                   filter by
                 </option>
+                <option>all</option>
                 <option>canceled</option>
                 <option>complated</option>
                 <option>progress</option>

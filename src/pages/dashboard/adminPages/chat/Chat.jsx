@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { NavLink, Outlet } from "react-router-dom";
+import { AuthContext } from "../../../../components/Socket_provider";
 import useAxios from "../../../../hooks/useAxios";
 const Chat = () => {
 
@@ -25,7 +26,8 @@ export default Chat;
 const Chat_user = () => {
   const [allUserData, setUsersData] = useState([])
   const axiosPublic = useAxios()
-
+  const [receivedMessages, setReceivedMessages] = useState([])
+  const { socket } = useContext(AuthContext);
   useEffect(() => {
     axiosPublic.get("/chat-user").then(res => {
       console.log(res.data.data)
@@ -33,8 +35,20 @@ const Chat_user = () => {
     }).catch(err => console.error(err))
   }, [])
 
+  useEffect(() => {
+    socket.on(
+      "receive-private-message",
+      (data) => {
+        setReceivedMessages((prevMessage) => [...prevMessage, data]);
+      }
+    );
+    // close socket id
+    return () => {
+      socket.off("receive-private-message");
+    };
+  }, [])
   // console.log(allUserData)
-
+console.log(receivedMessages)
   const user = useSelector((state) => state.user.user)
 
   return (
@@ -65,6 +79,7 @@ const Chat_user = () => {
                 <div className="hidden md:block">
                   <h1 className="font-semibold">{customer_name}</h1>
                   <p className="text-xs text-green">active now</p>
+                  <p></p>
                 </div>
               </div>
             </NavLink>
