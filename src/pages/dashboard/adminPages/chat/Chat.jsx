@@ -48,7 +48,13 @@ const Chat_user = () => {
     };
   }, [])
   // console.log(allUserData)
-console.log(receivedMessages)
+  const message = allUserData.filter(user => {
+    const msg = receivedMessages.filter(item => item.senderId == user.socketId)
+    return msg
+  })
+
+  
+  console.log(receivedMessages, allUserData, message)
   const user = useSelector((state) => state.user.user)
 
   return (
