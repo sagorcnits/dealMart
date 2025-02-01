@@ -13,9 +13,11 @@ const Order = () => {
   useEffect(() => {
     console.log("ok");
     if (user?.email) {
+      console.log("ok: order")
       axiosFetch
-        .get(`/orders/email/${user?.email}`)
+        .get(`/orders?email=${user?.email}`)
         .then((res) => {
+          console.log(res.data);
           setOrders(res.data);
           setLoading(false);
         })
@@ -50,7 +52,7 @@ const Order = () => {
               </tr>
             </thead>
             <tbody>
-              {orders?.order?.map((item, id) => {
+              {orders?.map((item, id) => {
                 const {
                   _id,
                   orderId,
