@@ -162,6 +162,13 @@ const Customer_profile = ({ customer }) => {
 // order history of the customer
 const OrderHistory = ({ customerOrderHistory, refetch, isPending }) => {
   const axiosFetch = useAxios();
+  const [filterData, setFilterData] = useState([])
+  // customer order history
+  useEffect(() => {
+    if (customerOrderHistory) {
+      setFilterData(customerOrderHistory)
+    }
+  }, [customerOrderHistory])
   // delete order from customer details
   const deleteOrder = (id) => {
     Swal.fire({
@@ -218,6 +225,26 @@ const OrderHistory = ({ customerOrderHistory, refetch, isPending }) => {
       });
   };
 
+
+  // filter order data
+
+  const filterOrders = (e) => {
+    const value = e.target.value;
+    if (value === "all") {
+      setFilterData(customerOrderHistory);
+    } else if (value === "progress"){
+      const filteredData = customerOrderHistory.filter(
+        (order) => order.order_status.status ===  "pending"
+      );
+      setFilterData(filteredData);
+    } else {
+      const filteredData = customerOrderHistory.filter(
+        (order) => order.order_status.status === value || order.payment_status === value
+      );
+      setFilterData(filteredData);
+    }
+  }
+
   if (isPending) {
     return (
       <div className="mt-40 w-16 h-16 border-4 border-dashed rounded-full animate-spin border-blue mx-auto"></div>
@@ -229,20 +256,22 @@ const OrderHistory = ({ customerOrderHistory, refetch, isPending }) => {
       <div className="flex justify-between items-center p-4 border-b">
         <p className="font-semibold">Orders</p>
         <select
-          name="category"
-          className="py-2 rounded-md  max-w-xs focus:outline-none border"
-        >
-          <option disabled selected>
-            filter by
-          </option>
-          <option>canceled</option>
-          <option>complated</option>
-          <option>progress</option>
-          <option>refund</option>
-          <option>unpaid</option>
-        </select>
+                onChange={filterOrders}
+                name="category"
+                className="select select-bordered  max-w-xs focus:outline-none border"
+              >
+                <option disabled selected>
+                  filter by
+                </option>
+                <option>all</option>
+                <option>canceled</option>
+                <option>complated</option>
+                <option>progress</option>
+                <option>refund</option>
+                <option>unpaid</option>
+              </select>
       </div>
-      {customerOrderHistory.length > 0 ? (
+      {filterData.length > 0 ? (
         <table className="w-full">
           <thead>
             <tr className="text-left *:p-3 border-b *:uppercase *:text-sm">
@@ -255,7 +284,7 @@ const OrderHistory = ({ customerOrderHistory, refetch, isPending }) => {
             </tr>
           </thead>
           <tbody>
-            {customerOrderHistory?.map((item, id) => {
+            {filterData?.map((item, id) => {
               const {
                 _id,
                 orderId,
