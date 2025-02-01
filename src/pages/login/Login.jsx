@@ -37,14 +37,19 @@ const Login = () => {
             customer_email: res?.user?.email,
             image: res?.user?.photoURL,
           }).then(res => {
+            console.log(res)
             if (res.data.message == "ok") {
               localStorage.setItem("user_email", res.data.chatUser.customer_email);
               setTimeout(() => {
                 navigate("/");
               }, 2000);
-            }
+            } 
+              
+            
           }).catch(err => {
             console.log(err.message)
+            alert("please SignUp")
+            navigate("/register");
           })
         }
       }
