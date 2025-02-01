@@ -144,7 +144,7 @@ const Navbar = ({ handleSideBar, handleMobileSideBar, sidebar }) => {
               <Link to="/">
                 <li className="hover:text-green duration-500 pl-3">Home</li>
               </Link>
-              <Link to="/create-product">
+              <Link to="/dashboard/create-product">
                 <li className="hover:text-green duration-500 pl-3">
                   Create Product
                 </li>

@@ -257,11 +257,14 @@ const Order = ({ theme,openCart, setOpenCart }) => {
     if (!name || !phone || !address || shippingVat == 0) {
       return alert("please share your shipping address");
     }
+    if(!user){
+      return alert("please login first");
+    }
 
     const orderData = {
       products: orderProducts,
       customer: name,
-      customer_img: user.photoUrl,
+      customer_img: user?.photoUrl,
       shipping_address: address,
       shipping_price: shippingVat,
       phone: phone,
@@ -282,6 +285,7 @@ const Order = ({ theme,openCart, setOpenCart }) => {
     axiosFetch
       .post("/orders", orderData)
       .then((res) => {
+        console.log(res)
         if (res.data.message == "ok") {
           Swal.fire({
             icon: "success",
@@ -297,7 +301,7 @@ const Order = ({ theme,openCart, setOpenCart }) => {
         console.log(error);
       });
 
-    console.log("ok");
+    // console.log("ok");
   };
 
   return (
