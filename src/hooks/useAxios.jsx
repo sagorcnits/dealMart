@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const axiosFetch = axios.create({
-  baseURL: "https://dealmart-server-wxsp.vercel.app/",
+  baseURL: "https://dealmart-server-88fs.onrender.com/",
 });
 
 const useAxios = () => {

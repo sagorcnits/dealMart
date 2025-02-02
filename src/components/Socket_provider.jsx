@@ -11,7 +11,7 @@ const Socket_Provider = ({ children }) => {
     const user_email = localStorage.getItem("user_email");
     const axiosPublic = useAxios()
     useEffect(  () => {
-        const socket =  io("https://dealmart-server-wxsp.vercel.app/");
+        const socket =  io("https://dealmart-server-88fs.onrender.com/");
         socket.on("connect", () => {
             setNewSocket(socket);
             console.log(socket)
